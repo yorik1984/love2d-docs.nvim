@@ -15,7 +15,7 @@ done < env.txt
 # Assign fallbacks in case the values are invalid
 export lua=${lua:-lua}
 export git=${git:-git}
-export vim=${vim:-vim}
+export nim=${nvim:-nvim}
 
 # Remove the old love-api and clone in the new one
 rm -rf love-api

@@ -18,8 +18,8 @@ if [!lua!]==[] (
 if [!git!]==[] (
 	set "git=git"
 )
-if [!vim!]==[] (
-	set "vim=vim"
+if [!nvim!]==[] (
+	set "nvim=nvim"
 )
 
 REM Remove the old love-api and clone in the new one

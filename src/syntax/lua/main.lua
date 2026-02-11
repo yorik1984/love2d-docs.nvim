@@ -73,9 +73,11 @@ limit( '\\%(' .. funcstr:sub( 1, -7 ), 'syntax match lovefunction "\\<love\\.\\%
 limit( '\\%(' .. typestr:sub( 1, -7 ), 'syntax match lovetype "[\\:\\.]\\%(', '\\)\\>"ms=s+1 ' .. containedin )
 limit( '\\%(' .. callbackstr:sub( 1, -7 ), 'syntax match lovecallback "\\<love\\.\\%(', '\\)\\>" ' .. containedin )
 
+print( 'syntax match love "\\<love\\>\\\ze\\." ' .. containedin )
 print( 'syntax region loveconfregion start="\\<love\\.conf\\>" end="\\<end\\>"me=e-3,he=e-3,re=e-3 skipwhite skipempty ' .. containedin .. ' contains=ALL' )
 
-print( 'execute( "highlight lovefunction " . g:lovedocs_colors )' )
-print( 'execute( "highlight lovetype " . g:lovedocs_colors )' )
-print( 'execute( "highlight lovecallback " . g:lovedocs_colors )' )
-print( 'execute( "highlight loveconf " . g:lovedocs_colors )' )
+print( 'execute( "highlight love " . g:lovedocs_colors_love )' )
+print( 'execute( "highlight lovefunction " . g:lovedocs_colors_function )' )
+print( 'execute( "highlight lovetype " . g:lovedocs_colors_type )' )
+print( 'execute( "highlight lovecallback " . g:lovedocs_colors_callback )' )
+print( 'execute( "highlight loveconf " . g:lovedocs_colors_conf )' )

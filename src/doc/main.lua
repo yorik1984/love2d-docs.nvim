@@ -573,12 +573,12 @@ end
 print( ( [[
 *love.txt* *love2d*                 Documentation for the LOVE game framework.
 
-                        _       o__o __      __ ______ ~
-                       | |     / __ \\ \    / //  ____\~
-                       | |    | |  | |\ \  / / | |__   ~
-                       | |    | |  | | \ \/ /  |  __|  ~
-                       | |____| |__| |  \  /   | |____ ~
-                       \______|\____/    \/    \______/~
+                        _       o__o __      __ ______  ~
+                       | |     / __ \\ \    / //  ____\ ~
+                       | |    | |  | |\ \  / / | |__    ~
+                       | |    | |  | | \ \/ /  |  __|   ~
+                       | |____| |__| |  \  /   | |____  ~
+                       \______|\____/    \/    \______/ ~
 
                    The complete solution for Vim with LOVE.
                    Includes highlighting and documentation.
@@ -593,7 +593,13 @@ using
 
     https://github.com/davisdude/vim-love-docs
 
-Made by Davis Claiborne under the MIT license. See LICENSE.md for more info.
+Original work by Davis Claiborne under the MIT license.
+
+Modified and maintained by yorik1984 at
+
+    https://github.com/yorik1984/love2d-docs.nvim
+
+See LICENSE.md for more info.
 ]] ):format( api.version ) )
 -- }}}
 

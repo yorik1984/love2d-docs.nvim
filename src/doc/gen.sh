@@ -15,7 +15,7 @@ mkdir ../../doc
 $lua main.lua  > ../../doc/love.txt
 
 # Generate helptags
-$vim -c "helptags ../../doc/" -c "qa!"
+$nvim -c "helptags ../../doc/" -c "qa!"
 
 # Cleanup
 rm -rf love-api

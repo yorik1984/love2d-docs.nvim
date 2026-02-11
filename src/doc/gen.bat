@@ -11,7 +11,7 @@ REM Generate documentation
 %lua% main.lua > ..\..\doc\love.txt
 
 REM Generate helptags
-%vim% -c "helptags ..\..\doc\" -c "qa!"
+%nvim% -c "helptags ../../doc/" -c "qa!"
 
 REM Cleanup
 rd /q /s love-api
