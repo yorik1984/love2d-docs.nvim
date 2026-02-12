@@ -34,9 +34,6 @@ REM Run the generation scripts
 call doc\gen.bat
 call syntax\gen.bat
 
-REM Update the plugin
-rd /q /s ..\plugin
-xcopy /y plugin ..\plugin\
 
 REM REmove love-api
 rd /q /s love-api

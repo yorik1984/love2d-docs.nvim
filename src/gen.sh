@@ -29,10 +29,6 @@ cp -rf love-api doc
 source doc/gen.sh
 source syntax/gen.sh
 
-# Update the plugin
-rm -rf ../plugin
-cp -rf plugin ../
-
 # Remove love-api
 rm -rf love-api
 

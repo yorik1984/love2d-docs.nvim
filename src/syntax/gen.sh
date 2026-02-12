@@ -12,19 +12,16 @@ cp -rf love-api love-conf
 cp -rf love-api lua
 
 # Update after/syntax
-rm -rf ../../after/syntax
-mkdir -p ../../after/syntax
-
-# Copy nongenerated help syntax
-cp help.vim ../../after/syntax/.
+rm -f ../../after/syntax/lua.vim
+rm -f ../../after/queries/lua/highlights.scm
 
 # Create syntax files
 $lua lua/main.lua > ../../after/syntax/lua.vim
-$lua love-conf/main.lua > ../../after/syntax/love-conf.vim
+$lua lua/treesitter.lua > ../../after/queries/lua/highlights.scm
 
 # Cleanup
 rm -rf love-api
-rm -rf love-conf/love-api
+rm -rf love-conf
 rm -rf lua/love-api
 
 popd > /dev/null

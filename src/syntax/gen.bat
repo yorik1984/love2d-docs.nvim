@@ -11,19 +11,16 @@ xcopy /e /q /y love-api love-conf\love-api\
 xcopy /e /q /y love-api lua\love-api\
 
 REM Update after\syntax
-rd /q /s ..\..\after\syntax
-mkdir ..\..\after\syntax
-
-REM Copy nongenerated help syntax
-copy help.vim ..\..\after\syntax\.
+del /f /q ..\..\after\syntax\lua.vim
+del /f /q ..\..\after\queries\lua\highlights.scm
 
 REM Create syntax files
 !lua! lua\main.lua > ..\..\after\syntax\lua.vim
-!lua! love-conf\main.lua > ..\..\after\syntax\love-conf.vim
+!lua! lua\treesitter.lua > ..\..\after\queries\lua\highlights.scm
 
 REM Cleanup
 rd /q /s love-api
-rd /q /s love-conf\love-api
+rd /q /s love-conf
 rd /q /s lua\love-api
 
 popd
