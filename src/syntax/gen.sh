@@ -14,10 +14,14 @@ cp -rf love-api lua
 # Update after/syntax
 rm -f ../../after/syntax/lua.vim
 rm -f ../../after/queries/lua/highlights.scm
+rm -f ../../test/example/api_full_list.lua
+rm -f ../../test/example/conf.lua
 
 # Create syntax files
 $lua lua/main.lua > ../../after/syntax/lua.vim
 $lua lua/treesitter.lua > ../../after/queries/lua/highlights.scm
+$lua lua/generate_api_list.lua > ../../test/example/api_full_list.lua
+$lua lua/generate_api_list.lua > ../../test/example/conf.lua
 
 # Cleanup
 rm -rf love-api

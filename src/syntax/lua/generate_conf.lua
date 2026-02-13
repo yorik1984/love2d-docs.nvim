@@ -1,0 +1,60 @@
+local api = require 'love-api.love_api'
+
+local function generate_pure_console_conf(tab)
+    local lines = { "function love.conf(t)" }
+
+    -- 1. Find the 'conf' callback in the API table
+    local conf_cb = nil
+    for _, cb in ipairs(tab.callbacks or {}) do
+        if cb.name == "conf" then
+            conf_cb = cb
+            break
+        end
+    end
+
+    if not conf_cb then return end
+
+    -- 2. Access the 't' argument table structure
+    -- Path: callbacks[i].variants[1].arguments[1].table
+    local t_arg = conf_cb.variants[1].arguments[1]
+    if not (t_arg and t_arg.table) then return end
+
+    for _, field in ipairs(t_arg.table) do
+        local to_process = {}
+        if field.table then
+            table.insert(lines, "") -- Gap for sub-tables like t.window
+            for _, sf in ipairs(field.table) do
+                table.insert(to_process, { name = "t." .. field.name .. "." .. sf.name, d = sf })
+            end
+        else
+            table.insert(to_process, { name = "t." .. field.name, d = field })
+        end
+
+        for _, item in ipairs(to_process) do
+            local name, d = item.name, item.d
+            local val = "nil"
+
+            -- Logic for version, booleans and strings
+            if name == "t.version" then
+                val = '"' .. (tab.version or "11.5") .. '"'
+            elseif d.type == "boolean" then
+                val = "true"
+            elseif d.type == "string" then
+                local first = d.description:match('"(%w+)"')
+                val = first and ('"' .. first .. '"') or '"default"'
+            end
+
+            -- Clean description and format
+            local desc = d.description:gsub("[\r\n]+", " "):gsub("%s+", " ")
+            local line = string.format("    %-30s = %-10s -- %s", name, val, desc)
+            table.insert(lines, line)
+        end
+    end
+
+    table.insert(lines, "end")
+
+    -- 3. Final print to console
+    print(table.concat(lines, "\n"))
+end
+
+generate_pure_console_conf(api)

@@ -15,27 +15,27 @@ let g:lovedocs_loaded = 1
 
 " Allow custom colors for LOVE functions
 if !exists( 'g:lovedocs_colors_love' )
-	let g:lovedocs_colors_love = 'guifg=#e54d95 ctermfg=162 gui=bold'
+	let g:lovedocs_colors_love = 'guifg=#E54D95 ctermfg=162 gui=bold'
 endif
 
 if !exists( 'g:lovedocs_colors_module' )
-	let g:lovedocs_colors_module = 'guifg=#e54d95 ctermfg=162'
+	let g:lovedocs_colors_module = 'guifg=#E54D95 ctermfg=162'
 endif
 
 if !exists( 'g:lovedocs_colors_function' )
-	let g:lovedocs_colors_function = 'guifg=#2fa8dc ctermfg=38'
+	let g:lovedocs_colors_function = 'guifg=#2FA8DC ctermfg=38'
 endif
 
 if !exists( 'g:lovedocs_colors_type' )
-	let g:lovedocs_colors_type = 'guifg=#2fa8dc ctermfg=38'
+	let g:lovedocs_colors_type = 'guifg=#2FA8DC ctermfg=38'
 endif
 
 if !exists( 'g:lovedocs_colors_callback' )
-	let g:lovedocs_colors_callback = 'guifg=#2fa8dc ctermfg=38'
+	let g:lovedocs_colors_callback = 'guifg=#2FA8DC ctermfg=38'
 endif
 
 if !exists( 'g:lovedocs_colors_conf' )
-	let g:lovedocs_colors_conf = 'guifg=#2fa8dc ctermfg=38'
+	let g:lovedocs_colors_conf = 'guifg=#2FA8DC ctermfg=38'
 endif
 
 " Reset compatibility

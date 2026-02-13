@@ -1,0 +1,39 @@
+local api = require 'love-api.love_api'
+
+local function generate_test_file(tab)
+    local lines = { "-- LÖVE2D API LIST", "" }
+
+    -- 1. Callbacks
+    table.insert(lines, "-- === CALLBACKS ===")
+    for _, cb in ipairs(tab.callbacks or {}) do
+        table.insert(lines, string.format("function love.%s(...)\n    print('%s called')\nend", cb.name, cb.name))
+    end
+    table.insert(lines, "")
+
+    -- 2. Modules and Functions
+    table.insert(lines, "-- === MODULES & FUNCTIONS ===")
+    for _, module in ipairs(tab.modules or {}) do
+        table.insert(lines, "-- Module: " .. module.name)
+        for _, func in ipairs(module.functions or {}) do
+            table.insert(lines, string.format("love.%s.%s()", module.name, func.name))
+        end
+        table.insert(lines, "")
+    end
+
+    -- 3. Types
+    table.insert(lines, "-- === TYPES & METHODS ===")
+    for _, typ in ipairs(tab.types or {}) do
+        table.insert(lines, "-- Type: " .. typ.name)
+
+        local obj_name = "obj_" .. typ.name:lower()
+        table.insert(lines, string.format("local %s = {}", obj_name))
+        for _, method in ipairs(typ.functions or {}) do
+            table.insert(lines, string.format("%s:%s()", obj_name, method.name))
+        end
+        table.insert(lines, "")
+    end
+
+    print(table.concat(lines, "\n"))
+end
+
+generate_test_file(api)
