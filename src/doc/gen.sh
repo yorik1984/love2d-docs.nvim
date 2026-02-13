@@ -8,11 +8,10 @@ set -o errexit
 set -o nounset
 
 # Update the doc directory
-rm -rf ../../doc
-mkdir ../../doc
+rm -r ../../doc/love2d-docs.txt
 
 # Generate documentation
-$lua main.lua  > ../../doc/love.txt
+$lua main.lua  > ../../doc/love2d-docs.txt
 
 # Generate helptags
 $nvim -c "helptags ../../doc/" -c "qa!"

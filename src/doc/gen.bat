@@ -4,11 +4,10 @@ REM Set the current directory to the location of this script
 pushd %~dp0
 
 REM Update the doc directory
-rd /q /s ..\..\doc
-mkdir ..\..\doc
+del /f /q ..\..\doc\love2d-docs.txt
 
 REM Generate documentation
-%lua% main.lua > ..\..\doc\love.txt
+%lua% main.lua > ..\..\doc\love2d-docs.txt
 
 REM Generate helptags
 %nvim% -c "helptags ../../doc/" -c "qa!"

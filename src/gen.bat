@@ -34,7 +34,6 @@ REM Run the generation scripts
 call doc\gen.bat
 call syntax\gen.bat
 
-
 REM REmove love-api
 rd /q /s love-api
 
