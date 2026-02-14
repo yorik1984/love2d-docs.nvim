@@ -24,7 +24,7 @@ Original work by Davis Claiborne under the MIT license.
 
     https://github.com/davisdude/vim-love-docs
 
-Modified and maintained by yorik1984 at
+Modified and maintained by yorik1984 under the MIT license.
 
 See LICENSE.md for more info.
 
