@@ -1,4 +1,4 @@
-" Help extensions for vim-love-docs
+" Help extensions for love2d-docs
 " This is based on luarefvim
 
 " Only apply syntax changes to our help docs (which will actually contain
@@ -16,11 +16,11 @@ else
 endif
 
 if has("conceal")
-    syn match helpHideLrv		contained "\<lrv-" conceal
-    syn match helpHideLove		contained "\<love-" conceal
+    syn match helpHideLrv       contained "\<lrv-" conceal
+    syn match helpHideLove      contained "\<love2d-docs-" conceal
 else
-    syn match helpHideLrv		contained "\<lrv-"
-    syn match helpHideLove		contained "\<love-"
+    syn match helpHideLrv       contained "\<lrv-"
+    syn match helpHideLove      contained "\<love2d-docs-"
 endif
 
 hi def link helpHideLrv         Ignore
