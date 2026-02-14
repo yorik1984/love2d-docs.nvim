@@ -149,6 +149,10 @@ if scm_types_str ~= '' then
         .. '  (#eq? @_love "love")\n'
         .. '  (#match? @type.lua.love\n'
         .. '    "^(' .. scm_types_str .. ')$")(#set! priority 150))\n\n'
+        .. '(function_call\n'
+        .. '  name: (method_index_expression\n'
+        .. '    method: (identifier) @type.lua.love\n'
+        .. '    (#match? @type.lua.love "^(' .. scm_types_str .. ')$")(#set! priority 150)))\n\n'
 end
 
 if scm_callbacks_str ~= '' then
