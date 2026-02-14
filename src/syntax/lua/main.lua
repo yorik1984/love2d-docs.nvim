@@ -42,15 +42,13 @@ local function extractDataConf(tab, index)
                             confstr = confstr:sub(1, -1) .. '\\)\\|'
                         end
                     end
-                    print(confstr:sub(1, -3) .. '"ms=s+1 containedin=LoveConfRegion,luaFunctionBlock\n')
+                    print(confstr:sub(1, -3) .. '"ms=s+1 contains=Lovet containedin=LoveConfRegion,luaFunctionBlock\n')
                 end
             end
             if type(v) == 'table' then extractDataConf(v) end
         end
     end
 end
-
-extractDataConf(api)
 
 local funcstr = ''
 local typestr = ''
@@ -133,7 +131,11 @@ limit('\\%(' .. callbackstr:sub(1, -7), 'syntax match LoveCallback "\\<love\\.\\
 
 print('syntax region LoveConfRegion start="\\<love\\.conf\\>" end="\\<end\\>"me=e-3,he=e-3,re=e-3 skipwhite skipempty ' .. containedin .. ' contains=ALL\n')
 
+print('syntax match Lovet "\\<t\\>" containedin=LoveConf\n')
+extractDataConf(api)
+
 print('execute( "highlight def Love " . g:lovedocs_colors_love )')
+print('execute( "highlight def Lovet " . g:lovedocs_colors_love )')
 print('execute( "highlight def LoveModule " . g:lovedocs_colors_module )')
 print('execute( "highlight def LoveFunction " . g:lovedocs_colors_function )')
 print('execute( "highlight def LoveType " . g:lovedocs_colors_type )')

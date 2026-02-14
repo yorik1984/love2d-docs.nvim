@@ -4,8 +4,6 @@
 " If you want to change the syntax, edit that file and run `src/gen.dat(sh)`
 " it to generate a new version of this file.
 
-syntax match LoveConf "\%(\.identity\>\)\|\%(\.appendidentity\>\)\|\%(\.version\>\)\|\%(\.console\>\)\|\%(\.accelerometerjoystick\>\)\|\%(\.externalstorage\>\)\|\%(\.gammacorrect\>\)\|\%(\.audio\%(\.mic\|\.mixwithsystem\)\>\)\|\%(\.window\%(\.title\|\.icon\|\.width\|\.height\|\.borderless\|\.resizable\|\.minwidth\|\.minheight\|\.fullscreen\|\.fullscreentype\|\.usedpiscale\|\.vsync\|\.depth\|\.stencil\|\.msaa\|\.display\|\.highdpi\|\.x\|\.y\)\>\)\|\%(\.modules\%(\.audio\|\.event\|\.graphics\|\.image\|\.joystick\|\.keyboard\|\.math\|\.mouse\|\.physics\|\.sound\|\.system\|\.timer\|\.touch\|\.video\|\.window\|\.thread\)\>\)"ms=s+1 containedin=LoveConfRegion,luaFunctionBlock
-
 syntax match Love "\<love\>" containedin=LoveModule,LoveFunction,LoveCallback,LoveConfRegion
 
 syntax match LoveModule "\<love\.\%(audio\|data\|event\|filesystem\|font\|graphics\|image\|joystick\|keyboard\|math\|mouse\|physics\|sound\|system\|thread\|timer\|touch\|video\|window\)\>" contains=Love containedin=ALLBUT,luaString,luaComment
@@ -32,7 +30,12 @@ syntax match LoveCallback "\<love\.\%(\%(conf\|directorydropped\|displayrotated\
 
 syntax region LoveConfRegion start="\<love\.conf\>" end="\<end\>"me=e-3,he=e-3,re=e-3 skipwhite skipempty containedin=ALLBUT,luaString,luaComment contains=ALL
 
+syntax match Lovet "\<t\>" containedin=LoveConf
+
+syntax match LoveConf "\%(\.identity\>\)\|\%(\.appendidentity\>\)\|\%(\.version\>\)\|\%(\.console\>\)\|\%(\.accelerometerjoystick\>\)\|\%(\.externalstorage\>\)\|\%(\.gammacorrect\>\)\|\%(\.audio\%(\.mic\|\.mixwithsystem\)\>\)\|\%(\.window\%(\.title\|\.icon\|\.width\|\.height\|\.borderless\|\.resizable\|\.minwidth\|\.minheight\|\.fullscreen\|\.fullscreentype\|\.usedpiscale\|\.vsync\|\.depth\|\.stencil\|\.msaa\|\.display\|\.highdpi\|\.x\|\.y\)\>\)\|\%(\.modules\%(\.audio\|\.event\|\.graphics\|\.image\|\.joystick\|\.keyboard\|\.math\|\.mouse\|\.physics\|\.sound\|\.system\|\.timer\|\.touch\|\.video\|\.window\|\.thread\)\>\)"ms=s+1 contains=Lovet containedin=LoveConfRegion,luaFunctionBlock
+
 execute( "highlight def Love " . g:lovedocs_colors_love )
+execute( "highlight def Lovet " . g:lovedocs_colors_love )
 execute( "highlight def LoveModule " . g:lovedocs_colors_module )
 execute( "highlight def LoveFunction " . g:lovedocs_colors_function )
 execute( "highlight def LoveType " . g:lovedocs_colors_type )

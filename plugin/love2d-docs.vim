@@ -15,7 +15,7 @@ let g:lovedocs_loaded = 1
 
 " Allow custom colors for LOVE functions
 if !exists( 'g:lovedocs_colors_love' )
-	let g:lovedocs_colors_love = 'guifg=#E54D95 ctermfg=162 gui=bold'
+	let g:lovedocs_colors_love = 'guifg=#E54D95 ctermfg=162 gui=bold cterm=bold'
 endif
 
 if !exists( 'g:lovedocs_colors_module' )
