@@ -570,8 +570,237 @@ local function compileModuleInformation(module, namePrefix, indentLevel, indentS
 end
 
 -- Header {{{
-print(([[
-*love2d-docs.txt* *love2d-docs*      Documentation for the LOVE game framework.
+print(
+[[*love2d-docs-config*                                 LÖVE2D DOCS Configuration
+
+(Neo)Vim syntax highlighting and helpfile for LÖVE (http://love2d.org)
+with |treesitter| support.
+
+The syntax part of the plugin highlights LÖVE functions, such as
+`love.udpate`, `love.graphics.rectangle`, and more. It also highlights
+`conf.lua` flags, such as `t.console`, `t.window.width`, etc.
+
+The plugin also includes help files for LÖVE, called `love2d-docs.txt`.
+This file includes help for all of LÖVE's functions, as well as its types,
+enums, etc.
+It is generated from https://github.com/love2d-community/love-api,
+so any discrepancies should be reported there.
+
+==============================================================================
+CONTENTS                                         *love2d-docs-config-contents*
+
+    1. Installation.....................|love2d-docs-config-installation|
+    2. Neovim settings..................|love2d-docs-config-neovim|
+        2.1 Commands....................|love2d-docs-config-neovim-commands|
+        2.2 Keybindings.................|love2d-docs-config-neovim-keybindings|
+    3. Vim settings.....................|love2d-docs-config-vim|
+    4. Help File........................|love2d-docs-config-help|
+    5. Rebuilding the API...............|love2d-docs-config-build|
+    6. Credits..........................|love2d-docs-config-credits|
+
+==============================================================================
+1. INSTALLATION                              *love2d-docs-config-installation*
+
+LAZY.NVIM ~
+>lGua
+    require("lazy").setup({
+        "yorik1984/love2d-docs.nvim",
+        ft = "lua",
+    })
+<
+
+VIM-PLUG ~
+>vim
+    Plug 'yorik1984/love2d-docs.nvim'
+<
+
+==============================================================================
+2. NEOVIM SETTINGS                               *love2d-docs-config-neovim*
+
+>lua
+    ---@alias LoveDocsStyleType string | "bold" | "italic" | "underline"
+    ---| "bold,italic" | "bold,underline" | "italic,underline" | "NONE"
+
+    ---@class LoveDocsStyle
+    ---@field love LoveDocsStyleType Style for 'love' global variable
+    ---@field module LoveDocsStyleType Style for LÖVE modules
+    ---@field func LoveDocsStyleType Style for LÖVE functions
+    ---@field type LoveDocsStyleType Style for LÖVE types/objects
+    ---@field callback LoveDocsStyleType Style for LÖVE callbacks
+    ---@field conf LoveDocsStyleType Style for LÖVE configuration
+
+    ---@class LoveDocsColors
+    ---@field LOVElove string? HEX color for 'love' global variable
+    ---@field LOVEmodule string? HEX color for LÖVE modules
+    ---@field LOVEfunction string? HEX color for LÖVE functions
+    ---@field LOVEtype string? HEX color for LÖVE types/objects
+    ---@field LOVEcallback string? HEX color for LÖVE callbacks
+    ---@field LOVEconf string? HEX color for LÖVE configuration
+
+    ---@class LoveDocsConfig
+    ---@field enable_on_start boolean enable automatically on startup
+    ---@field style LoveDocsStyle Custom styles
+    ---@field colors LoveDocsColors Optional table to override HEX colors
+
+    M.defaults = {
+        enable_on_start = true,
+        style = {
+            love     = "bold",
+            module   = "NONE",
+            func     = "NONE",
+            type     = "NONE",
+            callback = "NONE",
+            conf     = "NONE",
+        },
+        colors = {
+            LOVElove     = nil, -- Example: "#E54D95"
+            LOVEmodule   = nil,
+            LOVEfunction = nil,
+            LOVEtype     = nil,
+            LOVEcallback = nil,
+            LOVEconf     = nil,
+        },
+    }
+<
+
+Configure Treesitter styles using the following defaults:
+
+Highlight Group                     HEX Color   Variable        Style ~
+@variable.global.lua.love           #E54D95     LOVElove        bold
+@module.bulitin.lua.love            #E54D95     LOVEmodule      NONE
+@function.lua.love                  #2FA8DC     LOVEfunction    NONE
+@type.lua.love                      #2FA8DC     LOVEtype        NONE
+@function.call.lua.love.callback    #2FA8DC     LOVEcallback    NONE
+@function.call.lua.love.conf        #2FA8DC     LOVEconf        NONE
+
+------------------------------------------------------------------------------
+2.1 Commands                              *love2d-docs-config-neovim-commands*
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Command             ┃ Description                                   ┃
+┗━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+`LOVEHighlightEnable`    Enable LÖVE2D highlighting.
+`LOVEHighlightDisable`   Disable LÖVE2D highlighting.
+`LOVEHighlightToggle`    Toggle highlighting state.
+
+------------------------------------------------------------------------------
+2.2 Keybindings                        *love2d-docs-config-neovim-keybindings*
+
+RECOMMENDED KEYBINDINGS ~
+Example configuration for **lazy.nvim**:
+
+>lua
+    {
+        "yorik1984/love2d-docs.nvim",
+        keys = {
+            {
+                "<leader>Lt",
+                "<cmd>LOVEHighlightToggle<cr>",
+                ft = "lua",
+                desc = "Toggle LÖVE Highlights",
+            },
+            {
+                "<leader>Le",
+                "<cmd>LOVEHighlightEnable<cr>",
+                ft = "lua",
+                desc = "Enable LÖVE Highlights",
+            },
+            {
+                "<leader>Ld",
+                "<cmd>LOVEHighlightDisable<cr>",
+                ft = "lua",
+                desc = "Disable LÖVE Highlights",
+            },
+        },
+        opts = {
+            ...
+        },
+    },
+<
+
+Or nvim api mappings for LÖVE Highlights (Lua files only)
+>lua
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = "lua",
+        callback = function()
+            vim.keymap.set(
+                "n",
+                "<leader>Lt",
+                "<cmd>LOVEHighlightToggle<cr>",
+                { buffer = true, desc = "Toggle LÖVE Highlights" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>Le",
+                "<cmd>LOVEHighlightEnable<cr>",
+                { buffer = true, desc = "Enable LÖVE Highlights" }
+            )
+            vim.keymap.set(
+                "n",
+                "<leader>Ld",
+                "<cmd>LOVEHighlightDisable<cr>",
+                { buffer = true, desc = "Disable LÖVE Highlights" }
+            )
+        end,
+    })
+<
+==============================================================================
+3. VIM SETTINGS                                       *love2d-docs-config-vim*
+
+The style of the syntax highlighting can be changed by setting global
+variables in your `.vimrc`:
+
+>vim
+  let g:lovedocs_colors_love = 'guifg=#E54D95 ctermfg=162 gui=bold cterm=bold'
+<
+
+You can set the string to any valid highlighting specification
+(see |highlight-args|). Defaults are:
+
+Hl-Group     Variable Name             Parameters (GUI/CTERM) ~
+Love         g:lovedocs_colors_love     guifg=#E54D95 ctermfg=162 gui=bold cterm=bold
+Lovet        g:lovedocs_colors_love     guifg=#E54D95 ctermfg=162 gui=bold cterm=bold
+LoveModule   g:lovedocs_colors_module   guifg=#E54D95 ctermfg=162
+LoveFunction g:lovedocs_colors_function guifg=#2FA8DC ctermfg=38
+LoveType     g:lovedocs_colors_type     guifg=#2FA8DC ctermfg=38
+LoveCallback g:lovedocs_colors_callback guifg=#2FA8DC ctermfg=38
+LoveConf     g:lovedocs_colors_conf     guifg=#2FA8DC ctermfg=38
+
+==============================================================================
+4. HELP FILE                                         *love2d-docs-config-help*
+
+The documentation is generated from love-api. Search for any LÖVE
+identifier using the prefix `love2d-docs-`.
+
+EXAMPLES: ~
+   `:help love2d-docs-love.window.setMode`     Search for a function
+   `:help love2d-docs-File`                    Search for a Type
+   `:help love2d-docs-File:isEOF`              Search for a Type method
+   `:help love2d-docs-BufferMode`              Search for an Enum
+   `:help love2d-docs-BufferMode-full`         Search for an Enum constant
+
+==============================================================================
+5. REBUILDING THE API                               *love2d-docs-config-build*
+
+If you wish to re-build the API files from source:
+1. Ensure `git`, `lua`, and `nvim/vim` are available in your PATH.
+2. Run `build/gen.bat` (Windows) or `build/gen.sh` (Linux/Mac).
+
+See more in `README.md`
+
+==============================================================================
+6. CREDITS                                        *love2d-docs-config-credits*
+
+Original Author: ~
+    Davis Claiborne (https://github.com/davisdude)
+                    (https://github.com/davisdude/vim-love-docs)
+
+Current Maintainer: ~
+    yorik1984 (https://github.com/yorik1984)
+
+==============================================================================]])
+
+print((
+[[*love2d-docs.txt* *love2d-docs*      Documentation for the LOVE game framework.
 
                         _       o__o __      __ ______  ~
                        | |     / __ \\ \    / //  ____\ ~
@@ -620,5 +849,5 @@ end
 
 -- Prints modeline (spelling/capitalization errors are ugly; use correct file type)
 -- (Uses concat to prevent vim from interpreting THIS as a modeline)
-print(' vim' .. ':nospell:ft=help:')
+print(' vim' .. ':nospell:ft=help:ff=unix:')
 -- }}}

@@ -1,3 +1,4 @@
+!_TAG_FILE_ENCODING	utf-8	//
 love2d-docs	love2d-docs.txt	/*love2d-docs*
 love2d-docs-AlignMode	love2d-docs.txt	/*love2d-docs-AlignMode*
 love2d-docs-ArcType	love2d-docs.txt	/*love2d-docs-ArcType*
@@ -951,6 +952,16 @@ love2d-docs-World:setSleepingAllowed	love2d-docs.txt	/*love2d-docs-World:setSlee
 love2d-docs-World:translateOrigin	love2d-docs.txt	/*love2d-docs-World:translateOrigin*
 love2d-docs-World:update	love2d-docs.txt	/*love2d-docs-World:update*
 love2d-docs-WrapMode	love2d-docs.txt	/*love2d-docs-WrapMode*
+love2d-docs-config	love2d-docs.txt	/*love2d-docs-config*
+love2d-docs-config-build	love2d-docs.txt	/*love2d-docs-config-build*
+love2d-docs-config-contents	love2d-docs.txt	/*love2d-docs-config-contents*
+love2d-docs-config-credits	love2d-docs.txt	/*love2d-docs-config-credits*
+love2d-docs-config-help	love2d-docs.txt	/*love2d-docs-config-help*
+love2d-docs-config-installation	love2d-docs.txt	/*love2d-docs-config-installation*
+love2d-docs-config-neovim	love2d-docs.txt	/*love2d-docs-config-neovim*
+love2d-docs-config-neovim-commands	love2d-docs.txt	/*love2d-docs-config-neovim-commands*
+love2d-docs-config-neovim-keybindings	love2d-docs.txt	/*love2d-docs-config-neovim-keybindings*
+love2d-docs-config-vim	love2d-docs.txt	/*love2d-docs-config-vim*
 love2d-docs-love	love2d-docs.txt	/*love2d-docs-love*
 love2d-docs-love-callbacks	love2d-docs.txt	/*love2d-docs-love-callbacks*
 love2d-docs-love-enums	love2d-docs.txt	/*love2d-docs-love-enums*

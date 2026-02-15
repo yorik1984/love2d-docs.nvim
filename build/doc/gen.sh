@@ -14,7 +14,7 @@ rm -r ../../doc/love2d-docs.txt
 $lua main.lua  > ../../doc/love2d-docs.txt
 
 # Generate helptags
-$nvim -c "helptags ../../doc/" -c "qa!"
+$nvim -c "helptags ../../doc" -c "qa!"
 
 # Cleanup
 rm -rf love-api
