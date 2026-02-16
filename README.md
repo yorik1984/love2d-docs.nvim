@@ -1,8 +1,8 @@
-{<h1 align="center">♡&nbsp;&nbsp; LÖVE2D Docs&nbsp;&nbsp;♡</h1>}
+<h1 align="center">♡&nbsp;&nbsp; LÖVE2D Docs&nbsp;&nbsp;♡</h1>
 
 [![LÖVE API](https://img.shields.io/badge/L%C3%96VE_API-11.5-EA316E.svg)](https://github.com/love2d-community/love-api?tab=readme-ov-file#l%C3%B6ve-api)
 
-[(Neo)Vim syntax highlighting and helpfile for [LÖVE](http://love2d.org) with [Treesitter](https://github.com/nvim-treesitter/nvim-treesitter) support
+(Neo)Vim syntax highlighting and helpfile for [LÖVE](http://love2d.org) with [Treesitter](https://github.com/nvim-treesitter/nvim-treesitter) support
 
 The syntax part of the plugin highlights LÖVE functions, such as `love.udpate`, `love.graphics.rectangle`, and more. It also highlights `conf.lua` flags, such as `t.console`, `t.window.width`, etc.
 
