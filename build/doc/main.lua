@@ -602,7 +602,7 @@ CONTENTS                                         *love2d-docs-config-contents*
 1. INSTALLATION                              *love2d-docs-config-installation*
 
 LAZY.NVIM ~
->lGua
+>lua
     require("lazy").setup({
         "yorik1984/love2d-docs.nvim",
         ft = "lua",
