@@ -849,5 +849,5 @@ end
 
 -- Prints modeline (spelling/capitalization errors are ugly; use correct file type)
 -- (Uses concat to prevent vim from interpreting THIS as a modeline)
-print(' vim' .. ':nospell:ft=help:ff=unix:')
+print(' vim' .. ':nospell:ft=help:')
 -- }}}
