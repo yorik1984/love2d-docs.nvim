@@ -30,12 +30,11 @@ The plugin also includes help files for LÖVE, called `love2d-docs.txt`. This fi
 #### [lazy.nvim](https://github.com/folke/lazy.nvim)
 
 ```lua
-require("lazy").setup(
-{
+require("lazy").setup({
     "yorik1984/love2d-docs.nvim",
     ft = "lua",
-}
-)
+    opts = {},
+})
 ```
 
 #### [vim-plug](https://github.com/junegunn/vim-plug)
@@ -73,7 +72,7 @@ Plug "yorik1984/love2d-docs.nvim"
 ---@field style LoveDocsStyle Custom font styles (supports combinations like "bold,italic")
 ---@field colors LoveDocsColors Optional table to override default HEX colors
 
-M.defaults = {
+opts = {
     enable_on_start = true,
     style = {
         love     = "bold",
@@ -91,7 +90,7 @@ M.defaults = {
         LOVEcallback = nil,
         LOVEconf     = nil,
     },
-}
+},
 ```
 
 Configure Treesitter styles using the following defaults:

@@ -606,6 +606,7 @@ LAZY.NVIM ~
     require("lazy").setup({
         "yorik1984/love2d-docs.nvim",
         ft = "lua",
+        opts = {},
     })
 <
 
@@ -642,7 +643,7 @@ VIM-PLUG ~
     ---@field style LoveDocsStyle Custom styles
     ---@field colors LoveDocsColors Optional table to override HEX colors
 
-    M.defaults = {
+    opts = {
         enable_on_start = true,
         style = {
             love     = "bold",
