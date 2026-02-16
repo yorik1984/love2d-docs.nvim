@@ -33,6 +33,7 @@ LAZY.NVIM ~
     require("lazy").setup({
         "yorik1984/love2d-docs.nvim",
         ft = "lua",
+        opts = {},
     })
 <
 
@@ -69,7 +70,7 @@ VIM-PLUG ~
     ---@field style LoveDocsStyle Custom styles
     ---@field colors LoveDocsColors Optional table to override HEX colors
 
-    M.defaults = {
+    opts = {
         enable_on_start = true,
         style = {
             love     = "bold",
@@ -223,6 +224,7 @@ Original Author: ~
 
 Current Maintainer: ~
     yorik1984 (https://github.com/yorik1984)
+
 ==============================================================================
 *love2d-docs.txt* *love2d-docs*      Documentation for the LOVE game framework.
 
@@ -46664,4 +46666,4 @@ The types of |love.window|:
 
     None
 
- vim:nospell:ft=help:ff=unix:
+ vim:nospell:ft=help:
