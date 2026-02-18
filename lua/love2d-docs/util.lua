@@ -1,20 +1,8 @@
-local check        = require("love2d-docs.check")
 local colors       = require("love2d-docs.colors")
 local configModule = require("love2d-docs.config")
 local style        = require("love2d-docs.style")
 local theme        = require("love2d-docs.theme")
 local M            = {}
-
-function M.contains(tbl, string)
-    for _, v in pairs(tbl) do
-        if v == string then
-            return true
-        elseif type(v) == "table" and M.contains(v, string) then
-            return true
-        end
-    end
-    return false
-end
 
 function M.syntax(syntax)
     for group, color in pairs(syntax) do
@@ -59,7 +47,7 @@ function M.load(configApply)
 
     local configColors = colors.setup(config)
     local configStyle = style.setupStyle(config)
-    if config.enable_on_start then
+    if config.enable_on_start == true then
         M.syntax(theme.setup(configColors, configStyle))
         M.autocmds(theme.setup(configColors, configStyle))
     else
@@ -70,7 +58,7 @@ end
 
 function M.autocmds(syntax)
     local group = vim.api.nvim_create_augroup("love2d-docs", {})
-    vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+    vim.api.nvim_create_autocmd({ "VimEnter", "BufReadPost" }, {
         group = group,
         pattern = { "*.lua" },
         callback = function()

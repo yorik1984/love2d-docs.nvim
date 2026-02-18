@@ -67,11 +67,13 @@ VIM-PLUG ~
 
     ---@class LoveDocsConfig
     ---@field enable_on_start boolean enable automatically on startup
+    ---@field notifications boolean Whether to enable notifications
     ---@field style LoveDocsStyle Custom styles
     ---@field colors LoveDocsColors Optional table to override HEX colors
 
     opts = {
         enable_on_start = true,
+        notifications = true,
         style = {
             love     = "bold",
             module   = "NONE",
@@ -89,6 +91,45 @@ VIM-PLUG ~
             LOVEconf     = nil,
         },
     }
+<
+
+NOTE:
+Add this configuration to enable auto-highlighting in LÖVE2D projects
+
+>lua
+    require("lazy").setup({
+        "yorik1984/love2d-docs.nvim",
+        dependencies = {
+            "S1M0N38/love2d.nvim", -- A simple Neovim plugin to build games with LÖVE
+        },
+        ft = "lua",
+        opts = {
+            enable_on_start = false,
+            ...
+        },
+        config = function(_, opts)
+            require("love2d-docs").setup(opts)
+
+            local group = vim.api.nvim_create_augroup("Love2DAutoStart", { clear = true })
+            vim.api.nvim_create_autocmd({ "VimEnter", "BufReadPost" }, {
+                group = group,
+                pattern = { "*.lua" },
+                callback = function()
+                    local configModule = require("love2d-docs.config")
+                    configModule.setup(opts)
+                    local config = configModule.config
+                    config.enable_on_start = true
+
+                    local ok, love2d = pcall(require, "love2d")
+                    if ok and type(love2d.is_love2d_project) == "function" then
+                        if love2d.is_love2d_project() then
+                            require("love2d-docs.util").load(config)
+                        end
+                    end
+                end,
+            })
+        end,
+        })
 <
 
 Configure Treesitter styles using the following defaults:
@@ -228,14 +269,14 @@ Current Maintainer: ~
 ==============================================================================
 *love2d-docs.txt* *love2d-docs*      Documentation for the LOVE game framework.
 
-                        _       o__o __      __ ______  ~
-                       | |     / __ \\ \    / //  ____\ ~
-                       | |    | |  | |\ \  / / | |__    ~
-                       | |    | |  | | \ \/ /  |  __|   ~
-                       | |____| |__| |  \  /   | |____  ~
-                       \______|\____/    \/    \______/ ~
-
-                   The complete solution for Vim with LOVE.
+                               o  o                    ~
+                      ╭─╮    ╭──────╮╭─╮    ╭─╮╭─────╮ ~
+                      │ │    │ ╭──╮ ││ │    │ ││ ╭───╯ ~
+                      │ │    │ │  │ │╰╮╰╮  ╭╯╭╯│ ╰───╮ ~
+                      │ │    │ │  │ │ ╰╮╰╮╭╯╭╯ │ ╭───╯ ~
+                      │ ╰───╮│ ╰──╯ │  ╰╮╰╯╭╯  │ ╰───╮ ~
+                      ╰─────╯╰──────╯   ╰──╯   ╰─────╯ ~
+                The complete solution for (Neo)Vim with LOVE.
                    Includes highlighting and documentation.
 
 For LOVE (http://love2d.org) version 11.5.

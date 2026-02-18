@@ -117,6 +117,7 @@ function M.typeError(userConfig)
 
     local validators = {
         enable_on_start = "boolean",
+        notifications   = "boolean",
         style           = "table", -- preset table
         colors          = "table", -- preset table
     }

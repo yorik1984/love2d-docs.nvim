@@ -23,11 +23,13 @@ local M = {}
 
 ---@class LoveDocsConfig
 ---@field enable_on_start boolean Whether to enable highlighting automatically on startup
+---@field notifications boolean Whether to enable notifications
 ---@field style LoveDocsStyle Custom font styles (supports combinations like "bold,italic")
 ---@field colors LoveDocsColors Optional table to override default HEX colors
 
 M.defaults = {
     enable_on_start = true,
+    notifications = true,
     style = {
         love     = "bold",
         module   = "NONE",

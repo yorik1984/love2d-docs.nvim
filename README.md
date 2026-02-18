@@ -9,19 +9,20 @@ The syntax part of the plugin highlights LÖVE functions, such as `love.udpate`,
 The plugin also includes help files for LÖVE, called `love2d-docs.txt`. This file includes help for all of LÖVE's functions, as well as its types, enums, etc. It is generated from [love-api](https://github.com/love2d-community/love-api), so any discrepancies should be reported there.
 
 <!--toc:start-->
+
 - [📦 Installation](#-installation)
 - [🔧 Neovim settings](#-neovim-settings)
   - [Commands](#commands)
   - [Keybindings](#keybindings)
 - [🔧 Vim settings](#-vim-settings)
 - [❓ Help File](#-help-file)
-    - [Functions](#functions)
-    - [Types](#types)
-    - [Enums](#enums)
+  - [Functions](#functions)
+  - [Types](#types)
+  - [Enums](#enums)
 - [⚙️ Rebuilding the API and syntax files](#️-rebuilding-the-api-and-syntax-files)
 - [🎨 Screenshots](#-screenshots)
-    - [Neovim](#neovim)
-    - [Vim](#vim)
+  - [Neovim](#neovim)
+  - [Vim](#vim)
 - [©️ Credits](#️-credits)
 <!--toc:end-->
 
@@ -44,11 +45,12 @@ Plug "yorik1984/love2d-docs.nvim"
 ```
 
 ## 🔧 Neovim settings
+
 > [!NOTE]
 > This section only for Neovim users.
 
 ```lua
----@alias LoveDocsStyleType string | "bold" | "italic" | "underline" 
+---@alias LoveDocsStyleType string | "bold" | "italic" | "underline"
 ---| "bold,italic" | "bold,underline" | "italic,underline" | "NONE"
 
 ---@class LoveDocsStyle
@@ -69,11 +71,13 @@ Plug "yorik1984/love2d-docs.nvim"
 
 ---@class LoveDocsConfig
 ---@field enable_on_start boolean Whether to enable highlighting automatically on startup
+---@field notifications boolean Whether to enable notifications
 ---@field style LoveDocsStyle Custom font styles (supports combinations like "bold,italic")
 ---@field colors LoveDocsColors Optional table to override default HEX colors
 
 opts = {
     enable_on_start = true,
+    notifications = true,
     style = {
         love     = "bold",
         module   = "NONE",
@@ -91,6 +95,45 @@ opts = {
         LOVEconf     = nil,
     },
 },
+```
+
+> [!TIP]
+> Add this configuration to enable auto-highlighting in LÖVE2D projects
+
+```lua
+require("lazy").setup({
+    "yorik1984/love2d-docs.nvim",
+    dependencies = {
+        "S1M0N38/love2d.nvim", -- A simple Neovim plugin to build games with LÖVE
+    },
+    ft = "lua",
+    opts = {
+        enable_on_start = false,
+        ...
+    },
+    config = function(_, opts)
+        require("love2d-docs").setup(opts)
+
+        local group = vim.api.nvim_create_augroup("Love2DAutoStart", { clear = true })
+        vim.api.nvim_create_autocmd({ "VimEnter", "BufReadPost" }, {
+            group = group,
+            pattern = { "*.lua" },
+            callback = function()
+                local configModule = require("love2d-docs.config")
+                configModule.setup(opts)
+                local config = configModule.config
+                config.enable_on_start = true
+
+                local ok, love2d = pcall(require, "love2d")
+                if ok and type(love2d.is_love2d_project) == "function" then
+                    if love2d.is_love2d_project() then
+                        require("love2d-docs.util").load(config)
+                    end
+                end
+            end,
+        })
+    end,
+})
 ```
 
 Configure Treesitter styles using the following defaults:
@@ -115,6 +158,7 @@ The plugin provides the following user commands to manage highlighting states.
 | `:LOVEHighlightToggle`  | **Toggles** the highlighting state (On/Off).             |
 
 ### Keybindings
+
 > [!NOTE]
 > These keybindings are **not enabled by default**. You can manually add them to your configuration.
 
@@ -125,6 +169,7 @@ The plugin provides the following user commands to manage highlighting states.
 | `<leader>Ld` | `:LOVEHighlightDisable` | `lua`    | Disable LÖVE Highlights |
 
 Example configuration for **lazy.nvim**:
+
 ```lua
 {
     "yorik1984/love2d-docs.nvim",
@@ -155,6 +200,7 @@ Example configuration for **lazy.nvim**:
 ```
 
 Or nvim api mappings for LÖVE Highlights (Lua files only)
+
 ```lua
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "lua",
@@ -184,20 +230,21 @@ vim.api.nvim_create_autocmd("FileType", {
 ## 🔧 Vim settings
 
 The style of the syntax highlighting can be changed by setting `g:lovedocs_color_<name>` in your `.vimrc`:
+
 ```vimscript
 let g:lovedocs_colors_love = 'guifg=#E54D95 ctermfg=162 gui=bold cterm=bold'
 ```
 
 You can set the string to any valid highlighting specification (see `:help highlight-args`). Defaults are:
-| Highlight Group  | Variable Name                | Parameters (GUI/CTERM)                          |
+| Highlight Group | Variable Name | Parameters (GUI/CTERM) |
 | ---------------- | ---------------------------- | ----------------------------------------------- |
-| **Love**         | `g:lovedocs_colors_love`     | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
-| **Lovet**        | `g:lovedocs_colors_love`     | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
-| **LoveModule**   | `g:lovedocs_colors_module`   | `guifg=#E54D95 ctermfg=162`                     |
-| **LoveFunction** | `g:lovedocs_colors_function` | `guifg=#2FA8DC ctermfg=38`                      |
-| **LoveType**     | `g:lovedocs_colors_type`     | `guifg=#2FA8DC ctermfg=38`                      |
-| **LoveCallback** | `g:lovedocs_colors_callback` | `guifg=#2FA8DC ctermfg=38`                      |
-| **LoveConf**     | `g:lovedocs_colors_conf`     | `guifg=#2FA8DC ctermfg=38`                      |
+| **Love** | `g:lovedocs_colors_love` | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
+| **Lovet** | `g:lovedocs_colors_love` | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
+| **LoveModule** | `g:lovedocs_colors_module` | `guifg=#E54D95 ctermfg=162` |
+| **LoveFunction** | `g:lovedocs_colors_function` | `guifg=#2FA8DC ctermfg=38` |
+| **LoveType** | `g:lovedocs_colors_type` | `guifg=#2FA8DC ctermfg=38` |
+| **LoveCallback** | `g:lovedocs_colors_callback` | `guifg=#2FA8DC ctermfg=38` |
+| **LoveConf** | `g:lovedocs_colors_conf` | `guifg=#2FA8DC ctermfg=38` |
 
 ## ❓ Help File
 
@@ -224,29 +271,33 @@ Constants are separated by dashes. If you want to read about `BufferMode`'s cons
 ## ⚙️ Rebuilding the API and syntax files
 
 If you wish to re-build [love-api](https://github.com/love2d-community/love-api) from source, follow the steps below:
-* Ensure that the following commands will run from the command line:
-    - `git`
-    - `lua`
-    - `nvim` or `vim`
- 
-    You may also edit [`build/env.txt`](build/env.txt) to set custom values. For instance, if want to use Lua 5.2 instead of 5.3, you may change the line with `lua="lua"` to be `lua="lua5.2"` (assuming this command brings up the Lua 5.2 interpreter on your system).
-* Next, run [`build/gen.bat`](build/gen.bat) (Windows) or [`build/gen.sh`](build/gen.sh) (Mac/Linux). This should generate new files:
-    - [`love2d-docs.txt`](doc/love2d-docs.txt)
-    - [`after/queries/lua/highlights.scm`](after/queries/lua/highlights.scm)
-    - [`after/syntax/lua.vim`](after/syntax/lua.vim)
-    - [`test/example/api_full_list.lua`](test/example/api_full_list.lua)
-    - [`test/example/conf.lua`](test/example/conf.lua)
+
+- Ensure that the following commands will run from the command line:
+  - `git`
+  - `lua`
+  - `nvim` or `vim`
+
+  You may also edit [`build/env.txt`](build/env.txt) to set custom values. For instance, if want to use Lua 5.2 instead of 5.3, you may change the line with `lua="lua"` to be `lua="lua5.2"` (assuming this command brings up the Lua 5.2 interpreter on your system).
+
+- Next, run [`build/gen.bat`](build/gen.bat) (Windows) or [`build/gen.sh`](build/gen.sh) (Mac/Linux). This should generate new files:
+  - [`love2d-docs.txt`](doc/love2d-docs.txt)
+  - [`after/queries/lua/highlights.scm`](after/queries/lua/highlights.scm)
+  - [`after/syntax/lua.vim`](after/syntax/lua.vim)
+  - [`test/example/api_full_list.lua`](test/example/api_full_list.lua)
+  - [`test/example/conf.lua`](test/example/conf.lua)
 
 You may need to allow the files to be able to run. You need to do this for **every** file that ends with `.bat` if you're on Windows, or `.sh` for Mac/Linux. Windows users will need to "Unblock" the `.bat` files. See [here](https://blogs.msdn.microsoft.com/delay/p/unblockingdownloadedfile/) for how to unblock files. For Mac/Linux users, you will need to `chmod` the `.sh` files to allow execution.
 
 ## 🎨 Screenshots
 
-#### Neovim 
+#### Neovim
+
 - [newpaper.nvim](https://github.com/yorik1984/newpaper.nvim)
-![](pics/screen1.png)
-![](pics/screen2.png)
+  ![](pics/screen1.png)
+  ![](pics/screen2.png)
 
 #### Vim
+
 [papercolor-theme](https://github.com/NLKNguyen/papercolor-theme)
 ![](pics/screen3.png)
 
