@@ -1,6 +1,6 @@
 -- Generate Treesitter syntax highlighting for LOVE functions
 
-local api = require 'love-api.love_api'
+local api = require("love-api.love_api")
 
 local scm_modules = {}
 local scm_types = {}
@@ -8,11 +8,11 @@ local scm_callbacks = {}
 local scm_conf_keys = {}
 
 local function extractData(tab, path)
-    path = path or ''
+    path = path or ""
 
     for i, v in pairs(tab) do
-        if i == 'functions' then
-            if tab.name and (tab.name or ''):sub(1, 1):match('%l') then
+        if i == "functions" then
+            if tab.name and (tab.name or ""):sub(1, 1):match("%l") then
                 if not scm_modules[tab.name] then
                     scm_modules[tab.name] = {}
                 end
@@ -24,14 +24,14 @@ local function extractData(tab, path)
                     table.insert(scm_types, func.name)
                 end
             end
-        elseif i == 'callbacks' then
+        elseif i == "callbacks" then
             for _, callback in pairs(v) do
                 table.insert(scm_callbacks, callback.name)
             end
         end
 
-        if type(v) == 'table' then
-            extractData(v, path .. (tab.name and (tab.name .. '.') or ''))
+        if type(v) == "table" then
+            extractData(v, path .. (tab.name and (tab.name .. ".") or ""))
         end
     end
 end
@@ -39,7 +39,7 @@ end
 local function extractConfData(tab)
     if tab.callbacks then
         for _, cb in pairs(tab.callbacks) do
-            if cb.name == 'conf' then
+            if cb.name == "conf" then
                 local t_arg = cb.variants[1].arguments[1]
                 if t_arg and t_arg.table then
                     for _, field in pairs(t_arg.table) do
@@ -57,7 +57,7 @@ local function extractConfData(tab)
     end
 
     for _, v in pairs(tab) do
-        if type(v) == 'table' and v.name ~= tab.name then
+        if type(v) == "table" and v.name ~= tab.name then
             extractConfData(v)
         end
     end
@@ -67,31 +67,31 @@ extractData(api)
 
 extractConfData(api)
 
-local scm_types_str = ''
-local scm_callbacks_str = ''
-local scm_modules_str = ''
+local scm_types_str = ""
+local scm_callbacks_str = ""
+local scm_modules_str = ""
 
 for _, typ in ipairs(scm_types) do
-    scm_types_str = scm_types_str .. typ .. '|'
+    scm_types_str = scm_types_str .. typ .. "|"
 end
 
 for _, callback in ipairs(scm_callbacks) do
-    scm_callbacks_str = scm_callbacks_str .. callback .. '|'
+    scm_callbacks_str = scm_callbacks_str .. callback .. "|"
 end
 
 for module_name, _ in pairs(scm_modules) do
-    scm_modules_str = scm_modules_str .. module_name .. '|'
+    scm_modules_str = scm_modules_str .. module_name .. "|"
 end
 
-if scm_types_str ~= '' then
+if scm_types_str ~= "" then
     scm_types_str = scm_types_str:sub(1, -2)
 end
 
-if scm_callbacks_str ~= '' then
+if scm_callbacks_str ~= "" then
     scm_callbacks_str = scm_callbacks_str:sub(1, -2)
 end
 
-if scm_modules_str ~= '' then
+if scm_modules_str ~= "" then
     scm_modules_str = scm_modules_str:sub(1, -2)
 end
 
@@ -109,97 +109,117 @@ local scm_content = [[
 ]]
 
 scm_content = scm_content
-    .. '((dot_index_expression\n'
-    .. '  table: (identifier) @variable.global.lua.love)\n'
+    .. "((dot_index_expression\n"
+    .. "  table: (identifier) @variable.global.lua.love)\n"
     .. '  (#eq? @variable.global.lua.love "love")(#set! priority 150))\n\n'
-    .. '((assignment_statement\n'
-    .. '  (variable_list\n'
-    .. '    name: (identifier) @variable.global.lua.love))\n'
+    .. "((assignment_statement\n"
+    .. "  (variable_list\n"
+    .. "    name: (identifier) @variable.global.lua.love))\n"
     .. '    (#eq? @variable.global.lua.love "love")(#set! priority 150))\n\n'
-    .. '; Modules\n'
-    .. '((dot_index_expression\n'
-    .. '  table: (identifier) @_love\n'
-    .. '  field: (identifier) @module.bulitin.lua.love)\n'
+    .. "; Modules\n"
+    .. "((dot_index_expression\n"
+    .. "  table: (identifier) @_love\n"
+    .. "  field: (identifier) @module.bulitin.lua.love)\n"
     .. '  (#eq? @_love "love")\n'
-    .. '  (#match? @module.bulitin.lua.love\n'
-    .. '    "^(' .. scm_modules_str .. ')$")(#set! priority 150))\n\n'
-    .. '; Functions\n'
+    .. "  (#match? @module.bulitin.lua.love\n"
+    .. '    "^('
+    .. scm_modules_str
+    .. ')$")(#set! priority 150))\n\n'
+    .. "; Functions\n"
 for module_name, functions in pairs(scm_modules) do
-    local funcs_str = ''
+    local funcs_str = ""
     for _, func in ipairs(functions) do
-        funcs_str = funcs_str .. func .. '|'
+        funcs_str = funcs_str .. func .. "|"
     end
-    if funcs_str ~= '' then
+    if funcs_str ~= "" then
         funcs_str = funcs_str:sub(1, -2)
         scm_content = scm_content
-            .. '((dot_index_expression\n'
-            .. '  table: (dot_index_expression\n'
-            .. '    table: (identifier) @_love\n'
-            .. '    field: (identifier) @_module)\n'
-            .. '  field: (identifier) @function.lua.love)\n'
+            .. "((dot_index_expression\n"
+            .. "  table: (dot_index_expression\n"
+            .. "    table: (identifier) @_love\n"
+            .. "    field: (identifier) @_module)\n"
+            .. "  field: (identifier) @function.lua.love)\n"
             .. '  (#eq? @_love "love")\n'
-            .. '  (#eq? @_module "' .. module_name .. '")\n'
-            .. '  (#match? @function.lua.love\n'
-            .. '    "^(' .. funcs_str .. ')$")(#set! priority 150))\n\n'
+            .. '  (#eq? @_module "'
+            .. module_name
+            .. '")\n'
+            .. "  (#match? @function.lua.love\n"
+            .. '    "^('
+            .. funcs_str
+            .. ')$")(#set! priority 150))\n\n'
     end
 end
 
-if scm_types_str ~= '' then
+if scm_types_str ~= "" then
     scm_content = scm_content
-        .. '; Types\n'
-        .. '((dot_index_expression\n'
-        .. '  table: (identifier) @_love\n'
-        .. '  field: (identifier) @type.lua.love)\n'
+        .. "; Types\n"
+        .. "((dot_index_expression\n"
+        .. "  table: (identifier) @_love\n"
+        .. "  field: (identifier) @type.lua.love)\n"
         .. '  (#eq? @_love "love")\n'
-        .. '  (#match? @type.lua.love\n'
-        .. '    "^(' .. scm_types_str .. ')$")(#set! priority 150))\n\n'
-        .. '(function_call\n'
-        .. '  name: (method_index_expression\n'
-        .. '    method: (identifier) @type.lua.love\n'
-        .. '    (#match? @type.lua.love "^(' .. scm_types_str .. ')$")(#set! priority 150)))\n\n'
-        .. '(function_declaration\n'
-        .. '  name: (method_index_expression\n'
-        .. '    method: (identifier) @type.lua.love\n'
-        .. '    (#match? @type.lua.love "^(' .. scm_types_str .. ')$")(#set! priority 150)))\n\n'
+        .. "  (#match? @type.lua.love\n"
+        .. '    "^('
+        .. scm_types_str
+        .. ')$")(#set! priority 150))\n\n'
+        .. "(function_call\n"
+        .. "  name: (method_index_expression\n"
+        .. "    method: (identifier) @type.lua.love\n"
+        .. '    (#match? @type.lua.love "^('
+        .. scm_types_str
+        .. ')$")(#set! priority 150)))\n\n'
+        .. "(function_declaration\n"
+        .. "  name: (method_index_expression\n"
+        .. "    method: (identifier) @type.lua.love\n"
+        .. '    (#match? @type.lua.love "^('
+        .. scm_types_str
+        .. ')$")(#set! priority 150)))\n\n'
 end
 
-if scm_callbacks_str ~= '' then
+if scm_callbacks_str ~= "" then
     scm_content = scm_content
-        .. '; Callbacks\n'
-        .. '((dot_index_expression\n'
-        .. '  table: (identifier) @_love\n'
-        .. '  field: (identifier) @function.call.lua.love.callback)\n'
+        .. "; Callbacks\n"
+        .. "((dot_index_expression\n"
+        .. "  table: (identifier) @_love\n"
+        .. "  field: (identifier) @function.call.lua.love.callback)\n"
         .. '  (#eq? @_love "love")\n'
-        .. '  (#match? @function.call.lua.love.callback\n'
-        .. '    "^(' .. scm_callbacks_str .. ')$")(#set! priority 130))\n\n'
+        .. "  (#match? @function.call.lua.love.callback\n"
+        .. '    "^('
+        .. scm_callbacks_str
+        .. ')$")(#set! priority 130))\n\n'
 end
 
 local conf_scm = "; LOVE conf (t.window, t.modules, etc)\n"
 conf_scm = conf_scm
-    .. '((dot_index_expression\n'
-    .. '  table: (identifier) @variable.global.lua.love)\n'
+    .. "((dot_index_expression\n"
+    .. "  table: (identifier) @variable.global.lua.love)\n"
     .. '  (#eq? @variable.global.lua.love "t")(#set! priority 150))\n\n'
 for key, subkeys in pairs(scm_conf_keys) do
     -- t.window
-    conf_scm = conf_scm ..
-        "((dot_index_expression\n" ..
-        "  table: (identifier) @_t\n" ..
-        "  field: (identifier) @function.call.lua.love.conf)\n" ..
-        "  (#eq? @_t \"t\")\n" ..
-        "  (#eq? @function.call.lua.love.conf \"" .. key .. "\")(#set! priority 150))\n\n"
+    conf_scm = conf_scm
+        .. "((dot_index_expression\n"
+        .. "  table: (identifier) @_t\n"
+        .. "  field: (identifier) @function.call.lua.love.conf)\n"
+        .. '  (#eq? @_t "t")\n'
+        .. '  (#eq? @function.call.lua.love.conf "'
+        .. key
+        .. '")(#set! priority 150))\n\n'
 
     -- t.window.title
     if #subkeys > 0 then
         local sub_str = table.concat(subkeys, "|")
-        conf_scm = conf_scm ..
-            "((dot_index_expression\n" ..
-            "  table: (dot_index_expression\n" ..
-            "    table: (identifier) @_t\n" ..
-            "    field: (identifier) @_prop)\n" ..
-            "  field: (identifier) @function.call.lua.love.conf)\n" ..
-            "  (#eq? @_t \"t\")\n" ..
-            "  (#eq? @_prop \"" .. key .. "\")\n" ..
-            "  (#match? @function.call.lua.love.conf \"^(" .. sub_str .. ")$\")(#set! priority 150))\n\n"
+        conf_scm = conf_scm
+            .. "((dot_index_expression\n"
+            .. "  table: (dot_index_expression\n"
+            .. "    table: (identifier) @_t\n"
+            .. "    field: (identifier) @_prop)\n"
+            .. "  field: (identifier) @function.call.lua.love.conf)\n"
+            .. '  (#eq? @_t "t")\n'
+            .. '  (#eq? @_prop "'
+            .. key
+            .. '")\n'
+            .. '  (#match? @function.call.lua.love.conf "^('
+            .. sub_str
+            .. ')$")(#set! priority 150))\n\n'
     end
 end
 
