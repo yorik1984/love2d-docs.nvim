@@ -4,117 +4,49 @@
 -- If you want to change the syntax, edit that file and run `build/gen.dat(sh)`
 -- it to generate a new version of this file.
 
+---@diagnostic disable: missing-parameter
+---@diagnostic disable: unused-local
+---@diagnostic disable: duplicate-set-field
+
 -- LÖVE2D API LIST
 
 -- === CALLBACKS ===
-function love.conf(...)
-    print('conf called')
-end
-function love.directorydropped(...)
-    print('directorydropped called')
-end
-function love.displayrotated(...)
-    print('displayrotated called')
-end
-function love.draw(...)
-    print('draw called')
-end
-function love.errorhandler(...)
-    print('errorhandler called')
-end
-function love.filedropped(...)
-    print('filedropped called')
-end
-function love.focus(...)
-    print('focus called')
-end
-function love.gamepadaxis(...)
-    print('gamepadaxis called')
-end
-function love.gamepadpressed(...)
-    print('gamepadpressed called')
-end
-function love.gamepadreleased(...)
-    print('gamepadreleased called')
-end
-function love.joystickadded(...)
-    print('joystickadded called')
-end
-function love.joystickaxis(...)
-    print('joystickaxis called')
-end
-function love.joystickhat(...)
-    print('joystickhat called')
-end
-function love.joystickpressed(...)
-    print('joystickpressed called')
-end
-function love.joystickreleased(...)
-    print('joystickreleased called')
-end
-function love.joystickremoved(...)
-    print('joystickremoved called')
-end
-function love.keypressed(...)
-    print('keypressed called')
-end
-function love.keyreleased(...)
-    print('keyreleased called')
-end
-function love.load(...)
-    print('load called')
-end
-function love.lowmemory(...)
-    print('lowmemory called')
-end
-function love.mousefocus(...)
-    print('mousefocus called')
-end
-function love.mousemoved(...)
-    print('mousemoved called')
-end
-function love.mousepressed(...)
-    print('mousepressed called')
-end
-function love.mousereleased(...)
-    print('mousereleased called')
-end
-function love.quit(...)
-    print('quit called')
-end
-function love.resize(...)
-    print('resize called')
-end
-function love.run(...)
-    print('run called')
-end
-function love.textedited(...)
-    print('textedited called')
-end
-function love.textinput(...)
-    print('textinput called')
-end
-function love.threaderror(...)
-    print('threaderror called')
-end
-function love.touchmoved(...)
-    print('touchmoved called')
-end
-function love.touchpressed(...)
-    print('touchpressed called')
-end
-function love.touchreleased(...)
-    print('touchreleased called')
-end
-function love.update(...)
-    print('update called')
-end
-function love.visible(...)
-    print('visible called')
-end
-function love.wheelmoved(...)
-    print('wheelmoved called')
-end
+love.conf()
+love.directorydropped()
+love.displayrotated()
+love.draw()
+love.errorhandler()
+love.filedropped()
+love.focus()
+love.gamepadaxis()
+love.gamepadpressed()
+love.gamepadreleased()
+love.joystickadded()
+love.joystickaxis()
+love.joystickhat()
+love.joystickpressed()
+love.joystickreleased()
+love.joystickremoved()
+love.keypressed()
+love.keyreleased()
+love.load()
+love.lowmemory()
+love.mousefocus()
+love.mousemoved()
+love.mousepressed()
+love.mousereleased()
+love.quit()
+love.resize()
+love.run()
+love.textedited()
+love.textinput()
+love.threaderror()
+love.touchmoved()
+love.touchpressed()
+love.touchreleased()
+love.update()
+love.visible()
+love.wheelmoved()
 
 -- === MODULES & FUNCTIONS ===
 -- Module: audio
@@ -467,17 +399,785 @@ love.window.toPixels()
 love.window.updateMode()
 
 -- === TYPES & METHODS ===
--- Type: Data
-local obj_data = {}
-obj_data:clone()
-obj_data:getFFIPointer()
-obj_data:getPointer()
-obj_data:getSize()
-obj_data:getString()
+-- Type: love.Data
+local Data = {}
+Data:clone()
+Data:getFFIPointer()
+Data:getPointer()
+Data:getSize()
+Data:getString()
 
--- Type: Object
-local obj_object = {}
-obj_object:release()
-obj_object:type()
-obj_object:typeOf()
+-- Type: love.Object
+local Object = {}
+Object:release()
+Object:type()
+Object:typeOf()
+
+-- Type: love.video.VideoStream
+local VideoStream = {}
+VideoStream:getFilename()
+VideoStream:isPlaying()
+VideoStream:pause()
+VideoStream:play()
+VideoStream:rewind()
+VideoStream:seek()
+VideoStream:tell()
+
+-- Type: love.thread.Channel
+local Channel = {}
+Channel:clear()
+Channel:demand()
+Channel:getCount()
+Channel:hasRead()
+Channel:peek()
+Channel:performAtomic()
+Channel:pop()
+Channel:push()
+Channel:supply()
+
+-- Type: love.thread.Thread
+local Thread = {}
+Thread:getError()
+Thread:isRunning()
+Thread:start()
+Thread:wait()
+
+-- Type: love.sound.Decoder
+local Decoder = {}
+Decoder:clone()
+Decoder:decode()
+Decoder:getBitDepth()
+Decoder:getChannelCount()
+Decoder:getDuration()
+Decoder:getSampleRate()
+Decoder:seek()
+
+-- Type: love.sound.SoundData
+local SoundData = {}
+SoundData:getBitDepth()
+SoundData:getChannelCount()
+SoundData:getDuration()
+SoundData:getSample()
+SoundData:getSampleCount()
+SoundData:getSampleRate()
+SoundData:setSample()
+
+-- Type: love.physics.Body
+local Body = {}
+Body:applyAngularImpulse()
+Body:applyForce()
+Body:applyLinearImpulse()
+Body:applyTorque()
+Body:destroy()
+Body:getAngle()
+Body:getAngularDamping()
+Body:getAngularVelocity()
+Body:getContacts()
+Body:getFixtures()
+Body:getGravityScale()
+Body:getInertia()
+Body:getJoints()
+Body:getLinearDamping()
+Body:getLinearVelocity()
+Body:getLinearVelocityFromLocalPoint()
+Body:getLinearVelocityFromWorldPoint()
+Body:getLocalCenter()
+Body:getLocalPoint()
+Body:getLocalPoints()
+Body:getLocalVector()
+Body:getMass()
+Body:getMassData()
+Body:getPosition()
+Body:getTransform()
+Body:getType()
+Body:getUserData()
+Body:getWorld()
+Body:getWorldCenter()
+Body:getWorldPoint()
+Body:getWorldPoints()
+Body:getWorldVector()
+Body:getX()
+Body:getY()
+Body:isActive()
+Body:isAwake()
+Body:isBullet()
+Body:isDestroyed()
+Body:isFixedRotation()
+Body:isSleepingAllowed()
+Body:isTouching()
+Body:resetMassData()
+Body:setActive()
+Body:setAngle()
+Body:setAngularDamping()
+Body:setAngularVelocity()
+Body:setAwake()
+Body:setBullet()
+Body:setFixedRotation()
+Body:setGravityScale()
+Body:setInertia()
+Body:setLinearDamping()
+Body:setLinearVelocity()
+Body:setMass()
+Body:setMassData()
+Body:setPosition()
+Body:setSleepingAllowed()
+Body:setTransform()
+Body:setType()
+Body:setUserData()
+Body:setX()
+Body:setY()
+
+-- Type: love.physics.ChainShape
+local ChainShape = {}
+ChainShape:getChildEdge()
+ChainShape:getNextVertex()
+ChainShape:getPoint()
+ChainShape:getPoints()
+ChainShape:getPreviousVertex()
+ChainShape:getVertexCount()
+ChainShape:setNextVertex()
+ChainShape:setPreviousVertex()
+
+-- Type: love.physics.CircleShape
+local CircleShape = {}
+CircleShape:getPoint()
+CircleShape:getRadius()
+CircleShape:setPoint()
+CircleShape:setRadius()
+
+-- Type: love.physics.Contact
+local Contact = {}
+Contact:getChildren()
+Contact:getFixtures()
+Contact:getFriction()
+Contact:getNormal()
+Contact:getPositions()
+Contact:getRestitution()
+Contact:isEnabled()
+Contact:isTouching()
+Contact:resetFriction()
+Contact:resetRestitution()
+Contact:setEnabled()
+Contact:setFriction()
+Contact:setRestitution()
+
+-- Type: love.physics.DistanceJoint
+local DistanceJoint = {}
+DistanceJoint:getDampingRatio()
+DistanceJoint:getFrequency()
+DistanceJoint:getLength()
+DistanceJoint:setDampingRatio()
+DistanceJoint:setFrequency()
+DistanceJoint:setLength()
+
+-- Type: love.physics.EdgeShape
+local EdgeShape = {}
+EdgeShape:getNextVertex()
+EdgeShape:getPoints()
+EdgeShape:getPreviousVertex()
+EdgeShape:setNextVertex()
+EdgeShape:setPreviousVertex()
+
+-- Type: love.physics.Fixture
+local Fixture = {}
+Fixture:destroy()
+Fixture:getBody()
+Fixture:getBoundingBox()
+Fixture:getCategory()
+Fixture:getDensity()
+Fixture:getFilterData()
+Fixture:getFriction()
+Fixture:getGroupIndex()
+Fixture:getMask()
+Fixture:getMassData()
+Fixture:getRestitution()
+Fixture:getShape()
+Fixture:getUserData()
+Fixture:isDestroyed()
+Fixture:isSensor()
+Fixture:rayCast()
+Fixture:setCategory()
+Fixture:setDensity()
+Fixture:setFilterData()
+Fixture:setFriction()
+Fixture:setGroupIndex()
+Fixture:setMask()
+Fixture:setRestitution()
+Fixture:setSensor()
+Fixture:setUserData()
+Fixture:testPoint()
+
+-- Type: love.physics.FrictionJoint
+local FrictionJoint = {}
+FrictionJoint:getMaxForce()
+FrictionJoint:getMaxTorque()
+FrictionJoint:setMaxForce()
+FrictionJoint:setMaxTorque()
+
+-- Type: love.physics.GearJoint
+local GearJoint = {}
+GearJoint:getJoints()
+GearJoint:getRatio()
+GearJoint:setRatio()
+
+-- Type: love.physics.Joint
+local Joint = {}
+Joint:destroy()
+Joint:getAnchors()
+Joint:getBodies()
+Joint:getCollideConnected()
+Joint:getReactionForce()
+Joint:getReactionTorque()
+Joint:getType()
+Joint:getUserData()
+Joint:isDestroyed()
+Joint:setUserData()
+
+-- Type: love.physics.MotorJoint
+local MotorJoint = {}
+MotorJoint:getAngularOffset()
+MotorJoint:getLinearOffset()
+MotorJoint:setAngularOffset()
+MotorJoint:setLinearOffset()
+
+-- Type: love.physics.MouseJoint
+local MouseJoint = {}
+MouseJoint:getDampingRatio()
+MouseJoint:getFrequency()
+MouseJoint:getMaxForce()
+MouseJoint:getTarget()
+MouseJoint:setDampingRatio()
+MouseJoint:setFrequency()
+MouseJoint:setMaxForce()
+MouseJoint:setTarget()
+
+-- Type: love.physics.PolygonShape
+local PolygonShape = {}
+PolygonShape:getPoints()
+
+-- Type: love.physics.PrismaticJoint
+local PrismaticJoint = {}
+PrismaticJoint:areLimitsEnabled()
+PrismaticJoint:getAxis()
+PrismaticJoint:getJointSpeed()
+PrismaticJoint:getJointTranslation()
+PrismaticJoint:getLimits()
+PrismaticJoint:getLowerLimit()
+PrismaticJoint:getMaxMotorForce()
+PrismaticJoint:getMotorForce()
+PrismaticJoint:getMotorSpeed()
+PrismaticJoint:getReferenceAngle()
+PrismaticJoint:getUpperLimit()
+PrismaticJoint:isMotorEnabled()
+PrismaticJoint:setLimits()
+PrismaticJoint:setLimitsEnabled()
+PrismaticJoint:setLowerLimit()
+PrismaticJoint:setMaxMotorForce()
+PrismaticJoint:setMotorEnabled()
+PrismaticJoint:setMotorSpeed()
+PrismaticJoint:setUpperLimit()
+
+-- Type: love.physics.PulleyJoint
+local PulleyJoint = {}
+PulleyJoint:getConstant()
+PulleyJoint:getGroundAnchors()
+PulleyJoint:getLengthA()
+PulleyJoint:getLengthB()
+PulleyJoint:getMaxLengths()
+PulleyJoint:getRatio()
+PulleyJoint:setConstant()
+PulleyJoint:setMaxLengths()
+PulleyJoint:setRatio()
+
+-- Type: love.physics.RevoluteJoint
+local RevoluteJoint = {}
+RevoluteJoint:areLimitsEnabled()
+RevoluteJoint:getJointAngle()
+RevoluteJoint:getJointSpeed()
+RevoluteJoint:getLimits()
+RevoluteJoint:getLowerLimit()
+RevoluteJoint:getMaxMotorTorque()
+RevoluteJoint:getMotorSpeed()
+RevoluteJoint:getMotorTorque()
+RevoluteJoint:getReferenceAngle()
+RevoluteJoint:getUpperLimit()
+RevoluteJoint:hasLimitsEnabled()
+RevoluteJoint:isMotorEnabled()
+RevoluteJoint:setLimits()
+RevoluteJoint:setLimitsEnabled()
+RevoluteJoint:setLowerLimit()
+RevoluteJoint:setMaxMotorTorque()
+RevoluteJoint:setMotorEnabled()
+RevoluteJoint:setMotorSpeed()
+RevoluteJoint:setUpperLimit()
+
+-- Type: love.physics.RopeJoint
+local RopeJoint = {}
+RopeJoint:getMaxLength()
+RopeJoint:setMaxLength()
+
+-- Type: love.physics.Shape
+local Shape = {}
+Shape:computeAABB()
+Shape:computeMass()
+Shape:getChildCount()
+Shape:getRadius()
+Shape:getType()
+Shape:rayCast()
+Shape:testPoint()
+
+-- Type: love.physics.WeldJoint
+local WeldJoint = {}
+WeldJoint:getDampingRatio()
+WeldJoint:getFrequency()
+WeldJoint:getReferenceAngle()
+WeldJoint:setDampingRatio()
+WeldJoint:setFrequency()
+
+-- Type: love.physics.WheelJoint
+local WheelJoint = {}
+WheelJoint:getAxis()
+WheelJoint:getJointSpeed()
+WheelJoint:getJointTranslation()
+WheelJoint:getMaxMotorTorque()
+WheelJoint:getMotorSpeed()
+WheelJoint:getMotorTorque()
+WheelJoint:getSpringDampingRatio()
+WheelJoint:getSpringFrequency()
+WheelJoint:isMotorEnabled()
+WheelJoint:setMaxMotorTorque()
+WheelJoint:setMotorEnabled()
+WheelJoint:setMotorSpeed()
+WheelJoint:setSpringDampingRatio()
+WheelJoint:setSpringFrequency()
+
+-- Type: love.physics.World
+local World = {}
+World:destroy()
+World:getBodies()
+World:getBodyCount()
+World:getCallbacks()
+World:getContactCount()
+World:getContactFilter()
+World:getContacts()
+World:getGravity()
+World:getJointCount()
+World:getJoints()
+World:isDestroyed()
+World:isLocked()
+World:isSleepingAllowed()
+World:queryBoundingBox()
+World:rayCast()
+World:setCallbacks()
+World:setContactFilter()
+World:setGravity()
+World:setSleepingAllowed()
+World:translateOrigin()
+World:update()
+
+-- Type: love.mouse.Cursor
+local Cursor = {}
+Cursor:getType()
+
+-- Type: love.math.BezierCurve
+local BezierCurve = {}
+BezierCurve:evaluate()
+BezierCurve:getControlPoint()
+BezierCurve:getControlPointCount()
+BezierCurve:getDegree()
+BezierCurve:getDerivative()
+BezierCurve:getSegment()
+BezierCurve:insertControlPoint()
+BezierCurve:removeControlPoint()
+BezierCurve:render()
+BezierCurve:renderSegment()
+BezierCurve:rotate()
+BezierCurve:scale()
+BezierCurve:setControlPoint()
+BezierCurve:translate()
+
+-- Type: love.math.RandomGenerator
+local RandomGenerator = {}
+RandomGenerator:getSeed()
+RandomGenerator:getState()
+RandomGenerator:random()
+RandomGenerator:randomNormal()
+RandomGenerator:setSeed()
+RandomGenerator:setState()
+
+-- Type: love.math.Transform
+local Transform = {}
+Transform:apply()
+Transform:clone()
+Transform:getMatrix()
+Transform:inverse()
+Transform:inverseTransformPoint()
+Transform:isAffine2DTransform()
+Transform:reset()
+Transform:rotate()
+Transform:scale()
+Transform:setMatrix()
+Transform:setTransformation()
+Transform:shear()
+Transform:transformPoint()
+Transform:translate()
+
+-- Type: love.joystick.Joystick
+local Joystick = {}
+Joystick:getAxes()
+Joystick:getAxis()
+Joystick:getAxisCount()
+Joystick:getButtonCount()
+Joystick:getDeviceInfo()
+Joystick:getGUID()
+Joystick:getGamepadAxis()
+Joystick:getGamepadMapping()
+Joystick:getGamepadMappingString()
+Joystick:getHat()
+Joystick:getHatCount()
+Joystick:getID()
+Joystick:getName()
+Joystick:getVibration()
+Joystick:isConnected()
+Joystick:isDown()
+Joystick:isGamepad()
+Joystick:isGamepadDown()
+Joystick:isVibrationSupported()
+Joystick:setVibration()
+
+-- Type: love.image.CompressedImageData
+local CompressedImageData = {}
+CompressedImageData:getDimensions()
+CompressedImageData:getFormat()
+CompressedImageData:getHeight()
+CompressedImageData:getMipmapCount()
+CompressedImageData:getWidth()
+
+-- Type: love.image.ImageData
+local ImageData = {}
+ImageData:encode()
+ImageData:getDimensions()
+ImageData:getHeight()
+ImageData:getPixel()
+ImageData:getWidth()
+ImageData:mapPixel()
+ImageData:paste()
+ImageData:setPixel()
+ImageData:getFormat()
+
+-- Type: love.graphics.Canvas
+local Canvas = {}
+Canvas:generateMipmaps()
+Canvas:getMSAA()
+Canvas:getMipmapMode()
+Canvas:newImageData()
+Canvas:renderTo()
+
+-- Type: love.graphics.Drawable
+local Drawable = {}
+
+-- Type: love.graphics.Font
+local Font = {}
+Font:getAscent()
+Font:getBaseline()
+Font:getDPIScale()
+Font:getDescent()
+Font:getFilter()
+Font:getHeight()
+Font:getKerning()
+Font:getLineHeight()
+Font:getWidth()
+Font:getWrap()
+Font:hasGlyphs()
+Font:setFallbacks()
+Font:setFilter()
+Font:setLineHeight()
+
+-- Type: love.graphics.Image
+local Image = {}
+Image:isCompressed()
+Image:isFormatLinear()
+Image:replacePixels()
+
+-- Type: love.graphics.Mesh
+local Mesh = {}
+Mesh:attachAttribute()
+Mesh:detachAttribute()
+Mesh:flush()
+Mesh:getDrawMode()
+Mesh:getDrawRange()
+Mesh:getTexture()
+Mesh:getVertex()
+Mesh:getVertexAttribute()
+Mesh:getVertexCount()
+Mesh:getVertexFormat()
+Mesh:getVertexMap()
+Mesh:isAttributeEnabled()
+Mesh:setAttributeEnabled()
+Mesh:setDrawMode()
+Mesh:setDrawRange()
+Mesh:setTexture()
+Mesh:setVertex()
+Mesh:setVertexAttribute()
+Mesh:setVertexMap()
+Mesh:setVertices()
+
+-- Type: love.graphics.ParticleSystem
+local ParticleSystem = {}
+ParticleSystem:clone()
+ParticleSystem:emit()
+ParticleSystem:getBufferSize()
+ParticleSystem:getColors()
+ParticleSystem:getCount()
+ParticleSystem:getDirection()
+ParticleSystem:getEmissionArea()
+ParticleSystem:getEmissionRate()
+ParticleSystem:getEmitterLifetime()
+ParticleSystem:getInsertMode()
+ParticleSystem:getLinearAcceleration()
+ParticleSystem:getLinearDamping()
+ParticleSystem:getOffset()
+ParticleSystem:getParticleLifetime()
+ParticleSystem:getPosition()
+ParticleSystem:getQuads()
+ParticleSystem:getRadialAcceleration()
+ParticleSystem:getRotation()
+ParticleSystem:getSizeVariation()
+ParticleSystem:getSizes()
+ParticleSystem:getSpeed()
+ParticleSystem:getSpin()
+ParticleSystem:getSpinVariation()
+ParticleSystem:getSpread()
+ParticleSystem:getTangentialAcceleration()
+ParticleSystem:getTexture()
+ParticleSystem:hasRelativeRotation()
+ParticleSystem:isActive()
+ParticleSystem:isPaused()
+ParticleSystem:isStopped()
+ParticleSystem:moveTo()
+ParticleSystem:pause()
+ParticleSystem:reset()
+ParticleSystem:setBufferSize()
+ParticleSystem:setColors()
+ParticleSystem:setDirection()
+ParticleSystem:setEmissionArea()
+ParticleSystem:setEmissionRate()
+ParticleSystem:setEmitterLifetime()
+ParticleSystem:setInsertMode()
+ParticleSystem:setLinearAcceleration()
+ParticleSystem:setLinearDamping()
+ParticleSystem:setOffset()
+ParticleSystem:setParticleLifetime()
+ParticleSystem:setPosition()
+ParticleSystem:setQuads()
+ParticleSystem:setRadialAcceleration()
+ParticleSystem:setRelativeRotation()
+ParticleSystem:setRotation()
+ParticleSystem:setSizeVariation()
+ParticleSystem:setSizes()
+ParticleSystem:setSpeed()
+ParticleSystem:setSpin()
+ParticleSystem:setSpinVariation()
+ParticleSystem:setSpread()
+ParticleSystem:setTangentialAcceleration()
+ParticleSystem:setTexture()
+ParticleSystem:start()
+ParticleSystem:stop()
+ParticleSystem:update()
+
+-- Type: love.graphics.Quad
+local Quad = {}
+Quad:getTextureDimensions()
+Quad:getViewport()
+Quad:setViewport()
+
+-- Type: love.graphics.Shader
+local Shader = {}
+Shader:getWarnings()
+Shader:hasUniform()
+Shader:send()
+Shader:sendColor()
+
+-- Type: love.graphics.SpriteBatch
+local SpriteBatch = {}
+SpriteBatch:add()
+SpriteBatch:addLayer()
+SpriteBatch:attachAttribute()
+SpriteBatch:clear()
+SpriteBatch:flush()
+SpriteBatch:getBufferSize()
+SpriteBatch:getColor()
+SpriteBatch:getCount()
+SpriteBatch:getTexture()
+SpriteBatch:set()
+SpriteBatch:setColor()
+SpriteBatch:setDrawRange()
+SpriteBatch:setLayer()
+SpriteBatch:setTexture()
+
+-- Type: love.graphics.Text
+local Text = {}
+Text:add()
+Text:addf()
+Text:clear()
+Text:getDimensions()
+Text:getFont()
+Text:getHeight()
+Text:getWidth()
+Text:set()
+Text:setFont()
+Text:setf()
+
+-- Type: love.graphics.Texture
+local Texture = {}
+Texture:getDPIScale()
+Texture:getDepth()
+Texture:getDepthSampleMode()
+Texture:getDimensions()
+Texture:getFilter()
+Texture:getFormat()
+Texture:getHeight()
+Texture:getLayerCount()
+Texture:getMipmapCount()
+Texture:getMipmapFilter()
+Texture:getPixelDimensions()
+Texture:getPixelHeight()
+Texture:getPixelWidth()
+Texture:getTextureType()
+Texture:getWidth()
+Texture:getWrap()
+Texture:isReadable()
+Texture:setDepthSampleMode()
+Texture:setFilter()
+Texture:setMipmapFilter()
+Texture:setWrap()
+
+-- Type: love.graphics.Video
+local Video = {}
+Video:getDimensions()
+Video:getFilter()
+Video:getHeight()
+Video:getSource()
+Video:getStream()
+Video:getWidth()
+Video:isPlaying()
+Video:pause()
+Video:play()
+Video:rewind()
+Video:seek()
+Video:setFilter()
+Video:setSource()
+Video:tell()
+
+-- Type: love.font.GlyphData
+local GlyphData = {}
+GlyphData:getAdvance()
+GlyphData:getBearing()
+GlyphData:getBoundingBox()
+GlyphData:getDimensions()
+GlyphData:getFormat()
+GlyphData:getGlyph()
+GlyphData:getGlyphString()
+GlyphData:getHeight()
+GlyphData:getWidth()
+
+-- Type: love.font.Rasterizer
+local Rasterizer = {}
+Rasterizer:getAdvance()
+Rasterizer:getAscent()
+Rasterizer:getDescent()
+Rasterizer:getGlyphCount()
+Rasterizer:getGlyphData()
+Rasterizer:getHeight()
+Rasterizer:getLineHeight()
+Rasterizer:hasGlyphs()
+
+-- Type: love.filesystem.DroppedFile
+local DroppedFile = {}
+
+-- Type: love.filesystem.File
+local File = {}
+File:close()
+File:flush()
+File:getBuffer()
+File:getFilename()
+File:getMode()
+File:getSize()
+File:isEOF()
+File:isOpen()
+File:lines()
+File:open()
+File:read()
+File:seek()
+File:setBuffer()
+File:tell()
+File:write()
+
+-- Type: love.filesystem.FileData
+local FileData = {}
+FileData:getExtension()
+FileData:getFilename()
+
+-- Type: love.data.ByteData
+local ByteData = {}
+
+-- Type: love.data.CompressedData
+local CompressedData = {}
+CompressedData:getFormat()
+
+-- Type: love.audio.RecordingDevice
+local RecordingDevice = {}
+RecordingDevice:getBitDepth()
+RecordingDevice:getChannelCount()
+RecordingDevice:getData()
+RecordingDevice:getName()
+RecordingDevice:getSampleCount()
+RecordingDevice:getSampleRate()
+RecordingDevice:isRecording()
+RecordingDevice:start()
+RecordingDevice:stop()
+
+-- Type: love.audio.Source
+local Source = {}
+Source:clone()
+Source:getActiveEffects()
+Source:getAirAbsorption()
+Source:getAttenuationDistances()
+Source:getChannelCount()
+Source:getCone()
+Source:getDirection()
+Source:getDuration()
+Source:getEffect()
+Source:getFilter()
+Source:getFreeBufferCount()
+Source:getPitch()
+Source:getPosition()
+Source:getRolloff()
+Source:getType()
+Source:getVelocity()
+Source:getVolume()
+Source:getVolumeLimits()
+Source:isLooping()
+Source:isPlaying()
+Source:isRelative()
+Source:pause()
+Source:play()
+Source:queue()
+Source:seek()
+Source:setAirAbsorption()
+Source:setAttenuationDistances()
+Source:setCone()
+Source:setDirection()
+Source:setEffect()
+Source:setFilter()
+Source:setLooping()
+Source:setPitch()
+Source:setPosition()
+Source:setRelative()
+Source:setRolloff()
+Source:setVelocity()
+Source:setVolume()
+Source:setVolumeLimits()
+Source:stop()
+Source:tell()
 
