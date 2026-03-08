@@ -1,4 +1,4 @@
-local api = require 'love-api.love_api'
+local api = require("love-api.love_api")
 
 print([[
 -- WARNING!
@@ -12,27 +12,54 @@ print([[
 ---@diagnostic disable: duplicate-set-field
 ]])
 
+-- Exclude lists for callbacks, functions, modules, and types
+local function makeSet(t)
+    local set = {}
+    for _, v in ipairs(t) do
+        set[v] = true
+    end
+    return set
+end
+
+local exclude_callbacks = {
+    "conf",
+}
+local exclude_functions = {}
+local exclude_modules   = {}
+local exclude_types     = {}
+
+local exclude_callbacks_set = makeSet(exclude_callbacks)
+local exclude_functions_set = makeSet(exclude_functions)
+local exclude_modules_set   = makeSet(exclude_modules)
+local exclude_types_set     = makeSet(exclude_types)
+
 local function generate_test_file(tab)
     local lines = { "-- LÖVE2D API LIST", "" }
 
-    -- 1. Callbacks
+    -- 1. Callbacks (filtered)
     table.insert(lines, "-- === CALLBACKS ===")
     for _, cb in ipairs(tab.callbacks or {}) do
-        table.insert(lines, string.format("love.%s()", cb.name))
+        if not exclude_callbacks_set[cb.name] then
+            table.insert(lines, string.format("love.%s()", cb.name))
+        end
     end
     table.insert(lines, "")
 
-    -- 2. Modules and Functions
+    -- 2. Modules and Functions (filtered)
     table.insert(lines, "-- === MODULES & FUNCTIONS ===")
     for _, module in ipairs(tab.modules or {}) do
-        table.insert(lines, "-- Module: " .. module.name)
-        for _, func in ipairs(module.functions or {}) do
-            table.insert(lines, string.format("love.%s.%s()", module.name, func.name))
+        if not exclude_modules_set[module.name] then
+            table.insert(lines, "-- Module: " .. module.name)
+            for _, func in ipairs(module.functions or {}) do
+                if not exclude_functions_set[func.name] then
+                    table.insert(lines, string.format("love.%s.%s()", module.name, func.name))
+                end
+            end
+            table.insert(lines, "")
         end
-        table.insert(lines, "")
     end
 
-    -- 3. Types
+    -- 3. Types (filtered)
     table.insert(lines, "-- === TYPES & METHODS ===")
 
     local rootName = tab.name or "love"
@@ -44,17 +71,19 @@ local function generate_test_file(tab)
         local modPath = node.path
 
         for _, typ in ipairs(mod.types or {}) do
-            local fullName = modPath .. "." .. typ.name
-            table.insert(lines, "-- Type: " .. fullName)
+            if not exclude_types_set[typ.name] then
+                local fullName = modPath .. "." .. typ.name
+                table.insert(lines, "-- Type: " .. fullName)
 
-            local obj_name = typ.name
-            table.insert(lines, "local " .. obj_name .. " = {}")
+                local obj_name = typ.name
+                table.insert(lines, "local " .. obj_name .. " = {}")
 
-            for _, method in ipairs(typ.functions or {}) do
-                table.insert(lines, string.format("%s:%s()", obj_name, method.name))
+                for _, method in ipairs(typ.functions or {}) do
+                    table.insert(lines, string.format("%s:%s()", obj_name, method.name))
+                end
+
+                table.insert(lines, "")
             end
-
-            table.insert(lines, "")
         end
 
         for _, sub in ipairs(mod.modules or {}) do
