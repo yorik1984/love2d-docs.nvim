@@ -215,7 +215,7 @@ if #callbackstr > 0 then
 end
 
 print(
-    'syntax region LoveConfRegion start="\\<love\\.conf\\>" end="\\<end\\>" me=e-3,he=e-3,re=e-3 skipwhite skipempty '
+    'syntax region LoveConfRegion start="\\<love\\.conf\\>" end="\\<end\\>"me=e-3,he=e-3,re=e-3 skipwhite skipempty '
         .. containedin
         .. " contains=ALL,Love\n"
 )

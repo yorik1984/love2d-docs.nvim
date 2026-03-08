@@ -92,7 +92,7 @@ syntax match LoveFunction "love\.physics\.\%(getDistance\|getMeter\|newBody\|new
 
 syntax match LoveCallback "\<love\.\%(conf\|directorydropped\|displayrotated\|draw\|errorhandler\|filedropped\|focus\|gamepadaxis\|gamepadpressed\|gamepadreleased\|joystickadded\|joystickaxis\|joystickhat\|joystickpressed\|joystickreleased\|joystickremoved\|keypressed\|keyreleased\|load\|lowmemory\|mousefocus\|mousemoved\|mousepressed\|mousereleased\|quit\|resize\|run\|textedited\|textinput\|threaderror\|touchmoved\|touchpressed\|touchreleased\|update\|visible\|wheelmoved\)\>" contains=Love,LoveDot containedin=ALLBUT,luaString,luaComment
 
-syntax region LoveConfRegion start="\<love\.conf\>" end="\<end\>" me=e-3,he=e-3,re=e-3 skipwhite skipempty containedin=ALLBUT,luaString,luaComment contains=ALL,Love
+syntax region LoveConfRegion start="\<love\.conf\>" end="\<end\>"me=e-3,he=e-3,re=e-3 skipwhite skipempty containedin=ALLBUT,luaString,luaComment contains=ALL,Love
 
 syntax match Love "\<love\>" contained
 
