@@ -8,52 +8,115 @@ print([[
 " If you want to change the syntax, edit that file and run `build/gen.dat(sh)`
 " it to generate a new version of this file.
 ]])
--- Generate syntax matching for love.conf
--- TODO:
--- Allow support for variant love.conf = function()
--- (may not work because lua function overrides?)
-local function extractDataConf(tab, index)
-    local originalconfstr = 'syntax match LoveConf "'
-    local confstr = originalconfstr
-    local funcstrconf = ""
+
+-- Dictionaries to store methods by type
+local typeMethods = {}  -- type_name -> list of methods
+local allTypes = {}     -- list of all type names
+
+-- Recursively collect methods for each type
+local function collectTypeMethods(tab, currentPath)
+    currentPath = currentPath or ""
+
     for i, v in pairs(tab) do
-        if i == 'functions' or i == 'callbacks' then
-            if tab.name and (tab.name or ''):sub(1, 1):match('%l') then funcstrconf = funcstrconf ..
-                tab.name .. '\\.\\%(' end
-            for _, vv in pairs(v) do
-                if vv.name == 'conf' then
-                    for _, vvv in pairs(vv.variants[1].arguments[1].table) do
-                        if vvv.name then
-                            confstr = confstr .. '\\%(\\.'
-                            if type(vvv) == 'table' then
-                                confstr = confstr .. vvv.name .. '\\%('
-                                local hasSubs = false
-                                for _, vvvv in pairs(vvv.table or {}) do
-                                    hasSubs = true
-                                    confstr = confstr .. '\\.' .. vvvv.name .. '\\|'
-                                end
-                                if hasSubs then
-                                    confstr = confstr:sub(1, -3) .. '\\)'
-                                else
-                                    confstr = confstr:sub(1, -4)
-                                end
-                                confstr = confstr .. '\\>'
-                            end
-                            confstr = confstr:sub(1, -1) .. '\\)\\|'
-                        end
-                    end
-                    print(confstr:sub(1, -3) .. '"ms=s+1 contains=Lovet containedin=LoveConfRegion,luaFunctionBlock\n')
+        if i == 'types' then
+            for _, typ in ipairs(v) do
+                local typeName = typ.name
+                typeMethods[typeName] = typeMethods[typeName] or {}
+                table.insert(allTypes, typeName)
+
+                -- Collect methods for this type
+                for _, method in ipairs(typ.functions or {}) do
+                    table.insert(typeMethods[typeName], method.name)
                 end
             end
-            if type(v) == 'table' then extractDataConf(v) end
+        end
+
+        -- Recursively process modules
+        if i == 'modules' then
+            for _, module in ipairs(v) do
+                collectTypeMethods(module, currentPath .. "." .. module.name)
+            end
+        end
+
+        -- Also check nested tables
+        if type(v) == 'table' and i ~= 'modules' and i ~= 'types' then
+            collectTypeMethods(v, currentPath)
         end
     end
 end
 
+-- Generate syntax for love.conf
+local function extractDataConf(tab, index)
+    local originalconfstr = 'syntax match LoveConf "'
+    local confstr = originalconfstr
+    for i, v in pairs(tab) do
+        if i == 'functions' or i == 'callbacks' then
+            if tab.name and (tab.name or ''):sub(1, 1):match('%l') then
+                for _, vv in pairs(v) do
+                    if vv.name == 'conf' then
+                        for _, vvv in pairs(vv.variants[1].arguments[1].table) do
+                            if vvv.name then
+                                confstr = confstr .. '\\%(\\.'
+                                if type(vvv) == 'table' then
+                                    confstr = confstr .. vvv.name .. '\\%('
+                                    local hasSubs = false
+                                    for _, vvvv in pairs(vvv.table or {}) do
+                                        hasSubs = true
+                                        confstr = confstr .. '\\.' .. vvvv.name .. '\\|'
+                                    end
+                                    if hasSubs then
+                                        confstr = confstr:sub(1, -3) .. '\\)'
+                                    else
+                                        confstr = confstr:sub(1, -4)
+                                    end
+                                    confstr = confstr .. '\\>'
+                                end
+                                confstr = confstr:sub(1, -1) .. '\\)\\|'
+                            end
+                        end
+                        print(confstr:sub(1, -3) .. '"ms=s+1 contains=Lovet containedin=LoveConfRegion,luaFunctionBlock\n')
+                    end
+                end
+            end
+        end
+        if type(v) == 'table' then extractDataConf(v) end
+    end
+end
+
+-- First collect all methods by type
+collectTypeMethods(api)
+
+-- Generate LoveType pattern: list of all type names (simple word match)
+print('" LoveType - all type names\n')
+if #allTypes > 0 then
+    table.sort(allTypes)
+    local typeList = table.concat(allTypes, '\\|')
+    print('syntax match LoveType "\\(\\<' .. typeList .. '\\>\\)[:.]" contained')
+end
+print('')
+
+-- Generate LoveMethod pattern: each type with its methods
+print('" LoveMethod - all type methods in format Type[:.](method1|method2|...)\n')
+
+-- Build pattern for each type separately to ensure correct format
+for _, typeName in ipairs(allTypes) do
+    local methods = typeMethods[typeName]
+    if methods and #methods > 0 then
+        table.sort(methods)
+        local methodList = table.concat(methods, '\\|')
+
+        -- Format: Type[:.](method1|method2|...)
+        -- This creates a separate syntax match for each type
+        print('syntax match LoveMethod "' .. typeName .. '[:.]\\%(' .. methodList .. '\\)\\>" contains=LoveType')
+    end
+end
+print('')
+
+-- Now collect regular functions, modules, etc. (only love module functions)
 local funcstr = ''
-local typestr = ''
 local callbackstr = ''
 local modulestr = ''
+
 local function extractData(tab, index)
     for i, v in pairs(tab) do
         if i == 'functions' or i == 'callbacks' then
@@ -62,16 +125,12 @@ local function extractData(tab, index)
                 funcstr = funcstr .. tab.name .. '\\.\\%('
             end
             local func = false
-            local typ = false
             local callback = false
             for _, vv in pairs(v) do
                 if tab.name then
                     if tab.name:sub(1, 1):match('%l') then
                         func = true
                         funcstr = funcstr .. vv.name .. '\\|'
-                    else -- types
-                        typ = true
-                        typestr = typestr .. vv.name .. '\\|'
                     end
                 else
                     callback = true
@@ -79,15 +138,9 @@ local function extractData(tab, index)
                 end
             end
             if func then
-                -- We don't want to be able to have underscores after the word
                 funcstr = funcstr:sub(1, -3) .. '\\)\\)\\|\\%('
             end
-            if typ then
-                -- We don't want to be able to have underscores after the word or highlight the . or :
-                typestr = typestr:sub(1, -3) .. '\\)\\|\\%('
-            end
             if callback then
-                -- We don't want to be able to have underscores after the word
                 callbackstr = callbackstr:sub(1, -3) .. '\\)\\|\\%('
             end
         end
@@ -97,10 +150,7 @@ end
 
 extractData(api)
 
--- If syntax matches are too long, they are ignored
--- If each function gets individual syntax matches, it runs too slowly
--- Break each group to minimize the number of syntax matches
--- (2500 is an arbitraty limit that seems to work)
+-- Function to split long lines
 local textLimit = 2500
 local function limit(text, pre, post)
     while #text > 0 do
@@ -118,26 +168,36 @@ local function limit(text, pre, post)
 end
 
 local containedin = 'containedin=ALLBUT,luaString,luaComment'
+
+-- Main syntax elements
 print('syntax match Love "\\<love\\>" containedin=LoveModule,LoveFunction,LoveCallback,LoveConfRegion\n')
 
 if #modulestr > 0 then
     local modulePattern = modulestr:sub(1, -3)
-    print('syntax match LoveModule "\\<love\\.\\%(' .. modulePattern .. '\\)\\>" contains=Love ' .. containedin .. "\n")
+    print('syntax match LoveModule "\\<love\\.\\%(' .. modulePattern .. '\\)\\>" contains=Love,LoveDot ' .. containedin .. "\n")
 end
 
-limit('\\%(' .. typestr:sub(1, -7), 'syntax match LoveType "[\\:\\.]\\%(', '\\)\\>"ms=s+1 ' .. containedin .. "\n")
-limit('\\%(' .. funcstr:sub(1, -7), 'syntax match LoveFunction "\\<love\\.\\%(', '\\)\\>" contains=Love ' .. containedin .. "\n")
-limit('\\%(' .. callbackstr:sub(1, -7), 'syntax match LoveCallback "\\<love\\.\\%(', '\\)\\>" contains=Love ' .. containedin .. "\n")
+-- Regular module functions
+limit('\\%(' .. funcstr:sub(1, -7), 'syntax match LoveFunction "\\<love\\.\\%(', '\\)\\>" contains=Love,LoveDot ' .. containedin .. "\n")
 
-print('syntax region LoveConfRegion start="\\<love\\.conf\\>" end="\\<end\\>"me=e-3,he=e-3,re=e-3 skipwhite skipempty ' .. containedin .. ' contains=ALL\n')
+-- Callbacks
+limit('\\%(' .. callbackstr:sub(1, -7), 'syntax match LoveCallback "\\<love\\.\\%(', '\\)\\>" contains=Love,LoveDot ' .. containedin .. "\n")
 
-print('syntax match Lovet "\\<t\\>" containedin=LoveConf\n')
+-- love.conf region
+print('syntax region LoveConfRegion start="\\<love\\.conf\\>" end="\\<end\\>"me=e-3,he=e-3,re=e-3 skipwhite skipempty ' .. containedin .. ' contains=ALL,Lovet,LoveDot\n')
+print('syntax match Lovet "\\<t\\>" contained\n')
+
 extractDataConf(api)
 
+print('syntax match LoveDot "[.]" contained\n')
+
+-- Highlighting
 print('execute( "highlight def Love " . g:lovedocs_colors_love )')
 print('execute( "highlight def Lovet " . g:lovedocs_colors_love )')
+print('execute( "highlight def LoveDot " . g:lovedocs_colors_module )')
 print('execute( "highlight def LoveModule " . g:lovedocs_colors_module )')
-print('execute( "highlight def LoveFunction " . g:lovedocs_colors_function )')
 print('execute( "highlight def LoveType " . g:lovedocs_colors_type )')
+print('execute( "highlight def LoveFunction " . g:lovedocs_colors_function )')
+print('execute( "highlight def LoveMethod " . g:lovedocs_colors_method )')
 print('execute( "highlight def LoveCallback " . g:lovedocs_colors_callback )')
 print('execute( "highlight def LoveConf " . g:lovedocs_colors_conf )')

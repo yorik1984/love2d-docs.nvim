@@ -11,7 +11,6 @@
 -- LÖVE2D API LIST
 
 -- === CALLBACKS ===
-love.conf()
 love.directorydropped()
 love.displayrotated()
 love.draw()

@@ -1,7 +1,7 @@
 " Vim plugin for LÖVE syntax highlighting and help file
 " original:    https://github.com/davisdude/vim-love-docs
 " fork:        https://github.com/yorik1984/love2d-docs.nvim
-" Last Change: Feb 2026
+" Last Change: Mar 2026
 " Maintainer:  Davis Claiborne <davisclaib@gmail.com>
 " Modified :   yorik1984 <yorik1984@gmail.com>
 " License:     MIT
@@ -22,12 +22,16 @@ if !exists( 'g:lovedocs_colors_module' )
 	let g:lovedocs_colors_module = 'guifg=#E54D95 ctermfg=162'
 endif
 
+if !exists( 'g:lovedocs_colors_type' )
+	let g:lovedocs_colors_type = 'guifg=#E54D95 ctermfg=162'
+endif
+
 if !exists( 'g:lovedocs_colors_function' )
 	let g:lovedocs_colors_function = 'guifg=#2FA8DC ctermfg=38'
 endif
 
-if !exists( 'g:lovedocs_colors_type' )
-	let g:lovedocs_colors_type = 'guifg=#2FA8DC ctermfg=38'
+if !exists( 'g:lovedocs_colors_method' )
+	let g:lovedocs_colors_method = 'guifg=#2FA8DC ctermfg=38'
 endif
 
 if !exists( 'g:lovedocs_colors_callback' )
