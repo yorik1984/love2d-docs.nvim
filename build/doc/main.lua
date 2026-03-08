@@ -806,10 +806,11 @@ You can set the string to any valid highlighting specification
 Hl-Group     Variable Name             Parameters (GUI/CTERM) ~
 Love         g:lovedocs_colors_love     guifg=#E54D95 ctermfg=162 gui=bold cterm=bold
 Lovet        g:lovedocs_colors_love     guifg=#E54D95 ctermfg=162 gui=bold cterm=bold
+LoveDot      g:lovedocs_colors_love     guifg=#E54D95 ctermfg=162
 LoveModule   g:lovedocs_colors_module   guifg=#E54D95 ctermfg=162
 LoveType     g:lovedocs_colors_type     guifg=#E54D95 ctermfg=162
 LoveFunction g:lovedocs_colors_function guifg=#2FA8DC ctermfg=38
-Lovemethod   g:lovedocs_colors_method   guifg=#2FA8DC ctermfg=38
+LoveMethod   g:lovedocs_colors_method   guifg=#2FA8DC ctermfg=38
 LoveCallback g:lovedocs_colors_callback guifg=#2FA8DC ctermfg=38
 LoveConf     g:lovedocs_colors_conf     guifg=#2FA8DC ctermfg=38
 

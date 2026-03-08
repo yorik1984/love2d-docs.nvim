@@ -56,16 +56,18 @@ Plug "yorik1984/love2d-docs.nvim"
 ---@class LoveDocsStyle
 ---@field love LoveDocsStyleType Style for 'love' global variable
 ---@field module LoveDocsStyleType Style for LÖVE modules
----@field func LoveDocsStyleType Style for LÖVE functions
 ---@field type LoveDocsStyleType Style for LÖVE types/objects
+---@field func LoveDocsStyleType Style for LÖVE functions
+---@field method LoveDocsStyleType Style for LÖVE methods
 ---@field callback LoveDocsStyleType Style for LÖVE callbacks (e.g., love.load)
 ---@field conf LoveDocsStyleType Style for LÖVE configuration (love.conf)
 
 ---@class LoveDocsColors
 ---@field LOVElove string? HEX color for 'love' global variable
 ---@field LOVEmodule string? HEX color for LÖVE modules
----@field LOVEfunction string? HEX color for LÖVE functions
 ---@field LOVEtype string? HEX color for LÖVE types/objects
+---@field LOVEfunction string? HEX color for LÖVE functions
+---@field LOVEmethod string? HEX color for LÖVE methods
 ---@field LOVEcallback string? HEX color for LÖVE callbacks
 ---@field LOVEconf string? HEX color for LÖVE configuration
 
@@ -81,16 +83,18 @@ opts = {
     style = {
         love     = "bold",
         module   = "NONE",
-        func     = "NONE",
         type     = "NONE",
+        func     = "NONE",
+        method   = "NONE",
         callback = "NONE",
         conf     = "NONE",
     },
     colors = {
         LOVElove     = nil, -- Example: "#E54D95"
         LOVEmodule   = nil,
-        LOVEfunction = nil,
         LOVEtype     = nil,
+        LOVEfunction = nil,
+        LOVEmethod   = nil,
         LOVEcallback = nil,
         LOVEconf     = nil,
     },
@@ -142,8 +146,9 @@ Configure Treesitter styles using the following defaults:
 | ---------------------------------- | --------- | -------------- | ------ |
 | `@variable.global.lua.love`        | `#E54D95` | `LOVElove`     | `bold` |
 | `@module.bulitin.lua.love`         | `#E54D95` | `LOVEmodule`   | `NONE` |
+| `@type.lua.love`                   | `#E54D95` | `LOVEtype`     | `NONE` |
 | `@function.lua.love`               | `#2FA8DC` | `LOVEfunction` | `NONE` |
-| `@type.lua.love`                   | `#2FA8DC` | `LOVEtype`     | `NONE` |
+| `@function.method.lua.love`        | `#2FA8DC` | `LOVEmethod`   | `NONE` |
 | `@function.call.lua.love.callback` | `#2FA8DC` | `LOVEcallback` | `NONE` |
 | `@function.call.lua.love.conf`     | `#2FA8DC` | `LOVEconf`     | `NONE` |
 
@@ -240,9 +245,11 @@ You can set the string to any valid highlighting specification (see `:help highl
 | ---------------- | ---------------------------- | ----------------------------------------------- |
 | **Love** | `g:lovedocs_colors_love` | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
 | **Lovet** | `g:lovedocs_colors_love` | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
+| **LoveDot** | `g:lovedocs_colors_love` | `guifg=#E54D95 ctermfg=162` |
 | **LoveModule** | `g:lovedocs_colors_module` | `guifg=#E54D95 ctermfg=162` |
+| **LoveType** | `g:lovedocs_colors_type` | `guifg=#E54D95 ctermfg=162` |
 | **LoveFunction** | `g:lovedocs_colors_function` | `guifg=#2FA8DC ctermfg=38` |
-| **LoveType** | `g:lovedocs_colors_type` | `guifg=#2FA8DC ctermfg=38` |
+| **LoveMethod** | `g:lovedocs_colors_function` | `guifg=#2FA8DC ctermfg=38` |
 | **LoveCallback** | `g:lovedocs_colors_callback` | `guifg=#2FA8DC ctermfg=38` |
 | **LoveConf** | `g:lovedocs_colors_conf` | `guifg=#2FA8DC ctermfg=38` |
 
