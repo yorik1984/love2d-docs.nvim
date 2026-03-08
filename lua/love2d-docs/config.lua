@@ -8,16 +8,18 @@ local M = {}
 ---@class LoveDocsStyle
 ---@field love LoveDocsStyleType Style for 'love' global variable
 ---@field module LoveDocsStyleType Style for LÖVE modules
----@field func LoveDocsStyleType Style for LÖVE functions
 ---@field type LoveDocsStyleType Style for LÖVE types/objects
+---@field func LoveDocsStyleType Style for LÖVE functions
+---@field method LoveDocsStyleType Style for LÖVE methods
 ---@field callback LoveDocsStyleType Style for LÖVE callbacks (e.g., love.load)
 ---@field conf LoveDocsStyleType Style for LÖVE configuration (love.conf)
 
 ---@class LoveDocsColors
 ---@field LOVElove string? HEX color for 'love' global variable
 ---@field LOVEmodule string? HEX color for LÖVE modules
----@field LOVEfunction string? HEX color for LÖVE functions
 ---@field LOVEtype string? HEX color for LÖVE types/objects
+---@field LOVEfunction string? HEX color for LÖVE functions
+---@field LOVEmethod string? HEX color for LÖVE methods
 ---@field LOVEcallback string? HEX color for LÖVE callbacks
 ---@field LOVEconf string? HEX color for LÖVE configuration
 
@@ -33,16 +35,18 @@ M.defaults = {
     style = {
         love     = "bold",
         module   = "NONE",
-        func     = "NONE",
         type     = "NONE",
+        func     = "NONE",
+        method   = "NONE",
         callback = "NONE",
         conf     = "NONE",
     },
     colors = {
         LOVElove     = nil, -- Example: "#E54D95"
         LOVEmodule   = nil,
-        LOVEfunction = nil,
         LOVEtype     = nil,
+        LOVEfunction = nil,
+        LOVEmethod   = nil,
         LOVEcallback = nil,
         LOVEconf     = nil,
     },

@@ -10,9 +10,9 @@ endif
 syn clear helpHyperTextJump
 " helpHyperTextJump copied from $VIMRUNTIME/ftplugin/help.vim
 if has("ebcdic")
-    syn match helpHyperTextJump	"\\\@<!|[^"*|]\+|" contains=helpBar,helpHideLrv,helpHideLove
+    syn match helpHyperTextJump "\\\@<!|[^"*|]\+|" contains=helpBar,helpHideLrv,helpHideLove
 else
-    syn match helpHyperTextJump	"\\\@<!|[#-)!+-~]\+|" contains=helpBar,helpHideLrv,helpHideLove
+    syn match helpHyperTextJump "\\\@<!|[#-)!+-~]\+|" contains=helpBar,helpHideLrv,helpHideLove
 endif
 
 if has("conceal")

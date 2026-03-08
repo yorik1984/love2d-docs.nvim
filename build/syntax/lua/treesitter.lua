@@ -4,6 +4,7 @@ local api = require("love-api.love_api")
 
 local scm_modules = {}
 local scm_types = {}
+local scm_methods = {}
 local scm_callbacks = {}
 local scm_conf_keys = {}
 
@@ -20,8 +21,22 @@ local function extractData(tab, path)
                     table.insert(scm_modules[tab.name], func.name)
                 end
             else
-                for _, func in pairs(v) do
-                    table.insert(scm_types, func.name)
+                local stack = { tab }
+                while #stack > 0 do
+                    local node = table.remove(stack)
+                    if node.types then
+                        for _, typ in ipairs(node.types) do
+                            table.insert(scm_types, typ.name)
+                        end
+                    end
+                    if node.functions then
+                        for _, func in ipairs(node.functions) do
+                            table.insert(scm_methods, func.name)
+                        end
+                    end
+                    for _, sub in ipairs(node.modules or {}) do
+                        table.insert(stack, sub)
+                    end
                 end
             end
         elseif i == "callbacks" then
@@ -67,35 +82,25 @@ extractData(api)
 
 extractConfData(api)
 
-local scm_types_str = ""
-local scm_callbacks_str = ""
-local scm_modules_str = ""
-
-for _, typ in ipairs(scm_types) do
-    scm_types_str = scm_types_str .. typ .. "|"
+-- Join list with pipe (default "|") or trim trailing pipe from string
+local function joinPipe(list, pipe)
+    if not list then return "" end
+    pipe = pipe or "|"
+    if type(list) == "string" then
+        return (list:gsub(pipe .. "%s*$", ""))
+    end
+    if type(list) == "table" then
+        return table.concat(list, pipe)
+    end
+    return tostring(list)
 end
 
-for _, callback in ipairs(scm_callbacks) do
-    scm_callbacks_str = scm_callbacks_str .. callback .. "|"
-end
+local scm_modules_str   = joinPipe(scm_modules)
+local scm_types_str     = joinPipe(scm_types)
+local scm_methods_str   = joinPipe(scm_methods)
+local scm_callbacks_str = joinPipe(scm_callbacks)
 
-for module_name, _ in pairs(scm_modules) do
-    scm_modules_str = scm_modules_str .. module_name .. "|"
-end
-
-if scm_types_str ~= "" then
-    scm_types_str = scm_types_str:sub(1, -2)
-end
-
-if scm_callbacks_str ~= "" then
-    scm_callbacks_str = scm_callbacks_str:sub(1, -2)
-end
-
-if scm_modules_str ~= "" then
-    scm_modules_str = scm_modules_str:sub(1, -2)
-end
-
-local scm_content = [[
+local scm_content       = [[
 ; extends
 
 ; LOVE framework highlighting for Treesitter
@@ -108,7 +113,7 @@ local scm_content = [[
 
 ]]
 
-scm_content = scm_content
+scm_content             = scm_content
     .. "((dot_index_expression\n"
     .. "  table: (identifier) @variable.global.lua.love)\n"
     .. '  (#eq? @variable.global.lua.love "love")(#set! priority 150))\n\n'
@@ -126,13 +131,10 @@ scm_content = scm_content
     .. scm_modules_str
     .. ')$")(#set! priority 150))\n\n'
     .. "; Functions\n"
-for module_name, functions in pairs(scm_modules) do
-    local funcs_str = ""
-    for _, func in ipairs(functions) do
-        funcs_str = funcs_str .. func .. "|"
-    end
+
+for module, functions in pairs(scm_modules) do
+    local funcs_str = (joinPipe(functions))
     if funcs_str ~= "" then
-        funcs_str = funcs_str:sub(1, -2)
         scm_content = scm_content
             .. "((dot_index_expression\n"
             .. "  table: (dot_index_expression\n"
@@ -141,7 +143,7 @@ for module_name, functions in pairs(scm_modules) do
             .. "  field: (identifier) @function.lua.love)\n"
             .. '  (#eq? @_love "love")\n'
             .. '  (#eq? @_module "'
-            .. module_name
+            .. module
             .. '")\n'
             .. "  (#match? @function.lua.love\n"
             .. '    "^('
@@ -163,15 +165,39 @@ if scm_types_str ~= "" then
         .. ')$")(#set! priority 150))\n\n'
         .. "(function_call\n"
         .. "  name: (method_index_expression\n"
-        .. "    method: (identifier) @type.lua.love\n"
+        .. "    table: (identifier) @type.lua.love\n"
         .. '    (#match? @type.lua.love "^('
         .. scm_types_str
         .. ')$")(#set! priority 150)))\n\n'
         .. "(function_declaration\n"
         .. "  name: (method_index_expression\n"
-        .. "    method: (identifier) @type.lua.love\n"
+        .. "    table: (identifier) @type.lua.love\n"
         .. '    (#match? @type.lua.love "^('
         .. scm_types_str
+        .. ')$")(#set! priority 150)))\n\n'
+end
+if scm_methods_str ~= "" then
+    scm_content = scm_content
+        .. "; Methods\n"
+        .. "((dot_index_expression\n"
+        .. "  table: (identifier) @_love\n"
+        .. "  field: (identifier) @function.method.lua.love)\n"
+        .. '  (#eq? @_love "love")\n'
+        .. "  (#match? @function.method.lua.love\n"
+        .. '    "^('
+        .. scm_methods_str
+        .. ')$")(#set! priority 150))\n\n'
+        .. "(function_call\n"
+        .. "  name: (method_index_expression\n"
+        .. "    method: (identifier) @function.method.lua.love\n"
+        .. '    (#match? @function.method.lua.love "^('
+        .. scm_methods_str
+        .. ')$")(#set! priority 150)))\n\n'
+        .. "(function_declaration\n"
+        .. "  name: (method_index_expression\n"
+        .. "    method: (identifier) @function.method.lua.love\n"
+        .. '    (#match? @function.method.lua.love "^('
+        .. scm_methods_str
         .. ')$")(#set! priority 150)))\n\n'
 end
 

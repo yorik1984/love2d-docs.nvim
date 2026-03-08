@@ -1,9 +1,9 @@
 local check = require("love2d-docs.check")
 local M     = {}
 
---- Apply overrides from configColors into color table
---- @param color table
---- @param configColors table?
+---Apply overrides from configColors into color table
+---@param color table
+---@param configColors table?
 function M.colorOverrides(color, configColors)
     if configColors == nil then
         return

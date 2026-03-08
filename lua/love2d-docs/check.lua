@@ -76,7 +76,7 @@ function M.requiresPluginError(plugin, help)
     end
 end
 
---- Validate user_settings argument for setup
+---Validate user_settings argument for setup
 ---@param user_settings any
 function M.validateUserSettings(user_settings)
     if user_settings ~= nil and type(user_settings) ~= "table" then
