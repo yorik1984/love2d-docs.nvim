@@ -1,5 +1,5 @@
 -- Generate syntax highlighting for LOVE functions
-local api = require 'love-api.love_api'
+local api = require("love-api.love_api")
 
 print([[
 " WARNING!
@@ -10,188 +10,222 @@ print([[
 ]])
 
 -- Dictionaries to store methods by type
-local typeMethods = {}  -- type_name -> list of methods
-local allTypes = {}     -- list of all type names
+local typeMethods = {} -- type_name -> list of methods
+local allTypes = {} -- list of all type names
 
 -- Recursively collect methods for each type
 local function collectTypeMethods(tab, currentPath)
     currentPath = currentPath or ""
 
     for i, v in pairs(tab) do
-        if i == 'types' then
+        if i == "types" then
             for _, typ in ipairs(v) do
                 local typeName = typ.name
                 typeMethods[typeName] = typeMethods[typeName] or {}
                 table.insert(allTypes, typeName)
 
-                -- Collect methods for this type
                 for _, method in ipairs(typ.functions or {}) do
                     table.insert(typeMethods[typeName], method.name)
                 end
             end
         end
 
-        -- Recursively process modules
-        if i == 'modules' then
+        if i == "modules" then
             for _, module in ipairs(v) do
                 collectTypeMethods(module, currentPath .. "." .. module.name)
             end
         end
 
-        -- Also check nested tables
-        if type(v) == 'table' and i ~= 'modules' and i ~= 'types' then
+        if type(v) == "table" and i ~= "modules" and i ~= "types" then
             collectTypeMethods(v, currentPath)
         end
     end
 end
 
--- Generate syntax for love.conf
-local function extractDataConf(tab, index)
-    local originalconfstr = 'syntax match LoveConf "'
-    local confstr = originalconfstr
+-- Collect functions for each module (full path -> list of functions)
+local moduleFunctions = {}
+
+local function collectModuleFunctions(tab, currentPath)
+    currentPath = currentPath or "love"
     for i, v in pairs(tab) do
-        if i == 'functions' or i == 'callbacks' then
-            if tab.name and (tab.name or ''):sub(1, 1):match('%l') then
-                for _, vv in pairs(v) do
-                    if vv.name == 'conf' then
-                        for _, vvv in pairs(vv.variants[1].arguments[1].table) do
-                            if vvv.name then
-                                confstr = confstr .. '\\%(\\.'
-                                if type(vvv) == 'table' then
-                                    confstr = confstr .. vvv.name .. '\\%('
-                                    local hasSubs = false
-                                    for _, vvvv in pairs(vvv.table or {}) do
-                                        hasSubs = true
-                                        confstr = confstr .. '\\.' .. vvvv.name .. '\\|'
-                                    end
-                                    if hasSubs then
-                                        confstr = confstr:sub(1, -3) .. '\\)'
-                                    else
-                                        confstr = confstr:sub(1, -4)
-                                    end
-                                    confstr = confstr .. '\\>'
-                                end
-                                confstr = confstr:sub(1, -1) .. '\\)\\|'
-                            end
-                        end
-                        print(confstr:sub(1, -3) .. '"ms=s+1 contains=Lovet containedin=LoveConfRegion,luaFunctionBlock\n')
-                    end
+        if i == "modules" then
+            for _, module in ipairs(v) do
+                local fullName = currentPath .. "." .. module.name
+                moduleFunctions[fullName] = moduleFunctions[fullName] or {}
+                for _, func in ipairs(module.functions or {}) do
+                    table.insert(moduleFunctions[fullName], func.name)
                 end
+                collectModuleFunctions(module, fullName)
             end
         end
-        if type(v) == 'table' then extractDataConf(v) end
     end
 end
 
--- First collect all methods by type
-collectTypeMethods(api)
+-- Generate syntax for love.conf fields (like LoveFunction)
+local function generateLoveConf()
+    local conf_callback
+    for _, cb in ipairs(api.callbacks or {}) do
+        if cb.name == "conf" then
+            conf_callback = cb
+            break
+        end
+    end
+    if not conf_callback then
+        return
+    end
 
--- Generate LoveType pattern: list of all type names (simple word match)
-print('" LoveType - all type names\n')
+    local arg = conf_callback.variants[1].arguments[1]
+    if not arg or arg.type ~= "table" then
+        return
+    end
+    local fields = arg.table or {}
+
+    local all_paths = {}
+    local function walk(tbl, prefix)
+        for _, f in ipairs(tbl) do
+            local full = prefix .. f.name
+            table.insert(all_paths, full)
+            if f.table then
+                walk(f.table, full .. ".")
+            end
+        end
+    end
+    walk(fields, "")
+
+    local simple = {}
+    local nested = {}
+    for _, path in ipairs(all_paths) do
+        if not path:find("%.") then
+            table.insert(simple, path)
+        else
+            local first, rest = path:match("^([^.]+)%.(.+)$")
+            if first and rest then
+                nested[first] = nested[first] or {}
+                table.insert(nested[first], rest)
+            end
+        end
+    end
+
+    -- Generate rule for simple top‑level fields (t.identity, t.version, …)
+    if #simple > 0 then
+        table.sort(simple)
+        local pattern = "t[.]\\%(" .. table.concat(simple, "\\|") .. "\\)\\>"
+        print('syntax match LoveConf "' .. pattern .. '" contained contains=Lovet,LoveDot')
+    end
+
+    -- Generate separate rules for each nested group (t.audio.(mic|mixwithsystem), …)
+    for first, rests in pairs(nested) do
+        table.sort(rests)
+        local pattern = "t[.]" .. first .. "[.]\\%(" .. table.concat(rests, "\\|") .. "\\)\\>"
+        print('syntax match LoveConf "' .. pattern .. '" contained contains=Lovet,LoveDot')
+    end
+end
+
+-- First collect all methods by type and module functions
+collectTypeMethods(api)
+collectModuleFunctions(api, "love")
+
+-- Generate LoveType pattern: list of all type names, but only match if followed by : or .
+-- The type name itself is highlighted, the following character is not included.
+print('" LoveType - all type names (when followed by : or .)\n')
 if #allTypes > 0 then
     table.sort(allTypes)
-    local typeList = table.concat(allTypes, '\\|')
-    print('syntax match LoveType "\\(\\<' .. typeList .. '\\>\\)[:.]" contained')
+    local typeList = table.concat(allTypes, "\\|")
+    print('syntax match LoveType "\\%(' .. typeList .. '\\)[:.]" contained')
 end
-print('')
+print("")
 
 -- Generate LoveMethod pattern: each type with its methods
 print('" LoveMethod - all type methods in format Type[:.](method1|method2|...)\n')
-
--- Build pattern for each type separately to ensure correct format
 for _, typeName in ipairs(allTypes) do
     local methods = typeMethods[typeName]
     if methods and #methods > 0 then
         table.sort(methods)
-        local methodList = table.concat(methods, '\\|')
-
-        -- Format: Type[:.](method1|method2|...)
-        -- This creates a separate syntax match for each type
-        print('syntax match LoveMethod "' .. typeName .. '[:.]\\%(' .. methodList .. '\\)\\>" contains=LoveType')
+        local methodList = table.concat(methods, "\\|")
+        print('syntax match LoveMethod "' .. typeName .. "[:.]\\%(" .. methodList .. '\\)\\>" contains=LoveType')
     end
 end
-print('')
+print("")
 
--- Now collect regular functions, modules, etc. (only love module functions)
-local funcstr = ''
-local callbackstr = ''
-local modulestr = ''
-
-local function extractData(tab, index)
+-- Collect module names for LoveModule (simple list of module names, without "love.")
+local allModuleNames = {}
+local function collectModuleNames(tab)
     for i, v in pairs(tab) do
-        if i == 'functions' or i == 'callbacks' then
-            if tab.name and (tab.name or ''):sub(1, 1):match('%l') then
-                modulestr = modulestr .. tab.name .. '\\|'
-                funcstr = funcstr .. tab.name .. '\\.\\%('
-            end
-            local func = false
-            local callback = false
-            for _, vv in pairs(v) do
-                if tab.name then
-                    if tab.name:sub(1, 1):match('%l') then
-                        func = true
-                        funcstr = funcstr .. vv.name .. '\\|'
-                    end
-                else
-                    callback = true
-                    callbackstr = callbackstr .. vv.name .. '\\|'
+        if i == "modules" then
+            for _, module in ipairs(v) do
+                if module.name and module.name:match("^%l") then
+                    table.insert(allModuleNames, module.name)
                 end
-            end
-            if func then
-                funcstr = funcstr:sub(1, -3) .. '\\)\\)\\|\\%('
-            end
-            if callback then
-                callbackstr = callbackstr:sub(1, -3) .. '\\)\\|\\%('
+                collectModuleNames(module)
             end
         end
-        if type(v) == 'table' then extractData(v) end
+    end
+end
+collectModuleNames(api)
+table.sort(allModuleNames)
+
+-- Generate LoveModule pattern: list of module names, contained (matched only before a dot)
+print('" LoveModule - module names (contained, used inside LoveFunction/LoveCallback)\n')
+if #allModuleNames > 0 then
+    local moduleList = table.concat(allModuleNames, "\\|")
+    print('syntax match LoveModule "\\%(\\<' .. moduleList .. '\\>\\)\\ze[.]" contained')
+end
+print("")
+
+-- Generate LoveFunction pattern: each module with its functions, now contains LoveModule
+print('" LoveFunction - module functions in format love.module.func, contains LoveModule\n')
+for fullName, funcs in pairs(moduleFunctions) do
+    if #funcs > 0 then
+        table.sort(funcs)
+        local funcList = table.concat(funcs, "\\|")
+        local escapedName = fullName:gsub("%.", "\\.")
+        print(
+            'syntax match LoveFunction "'
+                .. escapedName
+                .. "\\.\\%("
+                .. funcList
+                .. '\\)\\>" contains=Love,LoveDot,LoveModule'
+        )
+    end
+end
+print("")
+
+-- Generate callbacks (top-level love functions) as a single rule, now contains LoveModule
+local callbackstr = ""
+local function collectCallbacks(tab)
+    for _, cb in ipairs(tab.callbacks or {}) do
+        callbackstr = callbackstr .. cb.name .. "\\|"
     end
 end
 
-extractData(api)
+collectCallbacks(api)
 
--- Function to split long lines
-local textLimit = 2500
-local function limit(text, pre, post)
-    while #text > 0 do
-        local start, stop = text:sub(1, textLimit):find('.*\\%)\\|')
-        local current
-        if start then
-            current = text:sub(start, stop - 2)
-            text = text:sub(stop + 1)
-        else
-            current = text .. ')'
-            text = ''
-        end
-        print(pre .. current .. post)
-    end
+local containedin = "containedin=ALLBUT,luaString,luaComment"
+
+-- Callbacks (love.load, love.draw, etc.) — now contains LoveModule
+if #callbackstr > 0 then
+    local cbPattern = callbackstr:sub(1, -3) -- remove trailing \|
+    print(
+        'syntax match LoveCallback "\\<love\\.\\%('
+            .. cbPattern
+            .. '\\)\\>" contains=Love,LoveDot '
+            .. containedin
+            .. "\n"
+    )
 end
 
-local containedin = 'containedin=ALLBUT,luaString,luaComment'
-
--- Main syntax elements
-print('syntax match Love "\\<love\\>" containedin=LoveModule,LoveFunction,LoveCallback,LoveConfRegion\n')
-
-if #modulestr > 0 then
-    local modulePattern = modulestr:sub(1, -3)
-    print('syntax match LoveModule "\\<love\\.\\%(' .. modulePattern .. '\\)\\>" contains=Love,LoveDot ' .. containedin .. "\n")
-end
-
--- Regular module functions
-limit('\\%(' .. funcstr:sub(1, -7), 'syntax match LoveFunction "\\<love\\.\\%(', '\\)\\>" contains=Love,LoveDot ' .. containedin .. "\n")
-
--- Callbacks
-limit('\\%(' .. callbackstr:sub(1, -7), 'syntax match LoveCallback "\\<love\\.\\%(', '\\)\\>" contains=Love,LoveDot ' .. containedin .. "\n")
-
--- love.conf region
-print('syntax region LoveConfRegion start="\\<love\\.conf\\>" end="\\<end\\>"me=e-3,he=e-3,re=e-3 skipwhite skipempty ' .. containedin .. ' contains=ALL,Lovet,LoveDot\n')
-print('syntax match Lovet "\\<t\\>" contained\n')
-
-extractDataConf(api)
-
+print(
+    'syntax region LoveConfRegion start="\\<love\\.conf\\>" end="\\<end\\>" me=e-3,he=e-3,re=e-3 skipwhite skipempty '
+        .. containedin
+        .. " contains=ALL,Love\n"
+)
+print('syntax match Love "\\<love\\>" contained\n')
+print('syntax match Lovet "\\<t\\>\\ze[.]" contained\n')
 print('syntax match LoveDot "[.]" contained\n')
 
--- Highlighting
+generateLoveConf()
+
+print('\n" Highlighting\n')
 print('execute( "highlight def Love " . g:lovedocs_colors_love )')
 print('execute( "highlight def Lovet " . g:lovedocs_colors_love )')
 print('execute( "highlight def LoveDot " . g:lovedocs_colors_module )')
