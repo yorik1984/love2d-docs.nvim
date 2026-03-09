@@ -148,14 +148,14 @@ Configure Treesitter styles using the following defaults:
 
 | Highlight Group                    | HEX Color | Color Variable | Style  |
 | ---------------------------------- | --------- | -------------- | ------ |
-| `@variable.global.love`        | `#E54D95` | `LOVElove`     | `bold` |
-| `@module.bulitin.love`         | `#E54D95` | `LOVEmodule`   | `NONE` |
-| `@type.love`                   | `#E54D95` | `LOVEtype`     | `NONE` |
-| `@punctuation.dot.love`        | `#E54D95` | `LOVEdot`      | `NONE` |
-| `@function.love`               | `#2FA8DC` | `LOVEfunction` | `NONE` |
-| `@function.method.love`        | `#2FA8DC` | `LOVEmethod`   | `NONE` |
-| `@function.call.love.callback` | `#2FA8DC` | `LOVEcallback` | `NONE` |
-| `@function.call.love.conf`     | `#2FA8DC` | `LOVEconf`     | `NONE` |
+| `@variable.global.love.lua`        | `#E54D95` | `LOVElove`     | `bold` |
+| `@module.bulitin.love.lua`         | `#E54D95` | `LOVEmodule`   | `NONE` |
+| `@type.love.lua`                   | `#E54D95` | `LOVEtype`     | `NONE` |
+| `@punctuation.dot.love.lua`        | `#E54D95` | `LOVEdot`      | `NONE` |
+| `@function.love.lua`               | `#2FA8DC` | `LOVEfunction` | `NONE` |
+| `@function.method.love.lua`        | `#2FA8DC` | `LOVEmethod`   | `NONE` |
+| `@function.call.love.callback.lua` | `#2FA8DC` | `LOVEcallback` | `NONE` |
+| `@function.call.love.conf.lua`     | `#2FA8DC` | `LOVEconf`     | `NONE` |
 
 ### Commands
 
