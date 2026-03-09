@@ -9,347 +9,458 @@
 ; it to generate a new version of this file.
 
 ((dot_index_expression
-  table: (identifier) @variable.global.lua.love)
-  (#eq? @variable.global.lua.love "love")(#set! priority 150))
+  table: (identifier) @variable.global.love)
+  (#eq? @variable.global.love "love")(#set! priority 150))
 
 ((assignment_statement
   (variable_list
-    name: (identifier) @variable.global.lua.love))
-    (#eq? @variable.global.lua.love "love")(#set! priority 150))
+    name: (identifier) @variable.global.love))
+    (#eq? @variable.global.love "love")(#set! priority 150))
+
+; `.` after `love`
+(dot_index_expression
+  table: (identifier) @_love
+  "." @punctuation.dot.love
+  (#eq? @_love "love")(#set! priority 150))
 
 ; Modules
 ((dot_index_expression
   table: (identifier) @_love
-  field: (identifier) @module.bulitin.lua.love)
+  field: (identifier) @module.bulitin.love)
   (#eq? @_love "love")
-  (#match? @module.bulitin.lua.love
-    "^()$")(#set! priority 150))
+  (#match? @module.bulitin.love
+    "^(keyboard|window|data|thread|image|math|sound|joystick|touch|audio|physics|event|system|filesystem|graphics|timer|mouse|video|font)$")(#set! priority 150))
+
+; `.` and after modules
+((dot_index_expression
+  table: (identifier) @_love
+  field: (identifier) @module.bulitin.love)
+  "." @punctuation.dot.love
+  (#eq? @_love "love")
+  (#match? @module.bulitin.love
+    "^(keyboard|window|data|thread|image|math|sound|joystick|touch|audio|physics|event|system|filesystem|graphics|timer|mouse|video|font)$")(#set! priority 150))
 
 ; Functions
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "keyboard")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "window")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "data")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "thread")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getChannel|newChannel|newThread)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "image")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(isCompressed|newCompressedData|newImageData)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "math")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "sound")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(newDecoder|newSoundData)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "joystick")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "touch")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getPosition|getPressure|getTouches)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "audio")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "physics")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "event")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(clear|poll|pump|push|quit|wait)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "system")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "filesystem")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "graphics")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "timer")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getAverageDelta|getDelta|getFPS|getTime|sleep|step)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "mouse")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "video")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(newVideoStream)$")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
     field: (identifier) @_module)
-  field: (identifier) @function.lua.love)
+  field: (identifier) @function.love)
   (#eq? @_love "love")
   (#eq? @_module "font")
-  (#match? @function.lua.love
+  (#match? @function.love
     "^(newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer)$")(#set! priority 150))
 
 ; Types
 ((dot_index_expression
   table: (identifier) @_love
-  field: (identifier) @type.lua.love)
+  field: (identifier) @type.love)
   (#eq? @_love "love")
-  (#match? @type.lua.love
+  (#match? @type.love
     "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")(#set! priority 150))
 
 (function_call
   name: (method_index_expression
-    table: (identifier) @type.lua.love
-    (#match? @type.lua.love "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")(#set! priority 150)))
+    table: (identifier) @type.love
+    (#match? @type.love "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")(#set! priority 150)))
 
 (function_declaration
   name: (method_index_expression
-    table: (identifier) @type.lua.love
-    (#match? @type.lua.love "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")(#set! priority 150)))
+    table: (identifier) @type.love
+    (#match? @type.love "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")(#set! priority 150)))
+
+; `.` and `:` in Types
+(function_call
+  name: (method_index_expression
+    table: (identifier) @type.love
+    ["." ":"] @punctuation.dot.love
+    (#match? @type.love "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")(#set! priority 150)))
+
+(function_declaration
+  name: (method_index_expression
+    table: (identifier) @type.love
+    ["." ":"] @punctuation.dot.love
+    (#match? @type.love "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")(#set! priority 150)))
 
 ; Methods
 ((dot_index_expression
   table: (identifier) @_love
-  field: (identifier) @function.method.lua.love)
+  field: (identifier) @function.method.love)
   (#eq? @_love "love")
-  (#match? @function.method.lua.love
+  (#match? @function.method.love
     "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop|clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell|getFormat|close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write|getExtension|getFilename|getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth|getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs|generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo|getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight|isCompressed|isFormatLinear|replacePixels|attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices|clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update|getTextureDimensions|getViewport|setViewport|getWarnings|hasUniform|send|sendColor|add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture|add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf|getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap|getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell|getDimensions|getFormat|getHeight|getMipmapCount|getWidth|encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat|getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration|evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate|getSeed|getState|random|randomNormal|setSeed|setState|apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate|getType|applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY|getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex|getPoint|getRadius|setPoint|setRadius|getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution|getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength|getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex|destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint|getMaxForce|getMaxTorque|setMaxForce|setMaxTorque|getJoints|getRatio|setRatio|destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData|getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset|getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget|getPoints|areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit|getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio|areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit|getMaxLength|setMaxLength|computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint|getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency|getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency|destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update|clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek|getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample|clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply|getError|isRunning|start|wait|getFilename|isPlaying|pause|play|rewind|seek|tell|getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput|close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode|newVideoStream|getPosition|getPressure|getTouches|getAverageDelta|getDelta|getFPS|getTime|sleep|step|getChannel|newChannel|newThread|getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate|newDecoder|newSoundData|getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter|getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY|colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate|getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput|getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping|isCompressed|newCompressedData|newImageData|applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader|newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer|append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write|clear|poll|pump|push|quit|wait|compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack|getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop|clone|getFFIPointer|getPointer|getSize|getString|release|type|typeOf)$")(#set! priority 150))
 
 (function_call
   name: (method_index_expression
-    method: (identifier) @function.method.lua.love
-    (#match? @function.method.lua.love "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop|clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell|getFormat|close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write|getExtension|getFilename|getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth|getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs|generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo|getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight|isCompressed|isFormatLinear|replacePixels|attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices|clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update|getTextureDimensions|getViewport|setViewport|getWarnings|hasUniform|send|sendColor|add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture|add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf|getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap|getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell|getDimensions|getFormat|getHeight|getMipmapCount|getWidth|encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat|getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration|evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate|getSeed|getState|random|randomNormal|setSeed|setState|apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate|getType|applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY|getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex|getPoint|getRadius|setPoint|setRadius|getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution|getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength|getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex|destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint|getMaxForce|getMaxTorque|setMaxForce|setMaxTorque|getJoints|getRatio|setRatio|destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData|getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset|getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget|getPoints|areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit|getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio|areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit|getMaxLength|setMaxLength|computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint|getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency|getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency|destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update|clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek|getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample|clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply|getError|isRunning|start|wait|getFilename|isPlaying|pause|play|rewind|seek|tell|getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput|close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode|newVideoStream|getPosition|getPressure|getTouches|getAverageDelta|getDelta|getFPS|getTime|sleep|step|getChannel|newChannel|newThread|getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate|newDecoder|newSoundData|getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter|getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY|colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate|getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput|getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping|isCompressed|newCompressedData|newImageData|applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader|newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer|append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write|clear|poll|pump|push|quit|wait|compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack|getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop|clone|getFFIPointer|getPointer|getSize|getString|release|type|typeOf)$")(#set! priority 150)))
+    method: (identifier) @function.method.love
+    (#match? @function.method.love "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop|clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell|getFormat|close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write|getExtension|getFilename|getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth|getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs|generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo|getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight|isCompressed|isFormatLinear|replacePixels|attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices|clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update|getTextureDimensions|getViewport|setViewport|getWarnings|hasUniform|send|sendColor|add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture|add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf|getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap|getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell|getDimensions|getFormat|getHeight|getMipmapCount|getWidth|encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat|getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration|evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate|getSeed|getState|random|randomNormal|setSeed|setState|apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate|getType|applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY|getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex|getPoint|getRadius|setPoint|setRadius|getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution|getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength|getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex|destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint|getMaxForce|getMaxTorque|setMaxForce|setMaxTorque|getJoints|getRatio|setRatio|destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData|getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset|getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget|getPoints|areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit|getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio|areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit|getMaxLength|setMaxLength|computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint|getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency|getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency|destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update|clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek|getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample|clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply|getError|isRunning|start|wait|getFilename|isPlaying|pause|play|rewind|seek|tell|getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput|close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode|newVideoStream|getPosition|getPressure|getTouches|getAverageDelta|getDelta|getFPS|getTime|sleep|step|getChannel|newChannel|newThread|getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate|newDecoder|newSoundData|getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter|getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY|colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate|getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput|getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping|isCompressed|newCompressedData|newImageData|applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader|newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer|append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write|clear|poll|pump|push|quit|wait|compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack|getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop|clone|getFFIPointer|getPointer|getSize|getString|release|type|typeOf)$")(#set! priority 150)))
 
 (function_declaration
   name: (method_index_expression
-    method: (identifier) @function.method.lua.love
-    (#match? @function.method.lua.love "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop|clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell|getFormat|close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write|getExtension|getFilename|getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth|getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs|generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo|getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight|isCompressed|isFormatLinear|replacePixels|attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices|clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update|getTextureDimensions|getViewport|setViewport|getWarnings|hasUniform|send|sendColor|add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture|add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf|getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap|getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell|getDimensions|getFormat|getHeight|getMipmapCount|getWidth|encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat|getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration|evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate|getSeed|getState|random|randomNormal|setSeed|setState|apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate|getType|applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY|getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex|getPoint|getRadius|setPoint|setRadius|getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution|getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength|getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex|destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint|getMaxForce|getMaxTorque|setMaxForce|setMaxTorque|getJoints|getRatio|setRatio|destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData|getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset|getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget|getPoints|areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit|getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio|areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit|getMaxLength|setMaxLength|computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint|getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency|getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency|destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update|clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek|getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample|clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply|getError|isRunning|start|wait|getFilename|isPlaying|pause|play|rewind|seek|tell|getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput|close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode|newVideoStream|getPosition|getPressure|getTouches|getAverageDelta|getDelta|getFPS|getTime|sleep|step|getChannel|newChannel|newThread|getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate|newDecoder|newSoundData|getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter|getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY|colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate|getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput|getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping|isCompressed|newCompressedData|newImageData|applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader|newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer|append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write|clear|poll|pump|push|quit|wait|compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack|getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop|clone|getFFIPointer|getPointer|getSize|getString|release|type|typeOf)$")(#set! priority 150)))
+    method: (identifier) @function.method.love
+    (#match? @function.method.love "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop|clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell|getFormat|close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write|getExtension|getFilename|getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth|getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs|generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo|getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight|isCompressed|isFormatLinear|replacePixels|attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices|clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update|getTextureDimensions|getViewport|setViewport|getWarnings|hasUniform|send|sendColor|add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture|add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf|getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap|getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell|getDimensions|getFormat|getHeight|getMipmapCount|getWidth|encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat|getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration|evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate|getSeed|getState|random|randomNormal|setSeed|setState|apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate|getType|applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY|getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex|getPoint|getRadius|setPoint|setRadius|getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution|getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength|getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex|destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint|getMaxForce|getMaxTorque|setMaxForce|setMaxTorque|getJoints|getRatio|setRatio|destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData|getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset|getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget|getPoints|areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit|getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio|areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit|getMaxLength|setMaxLength|computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint|getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency|getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency|destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update|clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek|getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample|clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply|getError|isRunning|start|wait|getFilename|isPlaying|pause|play|rewind|seek|tell|getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput|close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode|newVideoStream|getPosition|getPressure|getTouches|getAverageDelta|getDelta|getFPS|getTime|sleep|step|getChannel|newChannel|newThread|getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate|newDecoder|newSoundData|getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter|getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY|colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate|getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput|getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping|isCompressed|newCompressedData|newImageData|applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader|newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer|append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write|clear|poll|pump|push|quit|wait|compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack|getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop|clone|getFFIPointer|getPointer|getSize|getString|release|type|typeOf)$")(#set! priority 150)))
 
 ; Callbacks
 ((dot_index_expression
   table: (identifier) @_love
-  field: (identifier) @function.call.lua.love.callback)
+  field: (identifier) @function.call.love.callback)
   (#eq? @_love "love")
-  (#match? @function.call.lua.love.callback
+  (#match? @function.call.love.callback
     "^(conf|directorydropped|displayrotated|draw|errorhandler|filedropped|focus|gamepadaxis|gamepadpressed|gamepadreleased|joystickadded|joystickaxis|joystickhat|joystickpressed|joystickreleased|joystickremoved|keypressed|keyreleased|load|lowmemory|mousefocus|mousemoved|mousepressed|mousereleased|quit|resize|run|textedited|textinput|threaderror|touchmoved|touchpressed|touchreleased|update|visible|wheelmoved)$")(#set! priority 130))
 
 ; LOVE conf (t.window, t.modules, etc)
 ((dot_index_expression
-  table: (identifier) @variable.global.lua.love)
-  (#eq? @variable.global.lua.love "t")(#set! priority 150))
+  table: (identifier) @variable.global.love)
+  (#eq? @variable.global.love "t")(#set! priority 150))
+
+; `.` after `t`
+(dot_index_expression
+  table: (identifier) @variable.global.love
+  "." @punctuation.dot.love
+  (#eq? @variable.global.love "t")(#set! priority 150))
 
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "console")(#set! priority 150))
+  (#eq? @function.call.love.conf "console")(#set! priority 150))
+
+; `.` after `t.console`
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "console")(#set! priority 150))
 
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "audio")(#set! priority 150))
+  (#eq? @function.call.love.conf "audio")(#set! priority 150))
+
+; `.` after `t.audio`
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "audio")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_t
     field: (identifier) @_prop)
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
   (#eq? @_prop "audio")
-  (#match? @function.call.lua.love.conf "^(mic|mixwithsystem)$")(#set! priority 150))
+  (#match? @function.call.love.conf "^(mic|mixwithsystem)$")(#set! priority 150))
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "accelerometerjoystick")(#set! priority 150))
+
+; `.` after `t.accelerometerjoystick`
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "accelerometerjoystick")(#set! priority 150))
 
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "accelerometerjoystick")(#set! priority 150))
+  (#eq? @function.call.love.conf "window")(#set! priority 150))
 
+; `.` after `t.window`
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "window")(#set! priority 150))
+  (#eq? @function.call.love.conf "window")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_t
     field: (identifier) @_prop)
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
   (#eq? @_prop "window")
-  (#match? @function.call.lua.love.conf "^(title|icon|width|height|borderless|resizable|minwidth|minheight|fullscreen|fullscreentype|usedpiscale|vsync|depth|stencil|msaa|display|highdpi|x|y)$")(#set! priority 150))
+  (#match? @function.call.love.conf "^(title|icon|width|height|borderless|resizable|minwidth|minheight|fullscreen|fullscreentype|usedpiscale|vsync|depth|stencil|msaa|display|highdpi|x|y)$")(#set! priority 150))
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "identity")(#set! priority 150))
+
+; `.` after `t.identity`
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "identity")(#set! priority 150))
 
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "identity")(#set! priority 150))
+  (#eq? @function.call.love.conf "externalstorage")(#set! priority 150))
+
+; `.` after `t.externalstorage`
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "externalstorage")(#set! priority 150))
 
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "externalstorage")(#set! priority 150))
+  (#eq? @function.call.love.conf "modules")(#set! priority 150))
 
+; `.` after `t.modules`
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "modules")(#set! priority 150))
+  (#eq? @function.call.love.conf "modules")(#set! priority 150))
 
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_t
     field: (identifier) @_prop)
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
   (#eq? @_prop "modules")
-  (#match? @function.call.lua.love.conf "^(audio|event|graphics|image|joystick|keyboard|math|mouse|physics|sound|system|timer|touch|video|window|thread)$")(#set! priority 150))
+  (#match? @function.call.love.conf "^(audio|event|graphics|image|joystick|keyboard|math|mouse|physics|sound|system|timer|touch|video|window|thread)$")(#set! priority 150))
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "version")(#set! priority 150))
+
+; `.` after `t.version`
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "version")(#set! priority 150))
 
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "version")(#set! priority 150))
+  (#eq? @function.call.love.conf "appendidentity")(#set! priority 150))
+
+; `.` after `t.appendidentity`
+((dot_index_expression
+  table: (identifier) @_t
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
+  (#eq? @_t "t")
+  (#eq? @function.call.love.conf "appendidentity")(#set! priority 150))
 
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "appendidentity")(#set! priority 150))
+  (#eq? @function.call.love.conf "gammacorrect")(#set! priority 150))
 
+; `.` after `t.gammacorrect`
 ((dot_index_expression
   table: (identifier) @_t
-  field: (identifier) @function.call.lua.love.conf)
+  field: (identifier) @function.call.love.conf)
+  "." @punctuation.dot.love
   (#eq? @_t "t")
-  (#eq? @function.call.lua.love.conf "gammacorrect")(#set! priority 150))
+  (#eq? @function.call.love.conf "gammacorrect")(#set! priority 150))
 
 

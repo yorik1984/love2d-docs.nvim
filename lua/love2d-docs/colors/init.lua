@@ -8,6 +8,7 @@ function M.setup(config)
         LOVElove     = (vim.o.background == "dark") and "#E54D95" or "#E54D95",
         LOVEmodule   = (vim.o.background == "dark") and "#E54D95" or "#E54D95",
         LOVEtype     = (vim.o.background == "dark") and "#E54D95" or "#E54D95",
+        LOVEdot      = (vim.o.background == "dark") and "#E54D95" or "#E54D95",
         LOVEfunction = (vim.o.background == "dark") and "#2FA8DC" or "#2FA8DC",
         LOVEmethod   = (vim.o.background == "dark") and "#2FA8DC" or "#2FA8DC",
         LOVEcallback = (vim.o.background == "dark") and "#2FA8DC" or "#2FA8DC",

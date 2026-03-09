@@ -57,6 +57,7 @@ Plug "yorik1984/love2d-docs.nvim"
 ---@field love LoveDocsStyleType Style for 'love' global variable
 ---@field module LoveDocsStyleType Style for LÖVE modules
 ---@field type LoveDocsStyleType Style for LÖVE types/objects
+---@field dot LoveDocsStyleType Style for LÖVE dot and colon operator
 ---@field func LoveDocsStyleType Style for LÖVE functions
 ---@field method LoveDocsStyleType Style for LÖVE methods
 ---@field callback LoveDocsStyleType Style for LÖVE callbacks (e.g., love.load)
@@ -66,6 +67,7 @@ Plug "yorik1984/love2d-docs.nvim"
 ---@field LOVElove string? HEX color for 'love' global variable
 ---@field LOVEmodule string? HEX color for LÖVE modules
 ---@field LOVEtype string? HEX color for LÖVE types/objects
+---@field LOVEdot string? HEX color for LÖVE dot and colon operator
 ---@field LOVEfunction string? HEX color for LÖVE functions
 ---@field LOVEmethod string? HEX color for LÖVE methods
 ---@field LOVEcallback string? HEX color for LÖVE callbacks
@@ -84,6 +86,7 @@ opts = {
         love     = "bold",
         module   = "NONE",
         type     = "NONE",
+        dot      = "NONE",
         func     = "NONE",
         method   = "NONE",
         callback = "NONE",
@@ -93,6 +96,7 @@ opts = {
         LOVElove     = nil, -- Example: "#E54D95"
         LOVEmodule   = nil,
         LOVEtype     = nil,
+        LOVEdot      = nil,
         LOVEfunction = nil,
         LOVEmethod   = nil,
         LOVEcallback = nil,
@@ -144,13 +148,14 @@ Configure Treesitter styles using the following defaults:
 
 | Highlight Group                    | HEX Color | Color Variable | Style  |
 | ---------------------------------- | --------- | -------------- | ------ |
-| `@variable.global.lua.love`        | `#E54D95` | `LOVElove`     | `bold` |
-| `@module.bulitin.lua.love`         | `#E54D95` | `LOVEmodule`   | `NONE` |
-| `@type.lua.love`                   | `#E54D95` | `LOVEtype`     | `NONE` |
-| `@function.lua.love`               | `#2FA8DC` | `LOVEfunction` | `NONE` |
-| `@function.method.lua.love`        | `#2FA8DC` | `LOVEmethod`   | `NONE` |
-| `@function.call.lua.love.callback` | `#2FA8DC` | `LOVEcallback` | `NONE` |
-| `@function.call.lua.love.conf`     | `#2FA8DC` | `LOVEconf`     | `NONE` |
+| `@variable.global.love`        | `#E54D95` | `LOVElove`     | `bold` |
+| `@module.bulitin.love`         | `#E54D95` | `LOVEmodule`   | `NONE` |
+| `@type.love`                   | `#E54D95` | `LOVEtype`     | `NONE` |
+| `@punctuation.dot.love`        | `#E54D95` | `LOVEdot`      | `NONE` |
+| `@function.love`               | `#2FA8DC` | `LOVEfunction` | `NONE` |
+| `@function.method.love`        | `#2FA8DC` | `LOVEmethod`   | `NONE` |
+| `@function.call.love.callback` | `#2FA8DC` | `LOVEcallback` | `NONE` |
+| `@function.call.love.conf`     | `#2FA8DC` | `LOVEconf`     | `NONE` |
 
 ### Commands
 
