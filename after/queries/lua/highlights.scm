@@ -309,6 +309,19 @@
   (#eq? @_conf "conf")
   (#set! priority 150))
 
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      parameters: (parameters
+        (identifier) @module.bulitin.love)))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#set! priority 150))
+
 (function_declaration
   name: (dot_index_expression
     table: (identifier) @_love
@@ -320,6 +333,26 @@
           table: (identifier) @module.bulitin.love
           "." @punctuation.dot.love
           field: (identifier) @function.call.love.conf))))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#match? @function.call.love.conf
+    "^(console|accelerometerjoystick|identity|externalstorage|version|appendidentity|gammacorrect)$")
+  (#set! priority 150))
+
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      body: (block
+        (assignment_statement
+          (variable_list
+            name: (dot_index_expression
+              table: (identifier) @module.bulitin.love
+              "." @punctuation.dot.love
+              field: (identifier) @function.call.love.conf))))))
   (#eq? @_love "love")
   (#eq? @_conf "conf")
   (#match? @function.call.love.conf
@@ -344,6 +377,27 @@
     "^(audio|window|modules)$")
   (#set! priority 150))
 
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      body: (block
+        (assignment_statement
+          (variable_list
+            name: (dot_index_expression
+              table: (dot_index_expression
+                table: (identifier) @module.bulitin.love
+                "." @punctuation.dot.love
+                field: (identifier) @function.call.love.conf)))))))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#match? @function.call.love.conf
+    "^(audio|window|modules)$")
+  (#set! priority 150))
+
 (function_declaration
   name: (dot_index_expression
     table: (identifier) @_love
@@ -358,6 +412,30 @@
             field: (identifier) @_audio)
           "." @punctuation.dot.love
           field: (identifier) @function.call.love.conf))))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#eq? @_audio "audio")
+  (#match? @function.call.love.conf
+    "^(mic|mixwithsystem)$")
+  (#set! priority 150))
+
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      body: (block
+        (assignment_statement
+          (variable_list
+            name: (dot_index_expression
+              table: (dot_index_expression
+                table: (identifier) @module.bulitin.love
+                "." @punctuation.dot.love
+                field: (identifier) @_audio)
+              "." @punctuation.dot.love
+              field: (identifier) @function.call.love.conf))))))
   (#eq? @_love "love")
   (#eq? @_conf "conf")
   (#eq? @_audio "audio")
@@ -386,6 +464,30 @@
     "^(title|icon|width|height|borderless|resizable|minwidth|minheight|fullscreen|fullscreentype|usedpiscale|vsync|depth|stencil|msaa|display|highdpi|x|y)$")
   (#set! priority 150))
 
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      body: (block
+        (assignment_statement
+          (variable_list
+            name: (dot_index_expression
+              table: (dot_index_expression
+                table: (identifier) @module.bulitin.love
+                "." @punctuation.dot.love
+                field: (identifier) @_window)
+              "." @punctuation.dot.love
+              field: (identifier) @function.call.love.conf))))))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#eq? @_window "window")
+  (#match? @function.call.love.conf
+    "^(title|icon|width|height|borderless|resizable|minwidth|minheight|fullscreen|fullscreentype|usedpiscale|vsync|depth|stencil|msaa|display|highdpi|x|y)$")
+  (#set! priority 150))
+
 (function_declaration
   name: (dot_index_expression
     table: (identifier) @_love
@@ -400,6 +502,30 @@
             field: (identifier) @_modules)
           "." @punctuation.dot.love
           field: (identifier) @function.call.love.conf))))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#eq? @_modules "modules")
+  (#match? @function.call.love.conf
+    "^(audio|event|graphics|image|joystick|keyboard|math|mouse|physics|sound|system|timer|touch|video|window|thread)$")
+  (#set! priority 150))
+
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      body: (block
+        (assignment_statement
+          (variable_list
+            name: (dot_index_expression
+              table: (dot_index_expression
+                table: (identifier) @module.bulitin.love
+                "." @punctuation.dot.love
+                field: (identifier) @_modules)
+              "." @punctuation.dot.love
+              field: (identifier) @function.call.love.conf))))))
   (#eq? @_love "love")
   (#eq? @_conf "conf")
   (#eq? @_modules "modules")

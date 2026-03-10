@@ -257,6 +257,19 @@ conf_scm = conf_scm .. [[
   (#eq? @_conf "conf")
   (#set! priority 150))
 
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      parameters: (parameters
+        (identifier) @module.bulitin.love)))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#set! priority 150))
+
 ]]
 
 if #simple_keys > 0 then
@@ -273,6 +286,28 @@ if #simple_keys > 0 then
           table: (identifier) @module.bulitin.love
           "." @punctuation.dot.love
           field: (identifier) @function.call.love.conf))))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#match? @function.call.love.conf
+    "^(%s)$")
+  (#set! priority 150))
+
+]], simple_pattern)
+    conf_scm = conf_scm .. string.format([[
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      body: (block
+        (assignment_statement
+          (variable_list
+            name: (dot_index_expression
+              table: (identifier) @module.bulitin.love
+              "." @punctuation.dot.love
+              field: (identifier) @function.call.love.conf))))))
   (#eq? @_love "love")
   (#eq? @_conf "conf")
   (#match? @function.call.love.conf
@@ -304,6 +339,29 @@ if #table_keys > 0 then
   (#set! priority 150))
 
 ]], table_pattern)
+    conf_scm = conf_scm .. string.format([[
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      body: (block
+        (assignment_statement
+          (variable_list
+            name: (dot_index_expression
+              table: (dot_index_expression
+                table: (identifier) @module.bulitin.love
+                "." @punctuation.dot.love
+                field: (identifier) @function.call.love.conf)))))))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#match? @function.call.love.conf
+    "^(%s)$")
+  (#set! priority 150))
+
+]], table_pattern)
 end
 
 for key, subkeys in pairs(scm_conf_keys) do
@@ -324,6 +382,32 @@ for key, subkeys in pairs(scm_conf_keys) do
             field: (identifier) @_%s)
           "." @punctuation.dot.love
           field: (identifier) @function.call.love.conf))))
+  (#eq? @_love "love")
+  (#eq? @_conf "conf")
+  (#eq? @_%s "%s")
+  (#match? @function.call.love.conf
+    "^(%s)$")
+  (#set! priority 150))
+
+]], key, key, key, sub_pattern)
+        conf_scm = conf_scm .. string.format([[
+(assignment_statement
+  (variable_list
+    name: (dot_index_expression
+      table: (identifier) @_love
+      field: (identifier) @_conf))
+  (expression_list
+    value: (function_definition
+      body: (block
+        (assignment_statement
+          (variable_list
+            name: (dot_index_expression
+              table: (dot_index_expression
+                table: (identifier) @module.bulitin.love
+                "." @punctuation.dot.love
+                field: (identifier) @_%s)
+              "." @punctuation.dot.love
+              field: (identifier) @function.call.love.conf))))))
   (#eq? @_love "love")
   (#eq? @_conf "conf")
   (#eq? @_%s "%s")
