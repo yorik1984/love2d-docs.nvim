@@ -10,7 +10,9 @@ print([[
 ---@diagnostic disable: missing-parameter
 ---@diagnostic disable: unused-local
 ---@diagnostic disable: duplicate-set-field
-]])
+
+-- work with treesitter too
+-- love.conf = function(t)]])
 
 local function generate_pure_console_conf(tab)
     local lines = { "function love.conf(t)" }

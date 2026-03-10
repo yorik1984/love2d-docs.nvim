@@ -8,6 +8,8 @@
 ---@diagnostic disable: unused-local
 ---@diagnostic disable: duplicate-set-field
 
+-- work with treesitter too
+-- love.conf = function(t)
 function love.conf(t)
     t.identity                     = "default"  -- This flag determines the name of the save directory for your game. Note that you can only specify the name, not the location where it will be created: t.identity = "gabe_HL3" -- Correct t.identity = "c:/Users/gabe/HL3" -- Incorrect Alternatively love.filesystem.setIdentity can be used to set the save directory outside of the config file.
     t.appendidentity               = true       -- This flag determines if game directory should be searched first then save directory (true) or otherwise (false)
