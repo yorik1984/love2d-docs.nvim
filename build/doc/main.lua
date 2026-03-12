@@ -738,14 +738,13 @@ Highlight Group                     HEX Color   Variable        Style ~
 2.2 Keybindings                        *love2d-docs-config-neovim-keybindings*
 
 RECOMMENDED KEYBINDINGS ~
-Example configuration for **lazy.nvim**:
+Example configuration with |lazy.nvim|:
 
 >lua
     {
         "yorik1984/love2d-docs.nvim",
         keys = {
-            {
-                "<leader>Lt",
+            { "<leader>Lt",
                 "<cmd>LOVEHighlightToggle<cr>",
                 ft = "lua",
                 desc = "Toggle LÖVE Highlights",
@@ -810,8 +809,8 @@ You can set the string to any valid highlighting specification
 
 Hl-Group     Variable Name             Parameters (GUI/CTERM) ~
 Love         g:lovedocs_colors_love     guifg=#E54D95 ctermfg=162 gui=bold cterm=bold
-Lovet        g:lovedocs_colors_love     guifg=#E54D95 ctermfg=162 gui=bold cterm=bold
-LoveDot      g:lovedocs_colors_love     guifg=#E54D95 ctermfg=162
+Lovet        g:lovedocs_colors_module   guifg=#E54D95 ctermfg=162
+LoveDot      g:lovedocs_colors_module   guifg=#E54D95 ctermfg=162
 LoveModule   g:lovedocs_colors_module   guifg=#E54D95 ctermfg=162
 LoveType     g:lovedocs_colors_type     guifg=#E54D95 ctermfg=162
 LoveFunction g:lovedocs_colors_function guifg=#2FA8DC ctermfg=38
@@ -830,7 +829,6 @@ EXAMPLES: ~
    `:help love2d-docs-File`                    Search for a Type
    `:help love2d-docs-File:isEOF`              Search for a Type method
    `:help love2d-docs-BufferMode`              Search for an Enum
-   `:help love2d-docs-BufferMode-full`         Search for an Enum constant
 
 ==============================================================================
 5. REBUILDING THE API                               *love2d-docs-config-build*
