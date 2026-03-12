@@ -1,0 +1,211 @@
+name: Weekly update love-api
+
+on:
+  schedule:
+    # Runs every Monday at 00:30 UTC
+    - cron: "30 0 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-love-api:
+    runs-on: ubuntu-latest
+    env:
+      REPO: ${{ github.repository }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install system dependencies (Ubuntu) and ensure Lua 5.1
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git vim lua5.1
+          # Ensure 'lua' points to lua5.1 if runner doesn't provide it
+          if ! command -v lua >/dev/null 2>&1; then
+            LUA_BIN="$(command -v lua5.1 || true)"
+            if [ -n "$LUA_BIN" ]; then
+              sudo ln -sf "$LUA_BIN" /usr/local/bin/lua || true
+            fi
+          fi
+        shell: bash
+
+      - name: Determine current branch
+        id: branch
+        run: |
+          # prefer GITHUB_HEAD_REF (for workflow_dispatch from a PR), otherwise strip refs/heads/
+          if [ -n "${GITHUB_HEAD_REF:-}" ]; then
+            BR="${GITHUB_HEAD_REF}"
+          else
+            BR="${GITHUB_REF#refs/heads/}"
+          fi
+          echo "branch=${BR}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Fetch love-api and read API version
+        id: api_version
+        run: |
+          set -euo pipefail
+          TMP="/tmp/love-api-for-version"
+          rm -rf "$TMP"
+          git clone --depth 1 https://github.com/love2d-community/love-api "$TMP"
+          if [ ! -f "$TMP/love_api.lua" ]; then
+            echo "love_api.lua not found in cloned repo"
+            echo "api_version=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Extract version value like version = '11.5'
+          VER_LINE=$(grep -E "version[[:space:]]*=" "$TMP/love_api.lua" || true)
+          API_VER=""
+          if [ -n "$VER_LINE" ]; then
+            API_VER=$(echo "$VER_LINE" | sed -E "s/.*version[[:space:]]*=[[:space:]]*'([^']+)'.*/\1/")
+          fi
+          echo "api_version=${API_VER}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Ensure build script is executable
+        run: chmod +x build/gen.sh
+        shell: bash
+
+      - name: Run generation script
+        run: |
+          set -euo pipefail
+          pushd build
+          ./gen.sh
+          popd
+        shell: bash
+        env:
+          GIT_AUTHOR_NAME: "github-actions[bot]"
+          GIT_AUTHOR_EMAIL: "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update README badge(s) to target version (only badge)
+        id: update_readme
+        run: |
+          set -euo pipefail
+          BRANCH="${{ steps.branch.outputs.branch }}"
+          API_VER="${{ steps.api_version.outputs.api_version }}"
+
+          # decide target version:
+          if [ "$BRANCH" = "develop" ] || [ "$BRANCH" = "main" ]; then
+            TARGET_VERSION="$API_VER"
+          elif echo "$BRANCH" | grep -Eq "^[0-9]+(\\.[0-9]+)*$"; then
+            TARGET_VERSION="$BRANCH"
+          else
+            # fallback to parsed API version (may be empty)
+            TARGET_VERSION="$API_VER"
+          fi
+
+          echo "Detected branch: $BRANCH"
+          echo "Parsed API version: $API_VER"
+          echo "Target version for README badge: $TARGET_VERSION"
+
+          # If target version empty, skip README update
+          if [ -z "${TARGET_VERSION:-}" ]; then
+            echo "No target version — skipping README badge update"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          CHANGED=false
+          # Consider common README filenames (case sensitive)
+          for README in README.md README.MD README; do
+            if [ -f "$README" ]; then
+              # Replace only the version part in shields.io badge URL for LÖVE API while preserving other content.
+              # Pattern: https://img.shields.io/badge/L%C3%96VE_API-<version>-<color>.svg
+              # Replace <version> with TARGET_VERSION.
+              TMPFILE="$(mktemp)"
+              perl -pe '
+                s{(https://img\.shields\.io/badge/L%C3%96VE_API-)[^-\)\n]+(-[A-Za-z0-9]+\.svg)}{$1'"${TARGET_VERSION}"'$2}g;
+              ' -- "$README" > "$TMPFILE"
+              if ! cmp -s "$README" "$TMPFILE"; then
+                mv "$TMPFILE" "$README"
+                CHANGED=true
+              else
+                rm -f "$TMPFILE"
+              fi
+            fi
+          done
+
+          echo "changed=${CHANGED}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Commit, push to current branch and manage version branch merges
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          BRANCH="${{ steps.branch.outputs.branch }}"
+          API_VER="${{ steps.api_version.outputs.api_version }}"
+          TARGET_README_CHANGED="${{ steps.update_readme.outputs.changed }}"
+
+          echo "Branch: $BRANCH"
+          echo "API version: $API_VER"
+          echo "README badge changed: $TARGET_README_CHANGED"
+
+          # If there are changes from generator or README replacement, commit them
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "chore(docs): update generated love-api and README badge (automated run)"
+          else
+            echo "No changes to commit"
+          fi
+
+          # Configure remote with token for push
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+
+          # Push back to the same branch the workflow ran on
+          # If branch does not exist on remote (e.g., workflow for branch created locally), push and set upstream
+          if git rev-parse --verify --quiet "refs/remotes/origin/${BRANCH}" >/dev/null; then
+            git push origin "HEAD:${BRANCH}"
+          else
+            git push -u origin "HEAD:${BRANCH}"
+          fi
+
+          # If current branch is develop or main, also merge into version-named branch (create if missing)
+          if [ "$BRANCH" = "develop" ] || [ "$BRANCH" = "main" ]; then
+            if [ -z "${API_VER:-}" ]; then
+              echo "API version is empty — cannot merge into version branch. Skipping."
+              exit 0
+            fi
+            VERSION_BRANCH="$API_VER"
+            echo "Ensure version branch exists and merge ${BRANCH} into ${VERSION_BRANCH}"
+
+            # Fetch remote branches
+            git fetch origin "+refs/heads/*:refs/remotes/origin/*" --prune
+
+            # If version branch exists remotely -> merge develop/main into it
+            if git ls-remote --exit-code --heads origin "${VERSION_BRANCH}" >/dev/null 2>&1; then
+              echo "Version branch ${VERSION_BRANCH} exists on remote. Merging ${BRANCH} into ${VERSION_BRANCH}."
+              # Checkout local copy of version branch
+              if git show-ref --verify --quiet "refs/heads/${VERSION_BRANCH}"; then
+                git checkout "${VERSION_BRANCH}"
+                git reset --hard "origin/${VERSION_BRANCH}"
+              else
+                git checkout -b "${VERSION_BRANCH}" "origin/${VERSION_BRANCH}"
+              fi
+
+              # Try to merge (no-ff) from origin/BRANCH
+              if git merge --no-ff --no-edit "origin/${BRANCH}"; then
+                git push origin "${VERSION_BRANCH}"
+                echo "Merged ${BRANCH} -> ${VERSION_BRANCH} and pushed."
+              else
+                echo "Merge conflicts detected when merging ${BRANCH} into ${VERSION_BRANCH}. Aborting merge and failing the job."
+                git merge --abort || true
+                exit 1
+              fi
+            else
+              # create version branch from current branch state and push
+              echo "Version branch ${VERSION_BRANCH} does not exist. Creating it from ${BRANCH}."
+              git checkout -b "${VERSION_BRANCH}"
+              git push -u origin "${VERSION_BRANCH}"
+              echo "Created and pushed new branch ${VERSION_BRANCH}."
+            fi
+          fi
+        shell: bash
