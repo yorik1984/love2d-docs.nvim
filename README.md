@@ -3,7 +3,7 @@
 [![Generate love2d-docs](https://github.com/yorik1984/love2d-docs.nvim/actions/workflows/update-love-api.yml/badge.svg)](https://github.com/yorik1984/love2d-docs.nvim/actions/workflows/update-love-api.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yorik1984/love2d-docs.nvim/blob/main/LICENSE)
 [![Lua](https://img.shields.io/badge/Lua-5.1-blue.svg)](https://www.lua.org/)
-[![LÖVE API](https://img.shields.io/badge/L%C3%96VE_API-11.5-EA316E.svg)](https://github.com/love2d-community/love-api?tab=readme-ov-file#l%C3%B6ve-api)
+[![LÖVE API](.5-EA316E.svg)](https://github.com/love2d-community/love-api?tab=readme-ov-file#l%C3%B6ve-api)
 
 (Neo)Vim syntax highlighting and helpfile for [LÖVE](http://love2d.org) with [Treesitter](https://github.com/nvim-treesitter/nvim-treesitter) support
 
