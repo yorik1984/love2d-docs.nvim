@@ -2,11 +2,12 @@
 
 local api = require("love-api.love_api")
 
+local scm_func = {}
 local scm_modules = {}
 local scm_types = {}
-local scm_methods = {}
 local scm_callbacks = {}
 local scm_conf_keys = {}
+local scm_type_methods = {}
 
 local function extractData(tab, path)
     path = path or ""
@@ -24,16 +25,29 @@ local function extractData(tab, path)
                 local stack = { tab }
                 while #stack > 0 do
                     local node = table.remove(stack)
+
                     if node.types then
                         for _, typ in ipairs(node.types) do
                             table.insert(scm_types, typ.name)
+                            if not scm_type_methods[typ.name] then
+                                scm_type_methods[typ.name] = {}
+                            end
+                            if typ.functions then
+                                for _, func in ipairs(typ.functions) do
+                                    table.insert(scm_type_methods[typ.name], func.name)
+                                end
+                            end
                         end
                     end
+
                     if node.functions then
                         for _, func in ipairs(node.functions) do
-                            table.insert(scm_methods, func.name)
+                            if not node.name or not node.name:match("%l") then
+                                table.insert(scm_func, func.name)
+                            end
                         end
                     end
+
                     for _, sub in ipairs(node.modules or {}) do
                         table.insert(stack, sub)
                     end
@@ -100,9 +114,9 @@ for name, _ in pairs(scm_modules) do
     table.insert(module_names, name)
 end
 
+local scm_func_str      = joinPipe(scm_func)
 local scm_modules_str   = joinPipe(module_names)
 local scm_types_str     = joinPipe(scm_types)
-local scm_methods_str   = joinPipe(scm_methods)
 local scm_callbacks_str = joinPipe(scm_callbacks)
 
 local scm_content       = [[
@@ -118,30 +132,62 @@ local scm_content       = [[
 
 ]]
 
-scm_content             = scm_content .. string.format([[
-((dot_index_expression
-  table: (identifier) @variable.global.love
-  "." @punctuation.dot.love)
+scm_content             = scm_content .. [[
+(function_call
+  name: (dot_index_expression
+    table: (identifier) @variable.global.love
+    "." @punctuation.dot.love)
+  (#eq? @variable.global.love "love")
+  (#set! priority 150))
+
+(function_declaration
+  name: (dot_index_expression
+    table: (identifier) @variable.global.love
+    "." @punctuation.dot.love)
   (#eq? @variable.global.love "love")
   (#set! priority 150))
 
 ((assignment_statement
   (variable_list
     name: (identifier) @variable.global.love))
-    (#eq? @variable.global.love "love")
-    (#set! priority 150))
+  (#eq? @variable.global.love "love")
+  (#set! priority 150))
 
+((dot_index_expression
+  table: (identifier) @variable.global.love
+  "." @punctuation.dot.love)
+  (#eq? @variable.global.love "love")
+  (#set! priority 150))
+
+]]
+
+if scm_func_str ~= "" then
+    scm_content = scm_content .. string.format([[
+; Functions
+((dot_index_expression
+  table: (identifier) @_love
+  "." @punctuation.dot.love
+  field: (identifier) @function.love)
+  (#eq? @_love "love")
+  (#match? @function.love
+    "^(%s)$")
+  (#set! priority 150))
+
+]], scm_func_str)
+end
+
+scm_content = scm_content .. string.format([[
 ; Modules
 ((dot_index_expression
   table: (identifier) @_love
-  field: (identifier) @module.bulitin.love)
   "." @punctuation.dot.love
+  field: (identifier) @module.bulitin.love)
   (#eq? @_love "love")
   (#match? @module.bulitin.love
     "^(%s)$")
   (#set! priority 150))
 
-; Functions
+; Module's functions
 ]], scm_modules_str)
 
 for module, functions in pairs(scm_modules) do
@@ -174,50 +220,64 @@ if scm_types_str ~= "" then
     "^(%s)$")
   (#set! priority 150))
 
+; Type's methods
+]], scm_types_str)
+
+    for type_name, methods in pairs(scm_type_methods) do
+        if #methods > 0 then
+            local methods_str = joinPipe(methods, "|")
+            scm_content = scm_content .. string.format([[
 (function_call
-  name: (method_index_expression
-    table: (identifier) @type.love
-    ["." ":"] @punctuation.dot.love)
-    (#match? @type.love
-      "^(%s)$")
-    (#set! priority 150))
-
-(function_declaration
-  name: (method_index_expression
-    table: (identifier) @type.love
-    ["." ":"] @punctuation.dot.love)
-    (#match? @type.love
-      "^(%s)$")
-    (#set! priority 150))
-
-]], scm_types_str, scm_types_str, scm_types_str)
-end
-if scm_methods_str ~= "" then
-    scm_content = scm_content .. string.format([[
-; Methods
-((dot_index_expression
-  table: (identifier) @_love
-  field: (identifier) @function.method.love)
-  (#eq? @_love "love")
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "%s")
   (#match? @function.method.love
     "^(%s)$")
   (#set! priority 150))
 
-(function_call
-  name: (method_index_expression
-    method: (identifier) @function.method.love)
-    (#match? @function.method.love
-      "^(%s)$")
-    (#set! priority 150))
+]], type_name, methods_str)
 
+            scm_content = scm_content .. string.format([[
 (function_declaration
-  name: (method_index_expression
-    method: (identifier) @function.method.love)
-    (#match? @function.method.love
-      "^(%s)$")
-    (#set! priority 150))
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "%s")
+  (#match? @function.method.love
+    "^(%s)$")
+  (#set! priority 150))
 
-]], scm_methods_str, scm_methods_str, scm_methods_str)
+]], type_name, methods_str)
+
+            scm_content = scm_content .. string.format([[
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "%s")
+  (#match? @function.method.love
+    "^(%s)$")
+  (#set! priority 150))
+
+]], type_name, methods_str)
+
+        end
+    end
 end
 
 if scm_callbacks_str ~= "" then
@@ -229,7 +289,7 @@ if scm_callbacks_str ~= "" then
   (#eq? @_love "love")
   (#match? @function.call.love.callback
     "^(%s)$")
-  (#set! priority 130))
+  (#set! priority 150))
 
 ]], scm_callbacks_str)
 end

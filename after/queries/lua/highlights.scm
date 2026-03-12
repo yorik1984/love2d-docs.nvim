@@ -8,29 +8,53 @@
 ; If you want to change the syntax, edit that file and run `build/gen.dat(sh)`
 ; it to generate a new version of this file.
 
-((dot_index_expression
-  table: (identifier) @variable.global.love
-  "." @punctuation.dot.love)
+(function_call
+  name: (dot_index_expression
+    table: (identifier) @variable.global.love
+    "." @punctuation.dot.love)
+  (#eq? @variable.global.love "love")
+  (#set! priority 150))
+
+(function_declaration
+  name: (dot_index_expression
+    table: (identifier) @variable.global.love
+    "." @punctuation.dot.love)
   (#eq? @variable.global.love "love")
   (#set! priority 150))
 
 ((assignment_statement
   (variable_list
     name: (identifier) @variable.global.love))
-    (#eq? @variable.global.love "love")
-    (#set! priority 150))
+  (#eq? @variable.global.love "love")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @variable.global.love
+  "." @punctuation.dot.love)
+  (#eq? @variable.global.love "love")
+  (#set! priority 150))
+
+; Functions
+((dot_index_expression
+  table: (identifier) @_love
+  "." @punctuation.dot.love
+  field: (identifier) @function.love)
+  (#eq? @_love "love")
+  (#match? @function.love
+    "^(getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput)$")
+  (#set! priority 150))
 
 ; Modules
 ((dot_index_expression
   table: (identifier) @_love
-  field: (identifier) @module.bulitin.love)
   "." @punctuation.dot.love
+  field: (identifier) @module.bulitin.love)
   (#eq? @_love "love")
   (#match? @module.bulitin.love
     "^(keyboard|window|data|thread|image|math|sound|joystick|touch|audio|physics|event|system|filesystem|graphics|timer|mouse|video|font)$")
   (#set! priority 150))
 
-; Functions
+; Module's functions
 ((dot_index_expression
   table: (dot_index_expression
     table: (identifier) @_love
@@ -249,44 +273,2179 @@
     "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")
   (#set! priority 150))
 
+; Type's methods
 (function_call
-  name: (method_index_expression
-    table: (identifier) @type.love
-    ["." ":"] @punctuation.dot.love)
-    (#match? @type.love
-      "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")
-    (#set! priority 150))
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Canvas")
+  (#match? @function.method.love
+    "^(generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo)$")
+  (#set! priority 150))
 
 (function_declaration
-  name: (method_index_expression
-    table: (identifier) @type.love
-    ["." ":"] @punctuation.dot.love)
-    (#match? @type.love
-      "^(Data|Object|VideoStream|Channel|Thread|Decoder|SoundData|Body|ChainShape|CircleShape|Contact|DistanceJoint|EdgeShape|Fixture|FrictionJoint|GearJoint|Joint|MotorJoint|MouseJoint|PolygonShape|PrismaticJoint|PulleyJoint|RevoluteJoint|RopeJoint|Shape|WeldJoint|WheelJoint|World|Cursor|BezierCurve|RandomGenerator|Transform|Joystick|CompressedImageData|ImageData|Canvas|Drawable|Font|Image|Mesh|ParticleSystem|Quad|Shader|SpriteBatch|Text|Texture|Video|GlyphData|Rasterizer|DroppedFile|File|FileData|ByteData|CompressedData|RecordingDevice|Source)$")
-    (#set! priority 150))
-
-; Methods
-((dot_index_expression
-  table: (identifier) @_love
-  field: (identifier) @function.method.love)
-  (#eq? @_love "love")
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Canvas")
   (#match? @function.method.love
-    "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop|clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell|getFormat|close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write|getExtension|getFilename|getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth|getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs|generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo|getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight|isCompressed|isFormatLinear|replacePixels|attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices|clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update|getTextureDimensions|getViewport|setViewport|getWarnings|hasUniform|send|sendColor|add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture|add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf|getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap|getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell|getDimensions|getFormat|getHeight|getMipmapCount|getWidth|encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat|getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration|evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate|getSeed|getState|random|randomNormal|setSeed|setState|apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate|getType|applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY|getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex|getPoint|getRadius|setPoint|setRadius|getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution|getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength|getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex|destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint|getMaxForce|getMaxTorque|setMaxForce|setMaxTorque|getJoints|getRatio|setRatio|destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData|getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset|getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget|getPoints|areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit|getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio|areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit|getMaxLength|setMaxLength|computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint|getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency|getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency|destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update|clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek|getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample|clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply|getError|isRunning|start|wait|getFilename|isPlaying|pause|play|rewind|seek|tell|getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput|close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode|newVideoStream|getPosition|getPressure|getTouches|getAverageDelta|getDelta|getFPS|getTime|sleep|step|getChannel|newChannel|newThread|getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate|newDecoder|newSoundData|getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter|getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY|colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate|getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput|getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping|isCompressed|newCompressedData|newImageData|applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader|newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer|append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write|clear|poll|pump|push|quit|wait|compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack|getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop|clone|getFFIPointer|getPointer|getSize|getString|release|type|typeOf)$")
+    "^(generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Canvas")
+  (#match? @function.method.love
+    "^(generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo)$")
   (#set! priority 150))
 
 (function_call
-  name: (method_index_expression
-    method: (identifier) @function.method.love)
-    (#match? @function.method.love
-      "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop|clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell|getFormat|close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write|getExtension|getFilename|getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth|getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs|generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo|getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight|isCompressed|isFormatLinear|replacePixels|attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices|clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update|getTextureDimensions|getViewport|setViewport|getWarnings|hasUniform|send|sendColor|add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture|add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf|getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap|getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell|getDimensions|getFormat|getHeight|getMipmapCount|getWidth|encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat|getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration|evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate|getSeed|getState|random|randomNormal|setSeed|setState|apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate|getType|applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY|getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex|getPoint|getRadius|setPoint|setRadius|getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution|getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength|getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex|destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint|getMaxForce|getMaxTorque|setMaxForce|setMaxTorque|getJoints|getRatio|setRatio|destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData|getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset|getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget|getPoints|areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit|getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio|areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit|getMaxLength|setMaxLength|computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint|getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency|getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency|destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update|clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek|getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample|clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply|getError|isRunning|start|wait|getFilename|isPlaying|pause|play|rewind|seek|tell|getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput|close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode|newVideoStream|getPosition|getPressure|getTouches|getAverageDelta|getDelta|getFPS|getTime|sleep|step|getChannel|newChannel|newThread|getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate|newDecoder|newSoundData|getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter|getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY|colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate|getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput|getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping|isCompressed|newCompressedData|newImageData|applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader|newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer|append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write|clear|poll|pump|push|quit|wait|compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack|getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop|clone|getFFIPointer|getPointer|getSize|getString|release|type|typeOf)$")
-    (#set! priority 150))
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Data")
+  (#match? @function.method.love
+    "^(clone|getFFIPointer|getPointer|getSize|getString)$")
+  (#set! priority 150))
 
 (function_declaration
-  name: (method_index_expression
-    method: (identifier) @function.method.love)
-    (#match? @function.method.love
-      "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop|clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell|getFormat|close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write|getExtension|getFilename|getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth|getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs|generateMipmaps|getMSAA|getMipmapMode|newImageData|renderTo|getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight|isCompressed|isFormatLinear|replacePixels|attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices|clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update|getTextureDimensions|getViewport|setViewport|getWarnings|hasUniform|send|sendColor|add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture|add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf|getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap|getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell|getDimensions|getFormat|getHeight|getMipmapCount|getWidth|encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat|getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration|evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate|getSeed|getState|random|randomNormal|setSeed|setState|apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate|getType|applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY|getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex|getPoint|getRadius|setPoint|setRadius|getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution|getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength|getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex|destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint|getMaxForce|getMaxTorque|setMaxForce|setMaxTorque|getJoints|getRatio|setRatio|destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData|getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset|getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget|getPoints|areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit|getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio|areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit|getMaxLength|setMaxLength|computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint|getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency|getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency|destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update|clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek|getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample|clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply|getError|isRunning|start|wait|getFilename|isPlaying|pause|play|rewind|seek|tell|getVersion|hasDeprecationOutput|isVersionCompatible|setDeprecationOutput|close|fromPixels|getDPIScale|getDesktopDimensions|getDisplayCount|getDisplayName|getDisplayOrientation|getFullscreen|getFullscreenModes|getIcon|getMode|getPosition|getSafeArea|getTitle|getVSync|hasFocus|hasMouseFocus|isDisplaySleepEnabled|isMaximized|isMinimized|isOpen|isVisible|maximize|minimize|requestAttention|restore|setDisplaySleepEnabled|setFullscreen|setIcon|setMode|setPosition|setTitle|setVSync|showMessageBox|toPixels|updateMode|newVideoStream|getPosition|getPressure|getTouches|getAverageDelta|getDelta|getFPS|getTime|sleep|step|getChannel|newChannel|newThread|getClipboardText|getOS|getPowerInfo|getProcessorCount|hasBackgroundMusic|openURL|setClipboardText|vibrate|newDecoder|newSoundData|getDistance|getMeter|newBody|newChainShape|newCircleShape|newDistanceJoint|newEdgeShape|newFixture|newFrictionJoint|newGearJoint|newMotorJoint|newMouseJoint|newPolygonShape|newPrismaticJoint|newPulleyJoint|newRectangleShape|newRevoluteJoint|newRopeJoint|newWeldJoint|newWheelJoint|newWorld|setMeter|getCursor|getPosition|getRelativeMode|getSystemCursor|getX|getY|isCursorSupported|isDown|isGrabbed|isVisible|newCursor|setCursor|setGrabbed|setPosition|setRelativeMode|setVisible|setX|setY|colorFromBytes|colorToBytes|gammaToLinear|getRandomSeed|getRandomState|isConvex|linearToGamma|newBezierCurve|newRandomGenerator|newTransform|noise|random|randomNormal|setRandomSeed|setRandomState|triangulate|getKeyFromScancode|getScancodeFromKey|hasKeyRepeat|hasScreenKeyboard|hasTextInput|isDown|isScancodeDown|setKeyRepeat|setTextInput|getGamepadMappingString|getJoystickCount|getJoysticks|loadGamepadMappings|saveGamepadMappings|setGamepadMapping|isCompressed|newCompressedData|newImageData|applyTransform|arc|captureScreenshot|circle|clear|discard|draw|drawInstanced|drawLayer|ellipse|flushBatch|getBackgroundColor|getBlendMode|getCanvas|getCanvasFormats|getColor|getColorMask|getDPIScale|getDefaultFilter|getDepthMode|getDimensions|getFont|getFrontFaceWinding|getHeight|getImageFormats|getLineJoin|getLineStyle|getLineWidth|getMeshCullMode|getPixelDimensions|getPixelHeight|getPixelWidth|getPointSize|getRendererInfo|getScissor|getShader|getStackDepth|getStats|getStencilTest|getSupported|getSystemLimits|getTextureTypes|getWidth|intersectScissor|inverseTransformPoint|isActive|isGammaCorrect|isWireframe|line|newArrayImage|newCanvas|newCubeImage|newFont|newImage|newImageFont|newMesh|newParticleSystem|newQuad|newShader|newSpriteBatch|newText|newVideo|newVolumeImage|origin|points|polygon|pop|present|print|printf|push|rectangle|replaceTransform|reset|rotate|scale|setBackgroundColor|setBlendMode|setCanvas|setColor|setColorMask|setDefaultFilter|setDepthMode|setFont|setFrontFaceWinding|setLineJoin|setLineStyle|setLineWidth|setMeshCullMode|setNewFont|setPointSize|setScissor|setShader|setStencilTest|setWireframe|shear|stencil|transformPoint|translate|validateShader|newBMFontRasterizer|newGlyphData|newImageRasterizer|newRasterizer|newTrueTypeRasterizer|append|areSymlinksEnabled|createDirectory|getAppdataDirectory|getCRequirePath|getDirectoryItems|getIdentity|getInfo|getRealDirectory|getRequirePath|getSaveDirectory|getSource|getSourceBaseDirectory|getUserDirectory|getWorkingDirectory|init|isFused|lines|load|mount|newFile|newFileData|read|remove|setCRequirePath|setIdentity|setRequirePath|setSource|setSymlinksEnabled|unmount|write|clear|poll|pump|push|quit|wait|compress|decode|decompress|encode|getPackedSize|hash|newByteData|newDataView|pack|unpack|getActiveEffects|getActiveSourceCount|getDistanceModel|getDopplerScale|getEffect|getMaxSceneEffects|getMaxSourceEffects|getOrientation|getPosition|getRecordingDevices|getVelocity|getVolume|isEffectsSupported|newQueueableSource|newSource|pause|play|setDistanceModel|setDopplerScale|setEffect|setMixWithSystem|setOrientation|setPosition|setVelocity|setVolume|stop|clone|getFFIPointer|getPointer|getSize|getString|release|type|typeOf)$")
-    (#set! priority 150))
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Data")
+  (#match? @function.method.love
+    "^(clone|getFFIPointer|getPointer|getSize|getString)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Data")
+  (#match? @function.method.love
+    "^(clone|getFFIPointer|getPointer|getSize|getString)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Thread")
+  (#match? @function.method.love
+    "^(getError|isRunning|start|wait)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Thread")
+  (#match? @function.method.love
+    "^(getError|isRunning|start|wait)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Thread")
+  (#match? @function.method.love
+    "^(getError|isRunning|start|wait)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Contact")
+  (#match? @function.method.love
+    "^(getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Contact")
+  (#match? @function.method.love
+    "^(getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Contact")
+  (#match? @function.method.love
+    "^(getChildren|getFixtures|getFriction|getNormal|getPositions|getRestitution|isEnabled|isTouching|resetFriction|resetRestitution|setEnabled|setFriction|setRestitution)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Joint")
+  (#match? @function.method.love
+    "^(destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Joint")
+  (#match? @function.method.love
+    "^(destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Joint")
+  (#match? @function.method.love
+    "^(destroy|getAnchors|getBodies|getCollideConnected|getReactionForce|getReactionTorque|getType|getUserData|isDestroyed|setUserData)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "ParticleSystem")
+  (#match? @function.method.love
+    "^(clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "ParticleSystem")
+  (#match? @function.method.love
+    "^(clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "ParticleSystem")
+  (#match? @function.method.love
+    "^(clone|emit|getBufferSize|getColors|getCount|getDirection|getEmissionArea|getEmissionRate|getEmitterLifetime|getInsertMode|getLinearAcceleration|getLinearDamping|getOffset|getParticleLifetime|getPosition|getQuads|getRadialAcceleration|getRotation|getSizeVariation|getSizes|getSpeed|getSpin|getSpinVariation|getSpread|getTangentialAcceleration|getTexture|hasRelativeRotation|isActive|isPaused|isStopped|moveTo|pause|reset|setBufferSize|setColors|setDirection|setEmissionArea|setEmissionRate|setEmitterLifetime|setInsertMode|setLinearAcceleration|setLinearDamping|setOffset|setParticleLifetime|setPosition|setQuads|setRadialAcceleration|setRelativeRotation|setRotation|setSizeVariation|setSizes|setSpeed|setSpin|setSpinVariation|setSpread|setTangentialAcceleration|setTexture|start|stop|update)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Mesh")
+  (#match? @function.method.love
+    "^(attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Mesh")
+  (#match? @function.method.love
+    "^(attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Mesh")
+  (#match? @function.method.love
+    "^(attachAttribute|detachAttribute|flush|getDrawMode|getDrawRange|getTexture|getVertex|getVertexAttribute|getVertexCount|getVertexFormat|getVertexMap|isAttributeEnabled|setAttributeEnabled|setDrawMode|setDrawRange|setTexture|setVertex|setVertexAttribute|setVertexMap|setVertices)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "World")
+  (#match? @function.method.love
+    "^(destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "World")
+  (#match? @function.method.love
+    "^(destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "World")
+  (#match? @function.method.love
+    "^(destroy|getBodies|getBodyCount|getCallbacks|getContactCount|getContactFilter|getContacts|getGravity|getJointCount|getJoints|isDestroyed|isLocked|isSleepingAllowed|queryBoundingBox|rayCast|setCallbacks|setContactFilter|setGravity|setSleepingAllowed|translateOrigin|update)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "ChainShape")
+  (#match? @function.method.love
+    "^(getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "ChainShape")
+  (#match? @function.method.love
+    "^(getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "ChainShape")
+  (#match? @function.method.love
+    "^(getChildEdge|getNextVertex|getPoint|getPoints|getPreviousVertex|getVertexCount|setNextVertex|setPreviousVertex)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "WeldJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "WeldJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "WeldJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getReferenceAngle|setDampingRatio|setFrequency)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Source")
+  (#match? @function.method.love
+    "^(clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Source")
+  (#match? @function.method.love
+    "^(clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Source")
+  (#match? @function.method.love
+    "^(clone|getActiveEffects|getAirAbsorption|getAttenuationDistances|getChannelCount|getCone|getDirection|getDuration|getEffect|getFilter|getFreeBufferCount|getPitch|getPosition|getRolloff|getType|getVelocity|getVolume|getVolumeLimits|isLooping|isPlaying|isRelative|pause|play|queue|seek|setAirAbsorption|setAttenuationDistances|setCone|setDirection|setEffect|setFilter|setLooping|setPitch|setPosition|setRelative|setRolloff|setVelocity|setVolume|setVolumeLimits|stop|tell)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "VideoStream")
+  (#match? @function.method.love
+    "^(getFilename|isPlaying|pause|play|rewind|seek|tell)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "VideoStream")
+  (#match? @function.method.love
+    "^(getFilename|isPlaying|pause|play|rewind|seek|tell)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "VideoStream")
+  (#match? @function.method.love
+    "^(getFilename|isPlaying|pause|play|rewind|seek|tell)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "RecordingDevice")
+  (#match? @function.method.love
+    "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "RecordingDevice")
+  (#match? @function.method.love
+    "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "RecordingDevice")
+  (#match? @function.method.love
+    "^(getBitDepth|getChannelCount|getData|getName|getSampleCount|getSampleRate|isRecording|start|stop)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "PulleyJoint")
+  (#match? @function.method.love
+    "^(getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "PulleyJoint")
+  (#match? @function.method.love
+    "^(getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "PulleyJoint")
+  (#match? @function.method.love
+    "^(getConstant|getGroundAnchors|getLengthA|getLengthB|getMaxLengths|getRatio|setConstant|setMaxLengths|setRatio)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Video")
+  (#match? @function.method.love
+    "^(getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Video")
+  (#match? @function.method.love
+    "^(getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Video")
+  (#match? @function.method.love
+    "^(getDimensions|getFilter|getHeight|getSource|getStream|getWidth|isPlaying|pause|play|rewind|seek|setFilter|setSource|tell)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "FileData")
+  (#match? @function.method.love
+    "^(getExtension|getFilename)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "FileData")
+  (#match? @function.method.love
+    "^(getExtension|getFilename)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "FileData")
+  (#match? @function.method.love
+    "^(getExtension|getFilename)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "PolygonShape")
+  (#match? @function.method.love
+    "^(getPoints)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "PolygonShape")
+  (#match? @function.method.love
+    "^(getPoints)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "PolygonShape")
+  (#match? @function.method.love
+    "^(getPoints)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Object")
+  (#match? @function.method.love
+    "^(release|type|typeOf)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Object")
+  (#match? @function.method.love
+    "^(release|type|typeOf)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Object")
+  (#match? @function.method.love
+    "^(release|type|typeOf)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Channel")
+  (#match? @function.method.love
+    "^(clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Channel")
+  (#match? @function.method.love
+    "^(clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Channel")
+  (#match? @function.method.love
+    "^(clear|demand|getCount|hasRead|peek|performAtomic|pop|push|supply)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Decoder")
+  (#match? @function.method.love
+    "^(clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Decoder")
+  (#match? @function.method.love
+    "^(clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Decoder")
+  (#match? @function.method.love
+    "^(clone|decode|getBitDepth|getChannelCount|getDuration|getSampleRate|seek)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "FrictionJoint")
+  (#match? @function.method.love
+    "^(getMaxForce|getMaxTorque|setMaxForce|setMaxTorque)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "FrictionJoint")
+  (#match? @function.method.love
+    "^(getMaxForce|getMaxTorque|setMaxForce|setMaxTorque)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "FrictionJoint")
+  (#match? @function.method.love
+    "^(getMaxForce|getMaxTorque|setMaxForce|setMaxTorque)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "DistanceJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "DistanceJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "DistanceJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getLength|setDampingRatio|setFrequency|setLength)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "CompressedData")
+  (#match? @function.method.love
+    "^(getFormat)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "CompressedData")
+  (#match? @function.method.love
+    "^(getFormat)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "CompressedData")
+  (#match? @function.method.love
+    "^(getFormat)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Transform")
+  (#match? @function.method.love
+    "^(apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Transform")
+  (#match? @function.method.love
+    "^(apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Transform")
+  (#match? @function.method.love
+    "^(apply|clone|getMatrix|inverse|inverseTransformPoint|isAffine2DTransform|reset|rotate|scale|setMatrix|setTransformation|shear|transformPoint|translate)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Rasterizer")
+  (#match? @function.method.love
+    "^(getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Rasterizer")
+  (#match? @function.method.love
+    "^(getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Rasterizer")
+  (#match? @function.method.love
+    "^(getAdvance|getAscent|getDescent|getGlyphCount|getGlyphData|getHeight|getLineHeight|hasGlyphs)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "GlyphData")
+  (#match? @function.method.love
+    "^(getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "GlyphData")
+  (#match? @function.method.love
+    "^(getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "GlyphData")
+  (#match? @function.method.love
+    "^(getAdvance|getBearing|getBoundingBox|getDimensions|getFormat|getGlyph|getGlyphString|getHeight|getWidth)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "RopeJoint")
+  (#match? @function.method.love
+    "^(getMaxLength|setMaxLength)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "RopeJoint")
+  (#match? @function.method.love
+    "^(getMaxLength|setMaxLength)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "RopeJoint")
+  (#match? @function.method.love
+    "^(getMaxLength|setMaxLength)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Texture")
+  (#match? @function.method.love
+    "^(getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Texture")
+  (#match? @function.method.love
+    "^(getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Texture")
+  (#match? @function.method.love
+    "^(getDPIScale|getDepth|getDepthSampleMode|getDimensions|getFilter|getFormat|getHeight|getLayerCount|getMipmapCount|getMipmapFilter|getPixelDimensions|getPixelHeight|getPixelWidth|getTextureType|getWidth|getWrap|isReadable|setDepthSampleMode|setFilter|setMipmapFilter|setWrap)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Cursor")
+  (#match? @function.method.love
+    "^(getType)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Cursor")
+  (#match? @function.method.love
+    "^(getType)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Cursor")
+  (#match? @function.method.love
+    "^(getType)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Body")
+  (#match? @function.method.love
+    "^(applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Body")
+  (#match? @function.method.love
+    "^(applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Body")
+  (#match? @function.method.love
+    "^(applyAngularImpulse|applyForce|applyLinearImpulse|applyTorque|destroy|getAngle|getAngularDamping|getAngularVelocity|getContacts|getFixtures|getGravityScale|getInertia|getJoints|getLinearDamping|getLinearVelocity|getLinearVelocityFromLocalPoint|getLinearVelocityFromWorldPoint|getLocalCenter|getLocalPoint|getLocalPoints|getLocalVector|getMass|getMassData|getPosition|getTransform|getType|getUserData|getWorld|getWorldCenter|getWorldPoint|getWorldPoints|getWorldVector|getX|getY|isActive|isAwake|isBullet|isDestroyed|isFixedRotation|isSleepingAllowed|isTouching|resetMassData|setActive|setAngle|setAngularDamping|setAngularVelocity|setAwake|setBullet|setFixedRotation|setGravityScale|setInertia|setLinearDamping|setLinearVelocity|setMass|setMassData|setPosition|setSleepingAllowed|setTransform|setType|setUserData|setX|setY)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "CircleShape")
+  (#match? @function.method.love
+    "^(getPoint|getRadius|setPoint|setRadius)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "CircleShape")
+  (#match? @function.method.love
+    "^(getPoint|getRadius|setPoint|setRadius)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "CircleShape")
+  (#match? @function.method.love
+    "^(getPoint|getRadius|setPoint|setRadius)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "PrismaticJoint")
+  (#match? @function.method.love
+    "^(areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "PrismaticJoint")
+  (#match? @function.method.love
+    "^(areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "PrismaticJoint")
+  (#match? @function.method.love
+    "^(areLimitsEnabled|getAxis|getJointSpeed|getJointTranslation|getLimits|getLowerLimit|getMaxMotorForce|getMotorForce|getMotorSpeed|getReferenceAngle|getUpperLimit|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorForce|setMotorEnabled|setMotorSpeed|setUpperLimit)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "MouseJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "MouseJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "MouseJoint")
+  (#match? @function.method.love
+    "^(getDampingRatio|getFrequency|getMaxForce|getTarget|setDampingRatio|setFrequency|setMaxForce|setTarget)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "CompressedImageData")
+  (#match? @function.method.love
+    "^(getDimensions|getFormat|getHeight|getMipmapCount|getWidth)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "CompressedImageData")
+  (#match? @function.method.love
+    "^(getDimensions|getFormat|getHeight|getMipmapCount|getWidth)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "CompressedImageData")
+  (#match? @function.method.love
+    "^(getDimensions|getFormat|getHeight|getMipmapCount|getWidth)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "SpriteBatch")
+  (#match? @function.method.love
+    "^(add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "SpriteBatch")
+  (#match? @function.method.love
+    "^(add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "SpriteBatch")
+  (#match? @function.method.love
+    "^(add|addLayer|attachAttribute|clear|flush|getBufferSize|getColor|getCount|getTexture|set|setColor|setDrawRange|setLayer|setTexture)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Shader")
+  (#match? @function.method.love
+    "^(getWarnings|hasUniform|send|sendColor)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Shader")
+  (#match? @function.method.love
+    "^(getWarnings|hasUniform|send|sendColor)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Shader")
+  (#match? @function.method.love
+    "^(getWarnings|hasUniform|send|sendColor)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Quad")
+  (#match? @function.method.love
+    "^(getTextureDimensions|getViewport|setViewport)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Quad")
+  (#match? @function.method.love
+    "^(getTextureDimensions|getViewport|setViewport)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Quad")
+  (#match? @function.method.love
+    "^(getTextureDimensions|getViewport|setViewport)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Joystick")
+  (#match? @function.method.love
+    "^(getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Joystick")
+  (#match? @function.method.love
+    "^(getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Joystick")
+  (#match? @function.method.love
+    "^(getAxes|getAxis|getAxisCount|getButtonCount|getDeviceInfo|getGUID|getGamepadAxis|getGamepadMapping|getGamepadMappingString|getHat|getHatCount|getID|getName|getVibration|isConnected|isDown|isGamepad|isGamepadDown|isVibrationSupported|setVibration)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Image")
+  (#match? @function.method.love
+    "^(isCompressed|isFormatLinear|replacePixels)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Image")
+  (#match? @function.method.love
+    "^(isCompressed|isFormatLinear|replacePixels)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Image")
+  (#match? @function.method.love
+    "^(isCompressed|isFormatLinear|replacePixels)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "MotorJoint")
+  (#match? @function.method.love
+    "^(getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "MotorJoint")
+  (#match? @function.method.love
+    "^(getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "MotorJoint")
+  (#match? @function.method.love
+    "^(getAngularOffset|getLinearOffset|setAngularOffset|setLinearOffset)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "GearJoint")
+  (#match? @function.method.love
+    "^(getJoints|getRatio|setRatio)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "GearJoint")
+  (#match? @function.method.love
+    "^(getJoints|getRatio|setRatio)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "GearJoint")
+  (#match? @function.method.love
+    "^(getJoints|getRatio|setRatio)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "ImageData")
+  (#match? @function.method.love
+    "^(encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "ImageData")
+  (#match? @function.method.love
+    "^(encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "ImageData")
+  (#match? @function.method.love
+    "^(encode|getDimensions|getHeight|getPixel|getWidth|mapPixel|paste|setPixel|getFormat)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Text")
+  (#match? @function.method.love
+    "^(add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Text")
+  (#match? @function.method.love
+    "^(add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Text")
+  (#match? @function.method.love
+    "^(add|addf|clear|getDimensions|getFont|getHeight|getWidth|set|setFont|setf)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "EdgeShape")
+  (#match? @function.method.love
+    "^(getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "EdgeShape")
+  (#match? @function.method.love
+    "^(getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "EdgeShape")
+  (#match? @function.method.love
+    "^(getNextVertex|getPoints|getPreviousVertex|setNextVertex|setPreviousVertex)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "RandomGenerator")
+  (#match? @function.method.love
+    "^(getSeed|getState|random|randomNormal|setSeed|setState)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "RandomGenerator")
+  (#match? @function.method.love
+    "^(getSeed|getState|random|randomNormal|setSeed|setState)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "RandomGenerator")
+  (#match? @function.method.love
+    "^(getSeed|getState|random|randomNormal|setSeed|setState)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "BezierCurve")
+  (#match? @function.method.love
+    "^(evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "BezierCurve")
+  (#match? @function.method.love
+    "^(evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "BezierCurve")
+  (#match? @function.method.love
+    "^(evaluate|getControlPoint|getControlPointCount|getDegree|getDerivative|getSegment|insertControlPoint|removeControlPoint|render|renderSegment|rotate|scale|setControlPoint|translate)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Font")
+  (#match? @function.method.love
+    "^(getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Font")
+  (#match? @function.method.love
+    "^(getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Font")
+  (#match? @function.method.love
+    "^(getAscent|getBaseline|getDPIScale|getDescent|getFilter|getHeight|getKerning|getLineHeight|getWidth|getWrap|hasGlyphs|setFallbacks|setFilter|setLineHeight)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "WheelJoint")
+  (#match? @function.method.love
+    "^(getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "WheelJoint")
+  (#match? @function.method.love
+    "^(getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "WheelJoint")
+  (#match? @function.method.love
+    "^(getAxis|getJointSpeed|getJointTranslation|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getSpringDampingRatio|getSpringFrequency|isMotorEnabled|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setSpringDampingRatio|setSpringFrequency)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Fixture")
+  (#match? @function.method.love
+    "^(destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Fixture")
+  (#match? @function.method.love
+    "^(destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Fixture")
+  (#match? @function.method.love
+    "^(destroy|getBody|getBoundingBox|getCategory|getDensity|getFilterData|getFriction|getGroupIndex|getMask|getMassData|getRestitution|getShape|getUserData|isDestroyed|isSensor|rayCast|setCategory|setDensity|setFilterData|setFriction|setGroupIndex|setMask|setRestitution|setSensor|setUserData|testPoint)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "RevoluteJoint")
+  (#match? @function.method.love
+    "^(areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "RevoluteJoint")
+  (#match? @function.method.love
+    "^(areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "RevoluteJoint")
+  (#match? @function.method.love
+    "^(areLimitsEnabled|getJointAngle|getJointSpeed|getLimits|getLowerLimit|getMaxMotorTorque|getMotorSpeed|getMotorTorque|getReferenceAngle|getUpperLimit|hasLimitsEnabled|isMotorEnabled|setLimits|setLimitsEnabled|setLowerLimit|setMaxMotorTorque|setMotorEnabled|setMotorSpeed|setUpperLimit)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "File")
+  (#match? @function.method.love
+    "^(close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "File")
+  (#match? @function.method.love
+    "^(close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "File")
+  (#match? @function.method.love
+    "^(close|flush|getBuffer|getFilename|getMode|getSize|isEOF|isOpen|lines|open|read|seek|setBuffer|tell|write)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Shape")
+  (#match? @function.method.love
+    "^(computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "Shape")
+  (#match? @function.method.love
+    "^(computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "Shape")
+  (#match? @function.method.love
+    "^(computeAABB|computeMass|getChildCount|getRadius|getType|rayCast|testPoint)$")
+  (#set! priority 150))
+
+(function_call
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "SoundData")
+  (#match? @function.method.love
+    "^(getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample)$")
+  (#set! priority 150))
+
+(function_declaration
+  name: [
+    (method_index_expression
+      table: (identifier) @type.love
+      ":" @punctuation.dot.love
+      method: (identifier) @function.method.love)
+    (dot_index_expression
+      table: (identifier) @type.love
+      "." @punctuation.dot.love
+      field: (identifier) @function.method.love)
+  ]
+  (#eq? @type.love "SoundData")
+  (#match? @function.method.love
+    "^(getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample)$")
+  (#set! priority 150))
+
+((dot_index_expression
+  table: (identifier) @type.love
+  "." @punctuation.dot.love
+  field: (identifier) @function.method.love)
+  (#eq? @type.love "SoundData")
+  (#match? @function.method.love
+    "^(getBitDepth|getChannelCount|getDuration|getSample|getSampleCount|getSampleRate|setSample)$")
+  (#set! priority 150))
 
 ; Callbacks
 ((dot_index_expression
@@ -295,7 +2454,7 @@
   (#eq? @_love "love")
   (#match? @function.call.love.callback
     "^(conf|directorydropped|displayrotated|draw|errorhandler|filedropped|focus|gamepadaxis|gamepadpressed|gamepadreleased|joystickadded|joystickaxis|joystickhat|joystickpressed|joystickreleased|joystickremoved|keypressed|keyreleased|load|lowmemory|mousefocus|mousemoved|mousepressed|mousereleased|quit|resize|run|textedited|textinput|threaderror|touchmoved|touchpressed|touchreleased|update|visible|wheelmoved)$")
-  (#set! priority 130))
+  (#set! priority 150))
 
 ; LOVE conf highlighting inside love.conf
 
