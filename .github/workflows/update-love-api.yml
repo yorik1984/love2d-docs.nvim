@@ -120,18 +120,17 @@ jobs:
           # Consider common README filenames (case sensitive)
           for README in README.md README.MD README; do
             if [ -f "$README" ]; then
-              # Replace only the version part in shields.io badge URL for LÖVE API while preserving other content.
-              # Pattern: https://img.shields.io/badge/L%C3%96VE_API-<version>-<color>.svg
-              # Replace <version> with TARGET_VERSION.
               TMPFILE="$(mktemp)"
-              perl -pe '
-                s{(https://img\.shields\.io/badge/L%C3%96VE_API-)[^-\)\n]+(-[A-Za-z0-9]+\.svg)}{$1'"${TARGET_VERSION}"'$2}g;
-              ' -- "$README" > "$TMPFILE"
+
+              sed -E "s/(https:\/\/img\.shields\.io\/badge\/L%C3%96VE_API-)[^-]+(-EA316E\.svg)/\1${TARGET_VERSION}\2/g" "$README" > "$TMPFILE"
+
               if ! cmp -s "$README" "$TMPFILE"; then
                 mv "$TMPFILE" "$README"
                 CHANGED=true
+                echo "Updated README badge version to ${TARGET_VERSION}"
               else
                 rm -f "$TMPFILE"
+                echo "No changes needed for README badge"
               fi
             fi
           done
