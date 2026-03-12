@@ -10,6 +10,12 @@
 
 -- LÖVE2D API LIST
 
+-- === FUNCTIONS ===
+love.getVersion()
+love.hasDeprecationOutput()
+love.isVersionCompatible()
+love.setDeprecationOutput()
+
 -- === CALLBACKS ===
 love.directorydropped()
 love.displayrotated()

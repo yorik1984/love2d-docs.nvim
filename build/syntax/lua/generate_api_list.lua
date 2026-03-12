@@ -25,18 +25,29 @@ local exclude_callbacks = {
     "conf",
 }
 local exclude_functions = {}
+local exclude_func_top  = {}
 local exclude_modules   = {}
 local exclude_types     = {}
 
 local exclude_callbacks_set = makeSet(exclude_callbacks)
 local exclude_functions_set = makeSet(exclude_functions)
+local exclude_func_top_set  = makeSet(exclude_func_top)
 local exclude_modules_set   = makeSet(exclude_modules)
 local exclude_types_set     = makeSet(exclude_types)
 
 local function generate_test_file(tab)
     local lines = { "-- LÖVE2D API LIST", "" }
 
-    -- 1. Callbacks (filtered)
+    -- 1. Functions (filtered)
+    table.insert(lines, "-- === FUNCTIONS ===")
+    for _, func in ipairs(tab.functions or {}) do
+        if not exclude_func_top_set[func.name] then
+            table.insert(lines, string.format("love.%s()", func.name))
+        end
+    end
+    table.insert(lines, "")
+
+    -- 2. Callbacks (filtered)
     table.insert(lines, "-- === CALLBACKS ===")
     for _, cb in ipairs(tab.callbacks or {}) do
         if not exclude_callbacks_set[cb.name] then
@@ -45,7 +56,7 @@ local function generate_test_file(tab)
     end
     table.insert(lines, "")
 
-    -- 2. Modules and Functions (filtered)
+    -- 3. Modules and Functions (filtered)
     table.insert(lines, "-- === MODULES & FUNCTIONS ===")
     for _, module in ipairs(tab.modules or {}) do
         if not exclude_modules_set[module.name] then
@@ -59,7 +70,7 @@ local function generate_test_file(tab)
         end
     end
 
-    -- 3. Types (filtered)
+    -- 4. Types (filtered)
     table.insert(lines, "-- === TYPES & METHODS ===")
 
     local rootName = tab.name or "love"
