@@ -5,6 +5,7 @@ on:
     # Runs every Monday at 00:30 UTC
     - cron: "30 0 * * 1"
   workflow_dispatch:
+  push: {}
 
 permissions:
   contents: write
@@ -24,7 +25,7 @@ jobs:
       - name: Install system dependencies (Ubuntu) and ensure Lua 5.1
         run: |
           sudo apt-get update
-          sudo apt-get install -y git vim neovim lua5.1
+          sudo apt-get install -y git vim neovim lua5.1 perl
           # Ensure 'lua' points to lua5.1 if runner doesn't provide it
           if ! command -v lua >/dev/null 2>&1; then
             LUA_BIN="$(command -v lua5.1 || true)"
@@ -42,7 +43,7 @@ jobs:
       - name: Determine current branch
         id: branch
         run: |
-          # prefer GITHUB_HEAD_REF (for workflow_dispatch from a PR), otherwise strip refs/heads/
+          # prefer GITHUB_HEAD_REF (for workflow runs from a PR), otherwise strip refs/heads/
           if [ -n "${GITHUB_HEAD_REF:-}" ]; then
             BR="${GITHUB_HEAD_REF}"
           else
