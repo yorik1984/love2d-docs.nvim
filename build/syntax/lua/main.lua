@@ -227,7 +227,7 @@ generateLoveConf()
 
 print('\n" Highlighting\n')
 print('execute( "highlight def Love " . g:lovedocs_colors_love )')
-print('execute( "highlight def Lovet " . g:lovedocs_colors_love )')
+print('execute( "highlight def Lovet " . g:lovedocs_colors_module )')
 print('execute( "highlight def LoveDot " . g:lovedocs_colors_module )')
 print('execute( "highlight def LoveModule " . g:lovedocs_colors_module )')
 print('execute( "highlight def LoveType " . g:lovedocs_colors_type )')

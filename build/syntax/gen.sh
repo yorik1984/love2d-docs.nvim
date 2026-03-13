@@ -21,7 +21,7 @@ rm -f ../../test/example/conf.lua
 $lua lua/main.lua > ../../after/syntax/lua.vim
 $lua lua/treesitter.lua > ../../after/queries/lua/highlights.scm
 $lua lua/generate_api_list.lua > ../../test/example/api_full_list.lua
-$lua lua/generate_api_list.lua > ../../test/example/conf.lua
+$lua lua/generate_conf.lua > ../../test/example/conf.lua
 
 # Cleanup
 rm -rf love-api
