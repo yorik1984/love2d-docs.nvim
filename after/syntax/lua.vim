@@ -108,7 +108,7 @@ syntax match LoveConf "t[.]audio[.]\%(mic\|mixwithsystem\)\>" contained contains
 " Highlighting
 
 execute( "highlight def Love " . g:lovedocs_colors_love )
-execute( "highlight def Lovet " . g:lovedocs_colors_love )
+execute( "highlight def Lovet " . g:lovedocs_colors_module )
 execute( "highlight def LoveDot " . g:lovedocs_colors_module )
 execute( "highlight def LoveModule " . g:lovedocs_colors_module )
 execute( "highlight def LoveType " . g:lovedocs_colors_type )

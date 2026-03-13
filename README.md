@@ -3,31 +3,64 @@
 [![Generate love2d-docs](https://github.com/yorik1984/love2d-docs.nvim/actions/workflows/update-love-api.yml/badge.svg)](https://github.com/yorik1984/love2d-docs.nvim/actions/workflows/update-love-api.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yorik1984/love2d-docs.nvim/blob/main/LICENSE)
 [![Lua](https://img.shields.io/badge/Lua-5.1-blue.svg)](https://www.lua.org/)
-[![LÖVE API](.5-EA316E.svg)](https://github.com/love2d-community/love-api?tab=readme-ov-file#l%C3%B6ve-api)
+[![LÖVE API](https://img.shields.io/badge/L%C3%96VE_API-11.5-EA316E.svg)](https://github.com/love2d-community/love-api)
+[![Neovim](https://img.shields.io/badge/Neovim-0.5+-green.svg)](https://neovim.io/)
+[![Vim](https://img.shields.io/badge/Vim-8.0+-green.svg)](https://www.vim.org/)
 
-(Neo)Vim syntax highlighting and helpfile for [LÖVE](http://love2d.org) with [Treesitter](https://github.com/nvim-treesitter/nvim-treesitter) support
+**Beautiful syntax highlighting 📝 | Comprehensive documentation 📚 | Treesitter support 🌳**
 
-The syntax part of the plugin highlights LÖVE functions, such as `love.udpate`, `love.graphics.rectangle`, and more. It also highlights `conf.lua` flags, such as `t.console`, `t.window.width`, etc.
+</div>
 
-The plugin also includes help files for LÖVE, called `love2d-docs.txt`. This file includes help for all of LÖVE's functions, as well as its types, enums, etc. It is generated from [love-api](https://github.com/love2d-community/love-api), so any discrepancies should be reported there.
 
-<!--toc:start-->
+## ✨ About
+
+**love2d-docs.nvim** is a comprehensive plugin for [Neovim](https://neovim.io/) and [Vim](https://www.vim.org/) that brings the entire [LÖVE](http://love2d.org) game framework documentation right into your editor.
+
+- 🎨 **Syntax Highlighting** — Colors LÖVE functions, modules, types, and callbacks
+- 📖 **Built-in Help** — Complete LÖVE API documentation accessible via `:help love2d-docs-love`
+- 🌳 **Treesitter Support** — Full integration with Neovim's Treesitter
+- 🔧 **Customizable** — Flexible styling options for both Neovim and Vim
+
+### Features highlighted:
+
+```lua
+-- LÖVE functions light up automatically
+love.graphics.rectangle("fill", 100, 100, 200, 200)
+
+-- Callbacks are specially highlighted
+function love.load()
+    -- 'load' stands out with LOVEcallback highlight
+end
+
+-- Configuration flags in conf.lua get special treatment
+
+-- work with treesitter too
+-- love.conf = function(t)
+function love.conf(t)
+    t.window.width = 800
+    t.window.height = 600
+end
+```
+
+<!-- TOC -->
+
+## Table of Contents
 
 - [📦 Installation](#-installation)
-- [🔧 Neovim settings](#-neovim-settings)
-  - [Commands](#commands)
-  - [Keybindings](#keybindings)
-- [🔧 Vim settings](#-vim-settings)
-- [❓ Help File](#-help-file)
-  - [Functions](#functions)
-  - [Types](#types)
-  - [Enums](#enums)
-- [⚙️ Rebuilding the API and syntax files](#️-rebuilding-the-api-and-syntax-files)
+- [🔧 Configuration](#-configuration)
+  - [📍 Neovim Settings](#-neovim-settings)
+  - [🔧 Vim settings](#-vim-settings)
+- [📚 Documentation](#-documentation)
+  - [♡ API Help Files](#-api-help-files)
+  - [❓ Plugin Help](#-plugin-help)
+- [🔄 Rebuilding the API](#-rebuilding-the-api)
+  - [🤖 Automated Workflow](#-automated-workflow)
+  - [✋ Manual Generation (Optional)](#-manual-generation-optional)
 - [🎨 Screenshots](#-screenshots)
-  - [Neovim](#neovim)
-  - [Vim](#vim)
-- [©️ Credits](#️-credits)
-<!--toc:end-->
+- [📚 References & Related Projects](#-references--related-projects)
+- [©️ Credits](#-credits)
+
+<!-- /TOC -->
 
 ## 📦 Installation
 
@@ -47,10 +80,12 @@ require("lazy").setup({
 Plug "yorik1984/love2d-docs.nvim"
 ```
 
-## 🔧 Neovim settings
+## 🔧 Configuration
+
+### 📍 Neovim Settings
 
 > [!NOTE]
-> This section only for Neovim users.
+> This section only for **Neovim** users
 
 ```lua
 ---@alias LoveDocsStyleType string | "bold" | "italic" | "underline"
@@ -81,22 +116,21 @@ Plug "yorik1984/love2d-docs.nvim"
 ---@field notifications boolean Whether to enable notifications
 ---@field style LoveDocsStyle Custom font styles (supports combinations like "bold,italic")
 ---@field colors LoveDocsColors Optional table to override default HEX colors
-
-opts = {
+require("love2d-docs").setup({
     enable_on_start = true,
     notifications = true,
     style = {
-        love     = "bold",
-        module   = "NONE",
-        type     = "NONE",
-        dot      = "NONE",
-        func     = "NONE",
-        method   = "NONE",
-        callback = "NONE",
-        conf     = "NONE",
+        love     = "bold",      -- 'love' global variable
+        module   = "NONE",      -- LÖVE modules (graphics, audio, etc.)
+        type     = "NONE",      -- LÖVE types/objects
+        dot      = "NONE",      -- Dot and colon operators
+        func     = "NONE",      -- LÖVE functions
+        method   = "NONE",      -- LÖVE methods
+        callback = "NONE",      -- Callbacks (load, update, draw)
+        conf     = "NONE",      -- Configuration flags
     },
     colors = {
-        LOVElove     = nil, -- Example: "#E54D95"
+        LOVElove     = nil,     -- Example: "#E54D95"
         LOVEmodule   = nil,
         LOVEtype     = nil,
         LOVEdot      = nil,
@@ -105,17 +139,17 @@ opts = {
         LOVEcallback = nil,
         LOVEconf     = nil,
     },
-},
+})
 ```
 
 > [!TIP]
 > Add this configuration to enable auto-highlighting in LÖVE2D projects
 
 ```lua
-require("lazy").setup({
+{
     "yorik1984/love2d-docs.nvim",
     dependencies = {
-        "S1M0N38/love2d.nvim", -- A simple Neovim plugin to build games with LÖVE
+        "S1M0N38/love2d.nvim",  -- A simple Neovim plugin to build games with LÖVE
     },
     ft = "lua",
     opts = {
@@ -144,9 +178,10 @@ require("lazy").setup({
             end,
         })
     end,
-})
+}
 ```
 
+#### Treesitter Highlight Groups
 Configure Treesitter styles using the following defaults:
 
 | Highlight Group                    | HEX Color | Color Variable | Style  |
@@ -160,7 +195,7 @@ Configure Treesitter styles using the following defaults:
 | `@function.call.love.callback.lua` | `#2FA8DC` | `LOVEcallback` | `NONE` |
 | `@function.call.love.conf.lua`     | `#2FA8DC` | `LOVEconf`     | `NONE` |
 
-### Commands
+#### Commands
 
 The plugin provides the following user commands to manage highlighting states.
 
@@ -170,152 +205,173 @@ The plugin provides the following user commands to manage highlighting states.
 | `:LOVEHighlightDisable` | **Disables** LÖVE2D highlighting and resets colors.      |
 | `:LOVEHighlightToggle`  | **Toggles** the highlighting state (On/Off).             |
 
-### Keybindings
+#### Recommended Keybindings
 
-> [!NOTE]
-> These keybindings are **not enabled by default**. You can manually add them to your configuration.
-
-| Key          | Command                 | Filetype | Description             |
-| ------------ | ----------------------- | -------- | ----------------------- |
-| `<leader>Lt` | `:LOVEHighlightToggle`  | `lua`    | Toggle LÖVE Highlights  |
-| `<leader>Le` | `:LOVEHighlightEnable`  | `lua`    | Enable LÖVE Highlights  |
-| `<leader>Ld` | `:LOVEHighlightDisable` | `lua`    | Disable LÖVE Highlights |
-
-Example configuration for **lazy.nvim**:
+Example configuration with [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
     "yorik1984/love2d-docs.nvim",
     keys = {
-        {
-            "<leader>Lt",
-            "<cmd>LOVEHighlightToggle<cr>",
-            ft = "lua",
-            desc = "Toggle LÖVE Highlights",
-        },
-        {
-            "<leader>Le",
-            "<cmd>LOVEHighlightEnable<cr>",
-            ft = "lua",
-            desc = "Enable LÖVE Highlights",
-        },
-        {
-            "<leader>Ld",
-            "<cmd>LOVEHighlightDisable<cr>",
-            ft = "lua",
-            desc = "Disable LÖVE Highlights",
-        },
-    },
-    opts = {
-        ...
+        { "<leader>Lt", "<cmd>LOVEHighlightToggle<cr>", ft = "lua", desc = "Toggle LÖVE Highlights" },
+        { "<leader>Le", "<cmd>LOVEHighlightEnable<cr>", ft = "lua", desc = "Enable LÖVE Highlights" },
+        { "<leader>Ld", "<cmd>LOVEHighlightDisable<cr>", ft = "lua", desc = "Disable LÖVE Highlights" },
     },
 }
+
 ```
-
-Or nvim api mappings for LÖVE Highlights (Lua files only)
-
-```lua
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "lua",
-    callback = function()
-        vim.keymap.set(
-            "n",
-            "<leader>Lt",
-            "<cmd>LOVEHighlightToggle<cr>",
-            { buffer = true, desc = "Toggle LÖVE Highlights" }
-        )
-        vim.keymap.set(
-            "n",
-            "<leader>Le",
-            "<cmd>LOVEHighlightEnable<cr>",
-            { buffer = true, desc = "Enable LÖVE Highlights" }
-        )
-        vim.keymap.set(
-            "n",
-            "<leader>Ld",
-            "<cmd>LOVEHighlightDisable<cr>",
-            { buffer = true, desc = "Disable LÖVE Highlights" }
-        )
-    end,
-})
-```
-
-## 🔧 Vim settings
+### 🔧 Vim settings
 
 The style of the syntax highlighting can be changed by setting `g:lovedocs_color_<name>` in your `.vimrc`:
 
 ```vimscript
 let g:lovedocs_colors_love = 'guifg=#E54D95 ctermfg=162 gui=bold cterm=bold'
 ```
-
 You can set the string to any valid highlighting specification (see `:help highlight-args`). Defaults are:
-| Highlight Group | Variable Name | Parameters (GUI/CTERM) |
+| Highlight Group  | Variable Name                | Parameters (GUI/CTERM)                          |
 | ---------------- | ---------------------------- | ----------------------------------------------- |
-| **Love** | `g:lovedocs_colors_love` | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
-| **Lovet** | `g:lovedocs_colors_love` | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
-| **LoveDot** | `g:lovedocs_colors_love` | `guifg=#E54D95 ctermfg=162` |
-| **LoveModule** | `g:lovedocs_colors_module` | `guifg=#E54D95 ctermfg=162` |
-| **LoveType** | `g:lovedocs_colors_type` | `guifg=#E54D95 ctermfg=162` |
-| **LoveFunction** | `g:lovedocs_colors_function` | `guifg=#2FA8DC ctermfg=38` |
-| **LoveMethod** | `g:lovedocs_colors_function` | `guifg=#2FA8DC ctermfg=38` |
-| **LoveCallback** | `g:lovedocs_colors_callback` | `guifg=#2FA8DC ctermfg=38` |
-| **LoveConf** | `g:lovedocs_colors_conf` | `guifg=#2FA8DC ctermfg=38` |
+| **Love**         | `g:lovedocs_colors_love`     | `guifg=#E54D95 ctermfg=162 gui=bold cterm=bold` |
+| **Lovet**        | `g:lovedocs_colors_module`   | `guifg=#E54D95 ctermfg=162`                     |
+| **LoveDot**      | `g:lovedocs_colors_module`   | `guifg=#E54D95 ctermfg=162`                     |
+| **LoveModule**   | `g:lovedocs_colors_module`   | `guifg=#E54D95 ctermfg=162`                     |
+| **LoveType**     | `g:lovedocs_colors_type`     | `guifg=#E54D95 ctermfg=162`                     |
+| **LoveFunction** | `g:lovedocs_colors_function` | `guifg=#2FA8DC ctermfg=38`                      |
+| **LoveMethod**   | `g:lovedocs_colors_function` | `guifg=#2FA8DC ctermfg=38`                      |
+| **LoveCallback** | `g:lovedocs_colors_callback` | `guifg=#2FA8DC ctermfg=38`                      |
+| **LoveConf**     | `g:lovedocs_colors_conf`     | `guifg=#2FA8DC ctermfg=38`                      |
 
-## ❓ Help File
+## 📚 Documentation
 
-The help file can be opened with `:help love2d-docs.txt`, or by specifying a function, enum, or other identifier. The form for searching differs based on what is being searched, but each follows the same basic format: `:help love2d-docs-SEARCH`.
+The plugin provides **two types of documentation**:
 
-#### Functions
+### ♡ API Help Files
 
-Functions are found first by their full name. For instance, if you wanted to see the parameters for `love.window.setMode`, you could search `:help love2d-docs-love.window.setMode`.
+Access the complete LÖVE API documentation `:help love2d-docs-*`:
 
-Each function features a brief description of what the function does, as well as the different forms of the function (called `Variants`) available. Each variant includes a function's return values and types (if any), as well as its parameters and their types (if any).
+| What to find      | Command Example                         |
+| ----------------- | --------------------------------------- |
+| **Function**      | `:help love2d-docs-love.window.setMode` |
+| **Type**          | `:help love2d-docs-File`                |
+| **Type Method**   | `:help love2d-docs-File:isEOF`          |
+| **Enum**          | `:help love2d-docs-BufferMode`          |
 
-#### Types
+### ❓ Plugin Help
 
-Types are found by their name. For instance, if I wanted to look up the `File` type, I would do so with `:help love2d-docs-File`. The documentation includes a brief description of what the type handles, as well as a list of constructors, supertypes, subtypes, and functions.
+Get help on configuring the plugin itself `:help love2d-docs-config`. This opens documentation about available options, commands, and customization.
 
-Type functions can also be found with the function name, using self-invocation syntax. For instance, if you wanted to read about the `File` function `isEOF`, you would search `:help love2d-docs-File:isEOF`.
+## 🔄 Rebuilding the API
 
-#### Enums
+### 🤖 Automated Workflow
 
-Searching for enums is similar to searching for types: just use the name. For instance, if you wanted to read about the `BufferMode` enum, you would search `:help love2d-docs-BufferMode`.
+This plugin uses **GitHub Actions** to automatically stay up-to-date with the latest LÖVE API:
 
-Constants are separated by dashes. If you want to read about `BufferMode`'s constant `full`, you could search `:help love2d-docs-BufferMode-full`.
+| Feature      | Details                                                                   |
+| ------------ | ------------------------------------------------------------------------- |
+| **Schedule** | Every Monday at 00:30 UTC                                                 |
+| **Trigger**  | Manual dispatch via Actions tab                                           |
+| **Source**   | [love2d-community/love-api](https://github.com/love2d-community/love-api) |
+| **Updates**  | Documentation, syntax files, and Treesitter queries                       |
 
-## ⚙️ Rebuilding the API and syntax files
+**How it works:**
 
-If you wish to re-build [love-api](https://github.com/love2d-community/love-api) from source, follow the steps below:
+1. 🔄 Fetches the latest LÖVE API specification
+2. 📝 Generates help files (`love2d-docs.txt`)
+3. 🎨 Updates syntax highlighting rules
+4. 🌳 Refreshes Treesitter queries
+5. 🚀 Automatically commits changes to the repository
+6. 📌 Creates version branches (e.g., `11.5`, `12.0`) for API version tracking
 
-- Ensure that the following commands will run from the command line:
-  - `git`
-  - `lua`
-  - `nvim` or `vim`
+> [!NOTE]
+> The badge at the top of this README always shows the current LÖVE API version supported by this plugin.
 
-  You may also edit [`build/env.txt`](build/env.txt) to set custom values. For instance, if want to use Lua 5.2 instead of 5.3, you may change the line with `lua="lua"` to be `lua="lua5.2"` (assuming this command brings up the Lua 5.2 interpreter on your system).
+### ✋ Manual Generation (Optional)
 
-- Next, run [`build/gen.bat`](build/gen.bat) (Windows) or [`build/gen.sh`](build/gen.sh) (Mac/Linux). This should generate new files:
-  - [`love2d-docs.txt`](doc/love2d-docs.txt)
-  - [`after/queries/lua/highlights.scm`](after/queries/lua/highlights.scm)
-  - [`after/syntax/lua.vim`](after/syntax/lua.vim)
-  - [`test/example/api_full_list.lua`](test/example/api_full_list.lua)
-  - [`test/example/conf.lua`](test/example/conf.lua)
+> [!TIP]
+> **You don't need to do this!** The automated workflow keeps everything up-to-date.  
+> Manual generation is only for:
+> - Testing custom modifications
+> - Contributing to plugin development
+> - Offline environments without GitHub Actions
 
-You may need to allow the files to be able to run. You need to do this for **every** file that ends with `.bat` if you're on Windows, or `.sh` for Mac/Linux. Windows users will need to "Unblock" the `.bat` files. See [here](https://blogs.msdn.microsoft.com/delay/p/unblockingdownloadedfile/) for how to unblock files. For Mac/Linux users, you will need to `chmod` the `.sh` files to allow execution.
+If you still want to generate files manually:
+
+- Prerequisites:
+
+```
+   # Ensure these are installed
+   git --version
+   lua -v           # Lua 5.1
+   nvim --version   # or vim
+```
+- Configure (optional):
+Edit build/env.txt to set custom paths:
+
+```
+lua="lua5.1"     # Change to your Lua version
+nvim="nvim"      # or "vim"
+```
+- Run the generator:
+
+```bash
+# On Linux/Mac
+chmod +x build/gen.sh
+./build/gen.sh
+
+# On Windows
+build/gen.bat
+```
+
+- Generated files:
+    - 📄[`love2d-docs.txt`](doc/love2d-docs.txt) — API and plugin documentation
+    - 🌳[`after/queries/lua/highlights.scm`](after/queries/lua/highlights.scm) — Treesitter queries
+    - 🎨[`after/syntax/lua.vim`](after/syntax/lua.vim) — Vim syntax file
+    - 🧪[`test/example/api_full_list.lua`](test/example/api_full_list.lua) — Test preview file with full API-list
+    - ⚙️[`test/example/conf.lua`](test/example/conf.lua) — Test preview `love.conf()`
 
 ## 🎨 Screenshots
 
-#### Neovim
+### Neovim with [newpaper.nvim](https://github.com/yorik1984/newpaper.nvim)
 
-- [newpaper.nvim](https://github.com/yorik1984/newpaper.nvim)
-  ![](pics/screen1.png)
-  ![](pics/screen2.png)
+<div align="center">
+  <img src="pics/screen1.png" alt="Neovim screenshot 1" width="80%">
+  <br><br>
+  <img src="pics/screen2.png" alt="Neovim screenshot 2" width="80%">
+</div>
 
-#### Vim
+### Vim with [papercolor-theme](https://github.com/NLKNguyen/papercolor-theme)
 
-[papercolor-theme](https://github.com/NLKNguyen/papercolor-theme)
-![](pics/screen3.png)
+<div align="center">
+  <img src="pics/screen3.png" alt="Vim screenshot" width="80%">
+</div>
+
+## 📚 References & Related Projects
+
+Expand your LÖVE development toolkit with these complementary resources:
+
+#### 🔌 [EmmyLuaLOVEGenerator](https://github.com/yorik1984/EmmyLuaLOVEGenerator)
+A powerful script that automatically generates EmmyLua type annotations for the entire LÖVE framework.
+
+* **What it does:** Creates `---@class` and `---@alias` definitions for perfect autocompletion and type checking in IDEs  with EmmyLua, and others.
+* **✨ Key Features:**
+    * **🤖 Automated Updates:** Uses GitHub Actions to stay in sync with the official love-api, just like this docs plugin.
+    * **📦 Ready-to-Use:** Provides a pre-generated `api/` folder that you can directly add to your workspace library.
+    * **🧠 Smart Type System:** Intelligently handles type unions, plural forms (e.g., `tables` → `table[]`), optional parameters, and function overloads.
+    * **📌 Version Branches:** Includes branches for specific LÖVE versions (e.g., `11.5`), so you can use annotations that match your project.
+
+> **💡 Pro Tip:** Use this generator alongside **love2d-docs.nvim** for the ultimate LÖVE development setup—get both beautiful inline syntax highlighting *and* intelligent IDE autocompletion.
 
 ## ©️ Credits
 
-Original Authors [Davis Claiborne](https://github.com/davisdude) — Initial development and maintenance of the original [vim-love-docs](https://github.com/davisdude/vim-love-docs).
+* Current Maintainer: [yorik1984](https://github.com/yorik1984) — Ported to Neovim with Treesitter support and continuous updates
+* Original Author: [Davis Claiborne](https://github.com/davisdude) — Created and maintained the original [vim-love-docs](https://github.com/davisdude/vim-love-docs)
+* Powered by: [love-api](https://github.com/love2d-community/love-api) — Community-maintained LÖVE API specification
+
+<div align="center">
+  <sub>
+    Built with ♡ for the LÖVE community
+    <br>
+    <a href="https://github.com/yorik1984/love2d-docs.nvim/issues">Report Issue</a> ·
+    <a href="https://github.com/yorik1984/love2d-docs.nvim/discussions">Discussion</a> ·
+    <a href="https://love2d.org/">LÖVE2D</a>
+  </sub>
+</div>
