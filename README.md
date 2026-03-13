@@ -11,7 +11,6 @@
 
 </div>
 
-
 ## ✨ About
 
 **love2d-docs.nvim** is a comprehensive plugin for [Neovim](https://neovim.io/) and [Vim](https://www.vim.org/) that brings the entire [LÖVE](http://love2d.org) game framework documentation right into your editor.
@@ -218,8 +217,8 @@ Example configuration with [lazy.nvim](https://github.com/folke/lazy.nvim):
         { "<leader>Ld", "<cmd>LOVEHighlightDisable<cr>", ft = "lua", desc = "Disable LÖVE Highlights" },
     },
 }
-
 ```
+
 ### 🔧 Vim settings
 
 The style of the syntax highlighting can be changed by setting `g:lovedocs_color_<name>` in your `.vimrc`:
@@ -296,22 +295,21 @@ This plugin uses **GitHub Actions** to automatically stay up-to-date with the la
 If you still want to generate files manually:
 
 - Prerequisites:
-
 ```
 # Ensure these are installed
 git --version
 lua -v           # Lua 5.1
 nvim --version   # or vim
 ```
+
 - Configure (optional):
 Edit build/env.txt to set custom paths:
-
 ```
 lua="lua5.1"     # Change to your Lua version
 nvim="nvim"      # or "vim"
 ```
-- Run the generator:
 
+- Run the generator:
 ```bash
 # On Linux/Mac
 chmod +x build/gen.sh
@@ -348,13 +346,13 @@ build/gen.bat
 
 Expand your LÖVE development toolkit with these complementary resources:
 
-#### 🔌 [EmmyLuaLOVEGenerator](https://github.com/yorik1984/EmmyLuaLOVEGenerator)
-A powerful script that automatically generates EmmyLua type annotations for the entire LÖVE framework.
+#### 🔌 [EmmyLuaLOVEGenerator](https://github.com/yorik1984/love2d-definitions)
+A powerful script that automatically generates LuaCATS type annotations for the entire LÖVE framework.
 
-* **What it does:** Creates `---@class` and `---@alias` definitions for perfect autocompletion and type checking in IDEs  with EmmyLua, and others.
+* **What it does:** Creates `---@class` and `---@alias` definitions for perfect autocompletion and type checking in IDEs  with LuaCATS, and others.
 * **✨ Key Features:**
     * **🤖 Automated Updates:** Uses GitHub Actions to stay in sync with the official love-api, just like this docs plugin.
-    * **📦 Ready-to-Use:** Provides a pre-generated `api/` folder that you can directly add to your workspace library.
+    * **📦 Ready-to-Use:** Provides a pre-generated `library/` folder that you can directly add to your workspace library.
     * **🧠 Smart Type System:** Intelligently handles type unions, plural forms (e.g., `tables` → `table[]`), optional parameters, and function overloads.
     * **📌 Version Branches:** Includes branches for specific LÖVE versions (e.g., `11.5`), so you can use annotations that match your project.
 
