@@ -298,10 +298,10 @@ If you still want to generate files manually:
 - Prerequisites:
 
 ```
-   # Ensure these are installed
-   git --version
-   lua -v           # Lua 5.1
-   nvim --version   # or vim
+# Ensure these are installed
+git --version
+lua -v           # Lua 5.1
+nvim --version   # or vim
 ```
 - Configure (optional):
 Edit build/env.txt to set custom paths:
