@@ -744,7 +744,8 @@ Example configuration with |lazy.nvim|:
     {
         "yorik1984/love2d-docs.nvim",
         keys = {
-            { "<leader>Lt",
+            {
+                "<leader>Lt",
                 "<cmd>LOVEHighlightToggle<cr>",
                 ft = "lua",
                 desc = "Toggle LÖVE Highlights",
