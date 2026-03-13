@@ -346,7 +346,7 @@ build/gen.bat
 
 Expand your LÖVE development toolkit with these complementary resources:
 
-#### 🔌 [EmmyLuaLOVEGenerator](https://github.com/yorik1984/love2d-definitions)
+#### 🔌 [love2d-definitions](https://github.com/yorik1984/love2d-definitions)
 A powerful script that automatically generates LuaCATS type annotations for the entire LÖVE framework.
 
 * **What it does:** Creates `---@class` and `---@alias` definitions for perfect autocompletion and type checking in IDEs  with LuaCATS, and others.
@@ -360,7 +360,6 @@ A powerful script that automatically generates LuaCATS type annotations for the 
 
 ## ©️ Credits
 
-* Current Maintainer: [yorik1984](https://github.com/yorik1984) — Ported to Neovim with Treesitter support and continuous updates
 * Original Author: [Davis Claiborne](https://github.com/davisdude) — Created and maintained the original [vim-love-docs](https://github.com/davisdude/vim-love-docs)
 * Powered by: [love-api](https://github.com/love2d-community/love-api) — Community-maintained LÖVE API specification
 
