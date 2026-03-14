@@ -175,7 +175,7 @@ end
 
 -- Functions {{{
 -- Gets a synopsis of a function variant
--- Synopsis: return1, return2 = func( arg1, arg2 )
+-- Synopsis: return1, return2 = func(arg1, arg2)
 local function getSynopsis(variant, fullName)
     local synopsis = formatAsReference(fullName)
 
@@ -190,7 +190,7 @@ local function getSynopsis(variant, fullName)
         synopsis = synopsis .. '()'
     else
         local arguments = concatAttribute(variant.arguments, ', ', 'name', formatSpecial)
-        synopsis = synopsis .. '( ' .. arguments .. ' )'
+        synopsis = synopsis .. '(' .. arguments .. ')'
     end
 
     return synopsis
@@ -571,7 +571,7 @@ end
 
 -- Header {{{
 print(
-[[*love2d-docs-config*                                 LÖVE2D DOCS Configuration
+    [[*love2d-docs-config*                                 LÖVE2D DOCS Configuration
 
 (Neo)Vim syntax highlighting and helpfile for LÖVE (http://love2d.org)
 with |treesitter| support.
@@ -853,7 +853,7 @@ Current Maintainer: ~
 ==============================================================================]])
 
 print((
-[[*love2d-docs.txt* *love2d-docs*      Documentation for the LOVE game framework.
+    [[*love2d-docs.txt* *love2d-docs*      Documentation for the LOVE game framework.
 
                                o  o                    ~
                       ╭─╮    ╭──────╮╭─╮    ╭─╮╭─────╮ ~
