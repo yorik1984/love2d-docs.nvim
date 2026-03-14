@@ -9,8 +9,6 @@
 
 **Beautiful syntax highlighting 📝 | Comprehensive documentation 📚 | Treesitter support 🌳**
 
-</div>
-
 ## ✨ About
 
 **love2d-docs.nvim** is a comprehensive plugin for [Neovim](https://neovim.io/) and [Vim](https://www.vim.org/) that brings the entire [LÖVE](http://love2d.org) game framework documentation right into your editor.
@@ -344,19 +342,17 @@ build/gen.bat
 
 ## 📚 References & Related Projects
 
-Expand your LÖVE development toolkit with these complementary resources:
+### [love2d-definitions](https://github.com/yorik1984/love2d-definitions)
+Automatic [LuaCATS](https://luals.github.io/wiki/annotations/) type annotation generator for [LÖVE 2D](https://love2d.org/) framework.
+Creates `---@class` and `---@alias` definitions for perfect autocompletion and type checking in IDEs with LuaCATS.
 
-#### 🔌 [love2d-definitions](https://github.com/yorik1984/love2d-definitions)
-A powerful script that automatically generates LuaCATS type annotations for the entire LÖVE framework.
+✨ Key Features:
+* **🤖 Automated Updates:** Uses GitHub Actions to stay in sync with the official love-api, just like this docs plugin.
+* **📦 Ready-to-Use:** Provides a pre-generated `library/` folder that you can directly add to your workspace library.
+* **🧠 Smart Type System:** Intelligently handles type unions, plural forms (e.g., `tables` → `table[]`), optional parameters, and function overloads.
+* **📌 Version Branches:** Includes branches for specific LÖVE versions (e.g., `11.5`), so you can use annotations that match your project.
 
-* **What it does:** Creates `---@class` and `---@alias` definitions for perfect autocompletion and type checking in IDEs  with LuaCATS, and others.
-* **✨ Key Features:**
-    * **🤖 Automated Updates:** Uses GitHub Actions to stay in sync with the official love-api, just like this docs plugin.
-    * **📦 Ready-to-Use:** Provides a pre-generated `library/` folder that you can directly add to your workspace library.
-    * **🧠 Smart Type System:** Intelligently handles type unions, plural forms (e.g., `tables` → `table[]`), optional parameters, and function overloads.
-    * **📌 Version Branches:** Includes branches for specific LÖVE versions (e.g., `11.5`), so you can use annotations that match your project.
-
-> **💡 Pro Tip:** Use this generator alongside **love2d-docs.nvim** for the ultimate LÖVE development setup—get both beautiful inline syntax highlighting *and* intelligent IDE autocompletion.
+>[!TIP] Use this generator alongside **love2d-docs.nvim** for the ultimate LÖVE development setup — get both beautiful inline syntax highlighting and intelligent IDE autocompletion.
 
 ## ©️ Credits
 
