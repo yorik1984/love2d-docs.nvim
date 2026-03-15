@@ -13,7 +13,7 @@
 
 **love2d-docs.nvim** is a comprehensive plugin for [Neovim](https://neovim.io/) and [Vim](https://www.vim.org/) that brings the entire [LÖVE](http://love2d.org) game framework documentation right into your editor.
 
-- 📖 **Built-in Help** — Complete LÖVE API documentation accessible via `:help love2d-docs-love`
+- 📖 **Built-in Help** — Complete LÖVE API documentation accessible via `:help love2d-docs-*`
 
 <!-- TOC -->
 
@@ -128,8 +128,6 @@ build/gen.bat
 
 <div align="center">
   <img src="pics/screen1.png" alt="Neovim screenshot 1" width="80%">
-  <br><br>
-  <img src="pics/screen2.png" alt="Neovim screenshot 2" width="80%">
 </div>
 
 ### Vim with [papercolor-theme](https://github.com/NLKNguyen/papercolor-theme)
