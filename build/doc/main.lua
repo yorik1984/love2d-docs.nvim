@@ -10,7 +10,6 @@ align.setDefaultWidth(PAGE_WIDTH)
 
 local TOC_NAME_WIDTH_LIMIT = 40
 local TOC_NAME_REF_SPACING = 2
-local TOC_REF_WIDTH_LIMIT = PAGE_WIDTH - TOC_NAME_WIDTH_LIMIT - TOC_NAME_REF_SPACING
 
 local LOVE_TYPES = {}
 
@@ -93,7 +92,6 @@ end
 --
 -- Where `attributeName` is either `tab[i].name` or `tab[i]`
 -- `attributeName` is trimmed to be within `TOC_NAME_WIDTH_LIMIT` (including indent)
--- The tag is also trimmed, to the width of `TOC_REF_WIDTH_LIMIT`
 local function printTableOfContents(tab, tagPrefix, indentLevel, indentString)
     local indent = select(3, getIndentation(indentLevel, indentString))
     tab = tab or {}
@@ -104,16 +102,27 @@ local function printTableOfContents(tab, tagPrefix, indentLevel, indentString)
         return concat(tab, "\n", function(_, attr)
             local attrName = attr.name or tostring(attr)
 
-            local name =
-                align.left(trimFormattedText(attrName, TOC_NAME_WIDTH_LIMIT - #indent, formatAsReference), indent)
+            local name = align.left(trimFormattedText(
+                attrName,
+                TOC_NAME_WIDTH_LIMIT - #indent,
+                formatAsReference
+            ), indent)
 
-            local trimmedTag = trimFormattedText(tagPrefix .. attrName, TOC_REF_WIDTH_LIMIT, formatAsReference)
+            local tag = formatAsReference(tagPrefix .. attrName)
+            local tagLength = #tag
 
-            -- Left-aligns tag
-            local width = TOC_NAME_WIDTH_LIMIT - #name + TOC_NAME_REF_SPACING
-            local spacing = (" "):rep(width)
+            local nameLength = #name
+            local maxAvailableSpace = PAGE_WIDTH - nameLength
 
-            return name .. spacing .. trimmedTag
+            local minSpacing = TOC_NAME_REF_SPACING
+
+            for spacing = maxAvailableSpace - tagLength, minSpacing, -1 do
+                if spacing >= minSpacing and nameLength + spacing + tagLength <= PAGE_WIDTH then
+                    return name .. (" "):rep(spacing) .. tag
+                end
+            end
+
+            return name .. (" "):rep(minSpacing) .. tag
         end)
     end
 end
@@ -234,7 +243,7 @@ local function formatNeovimReturn(ret, indentLevel, indentString, index, total)
         prefix = indent .. index .. ". "
     end
 
-    local returnLine = prefix .. "(" .. (formatDefaultValue(ret.type) or "any") .. ")"
+    local returnLine = prefix .. "(" .. (("`" .. formatDefaultValue(ret.type) .. "`") or "any") .. ")"
 
     if LOVE_TYPES[ret.type] then
         returnLine = returnLine .. " |love2d-docs-" .. ret.type .. "|"
