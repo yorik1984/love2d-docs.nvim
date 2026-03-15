@@ -119,8 +119,6 @@ build/gen.bat
 
 - Generated files:
     - 📄[`love2d-docs.txt`](doc/love2d-docs.txt) — API and plugin documentation
-    - 🧪[`test/example/api_full_list.lua`](test/example/api_full_list.lua) — Test preview file with full API-list
-    - ⚙️[`test/example/conf.lua`](test/example/conf.lua) — Test preview `love.conf()`
 
 ## 🎨 Screenshots
 
