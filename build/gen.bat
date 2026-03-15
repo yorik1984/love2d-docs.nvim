@@ -27,12 +27,10 @@ rd /q /s love-api
 !git! clone https://github.com/love2d-community/love-api
 
 REM Copy love-api to the specified directories
-xcopy /e /q /y love-api syntax\love-api\
 xcopy /e /q /y love-api doc\love-api\
 
 REM Run the generation scripts
 call doc\gen.bat
-call syntax\gen.bat
 
 REM REmove love-api
 rd /q /s love-api

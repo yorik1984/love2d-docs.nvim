@@ -22,12 +22,10 @@ rm -rf love-api
 $git clone https://github.com/love2d-community/love-api
 
 # Copy love-api to the specified directories
-cp -rf love-api syntax
 cp -rf love-api doc
 
 # Run the generation scripts
 source doc/gen.sh
-source syntax/gen.sh
 
 # Remove love-api
 rm -rf love-api
