@@ -25,7 +25,7 @@ jobs:
       - name: Install system dependencies (Ubuntu) and ensure Lua 5.1
         run: |
           sudo apt-get update
-          sudo apt-get install -y git vim neovim lua5.1 perl
+          sudo apt-get install -y git vim neovim lua5.1
           # Ensure 'lua' points to lua5.1 if runner doesn't provide it
           if ! command -v lua >/dev/null 2>&1; then
             LUA_BIN="$(command -v lua5.1 || true)"
@@ -157,7 +157,7 @@ jobs:
           # If there are changes from generator or README replacement, commit them
           if [ -n "$(git status --porcelain)" ]; then
             git add -A
-            git commit -m "chore(docs): update generated love-api and README badge (automated run)"
+            git commit -m "chore(docs): update generated love-api and README badge to version $API_VER"
           else
             echo "No changes to commit"
           fi
