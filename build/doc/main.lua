@@ -7,7 +7,7 @@ local TAG_PREFIX = "love2d-docs-"
 local NEW_LINE_S = "\n"
 local NEW_LINE_D = "\n\n"
 
-local PAGE_WIDTH = 79
+local PAGE_WIDTH = 80
 align.setDefaultWidth(PAGE_WIDTH)
 
 local TOC_NAME_WIDTH_LIMIT = 40
@@ -135,8 +135,8 @@ local function printTOCWithTagAndDesc(tab, attribute, tagPrefix, indentLevel, in
     return align.right(formatAsTag(TAG_PREFIX .. tab.name .. "-" .. attribute))
         .. NEW_LINE_S
         -- Basic identifier
-        .. align.left(attribute .. ":", indent)
-        .. NEW_LINE_D
+        .. align.left(attribute:gsub("^%l", string.upper) .. ": ~", indent)
+        .. NEW_LINE_S
         -- Table of contents
         .. printTableOfContents(tab[attribute], TAG_PREFIX .. tagPrefix, indentLevel + 1, indentString)
 end
@@ -244,7 +244,13 @@ local function formatNeovimReturn(ret, indentLevel, indentString, index, total)
         prefix = indent .. index .. ". "
     end
 
-    local returnLine = prefix .. "(" .. (("`" .. formatDefaultValue(ret.type) .. "`") or "any") .. ")"
+    local typeStr = formatDefaultValue(ret.type) or "any"
+
+    local returnLine = prefix .. "(`" .. typeStr .. "`)"
+
+    if ret.name and ret.name ~= "" then
+        returnLine = returnLine .. " `" .. ret.name .. "`"
+    end
 
     if LOVE_TYPES[ret.type] then
         returnLine = returnLine .. " |love2d-docs-" .. ret.type .. "|"
@@ -313,12 +319,12 @@ local function getFormattedSynopses(func, fullName, indentLevel, indentString)
     for index, synopsis in ipairs(synopses) do
         local prefix
         if variantCount > 1 then
-            prefix = indent .. align.pad(index .. ".", " ", #indentString)
+            prefix = indent .. align.pad(index .. ". ", "", #indentString)
         else
-            prefix = indent .. align.pad("", " ", #indentString)
+            prefix = indent
         end
 
-        table.insert(list, align.left(prefix .. synopsis, indentString:rep(indentLevel + 1), nil, true))
+        table.insert(list, align.left(prefix .. synopsis, indentString:rep(indentLevel), nil, true))
     end
 
     return list
@@ -355,7 +361,22 @@ local function getFormattedVariant(variant, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
 
-    local result = align.left(variant.description or "See function description", indent) .. NEW_LINE_D
+    local result = ""
+
+    if variant.arguments and #variant.arguments > 0 then
+        result = result .. NEW_LINE_D
+    else
+        result = result .. NEW_LINE_S
+    end
+
+    -- Prevent if description is empty
+    if variant.description == nil then
+        result = align.left("See function description", indent) .. result
+    elseif variant.description == "" then
+        result = ""
+    else
+        result = align.left(variant.description, indent) .. result
+    end
 
     if variant.arguments and #variant.arguments > 0 then
         result = result
@@ -363,7 +384,12 @@ local function getFormattedVariant(variant, indentLevel, indentString)
             .. "Parameters: ~"
             .. NEW_LINE_S
             .. formatNeovimParameters(variant.arguments, indentLevel + 1, indentString)
-            .. NEW_LINE_D
+
+        if variant.returns and #variant.returns > 0 then
+            result = result .. NEW_LINE_D
+        else
+            result = result .. NEW_LINE_S
+        end
     end
 
     if variant.returns and #variant.returns > 0 then
@@ -374,6 +400,7 @@ local function getFormattedVariant(variant, indentLevel, indentString)
             .. ": ~"
             .. NEW_LINE_S
             .. formatNeovimReturns(variant.returns, indentLevel + 1, indentString)
+            .. NEW_LINE_S
     end
 
     return result
@@ -385,16 +412,13 @@ local function getFormattedVariants(func, fullName, indentLevel, indentString)
 
     local formattedSynopses = getFormattedSynopses(func, fullName, indentLevel, indentString)
     local variantCount = #func.variants
+    local resultBegin = "Variant" .. (variantCount > 1 and "s" or "") .. ": ~" .. NEW_LINE_S
+    return resultBegin
+        .. concat(func.variants, NEW_LINE_S, function(index, variant)
+            local result = formattedSynopses[index] .. NEW_LINE_D
 
-    return concat(func.variants, NEW_LINE_S, function(index, variant)
-        local result = formattedSynopses[index] .. NEW_LINE_D
-
-        if variantCount > 1 then
-            result = result .. "    " .. index .. ".  "
-        end
-
-        return result .. getFormattedVariant(variant, indentLevel + 1, indentString)
-    end)
+            return result .. getFormattedVariant(variant, indentLevel, indentString)
+        end)
 end
 
 -- Compiles all of the information about a function
@@ -413,12 +437,10 @@ local function getFunctionOverview(func, parentName, indentLevel, indentString)
         .. NEW_LINE_D
         .. indent
         .. "Synopses: ~"
-        .. NEW_LINE_D
+        .. NEW_LINE_S
         .. table.concat(getFormattedSynopses(func, fullName, indentLevel + 1, indentString), NEW_LINE_S)
         .. NEW_LINE_D
         .. indent
-        .. "Variants: ~"
-        .. NEW_LINE_D
         .. getFormattedVariants(func, fullName, indentLevel + 1, indentString)
 
     return overview
@@ -627,31 +649,30 @@ end
 
 print(([[*love2d-docs.txt* *love2d-docs*      Documentation for the LÖVE game framework.
 
-                               o  o                    ~
-                      ╭─╮    ╭──────╮╭─╮    ╭─╮╭─────╮ ~
-                      │ │    │ ╭──╮ ││ │    │ ││ ╭───╯ ~
-                      │ │    │ │  │ │╰╮╰╮  ╭╯╭╯│ ╰───╮ ~
-                      │ │    │ │  │ │ ╰╮╰╮╭╯╭╯ │ ╭───╯ ~
-                      │ ╰───╮│ ╰──╯ │  ╰╮╰╯╭╯  │ ╰───╮ ~
-                      ╰─────╯╰──────╯   ╰──╯   ╰─────╯ ~
+                               o  o                     ~
+                       ╭─╮    ╭──────╮╭─╮    ╭─╮╭─────╮ ~
+                       │ │    │ ╭──╮ ││ │    │ ││ ╭───╯ ~
+                       │ │    │ │  │ │╰╮╰╮  ╭╯╭╯│ ╰───╮ ~
+                       │ │    │ │  │ │ ╰╮╰╮╭╯╭╯ │ ╭───╯ ~
+                       │ ╰───╮│ ╰──╯ │  ╰╮╰╯╭╯  │ ╰───╮ ~
+                       ╰─────╯╰──────╯   ╰──╯   ╰─────╯ ~
                 The complete solution for (Neo)Vim with LÖVE.
-                   Includes documentation.
+                            Includes documentation.
 
 For LÖVE (http://love2d.org) version %s.
 
-Generated from
-
+Generated from: ~
     https://github.com/love2d-community/love-api
 
-using
-
+Using: ~
     https://github.com/yorik1984/love2d-docs.nvim
 
-Original work by Davis Claiborne under the MIT license.
+Modified and maintained by: ~
+    yorik1984 under the MIT license.
 
+Original work by: ~
+    Davis Claiborne under the MIT license.
     https://github.com/davisdude/vim-love-docs
-
-Modified and maintained by yorik1984 under the MIT license.
 
 See LICENSE.md for more info.
 ]]):format(api.version))
@@ -673,4 +694,4 @@ end
 
 -- Prints modeline (spelling/capitalization errors are ugly; use correct file type)
 -- (Uses concat to prevent vim from interpreting THIS as a modeline)
-print(" vim" .. ":nospell:ft=help:")
+print(" vim" .. ":nospell:ft=help:tw=" .. PAGE_WIDTH)
