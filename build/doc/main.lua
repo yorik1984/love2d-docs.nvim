@@ -3,11 +3,12 @@ local align = require("align")
 
 -- Local variables
 local INDENT_STRING = "    "
-local TAG_PREFIX = "love2d-docs-"
+local TAG_PREFIX = "LOVE-"
+local TAG_ALT_PREFIX = "love-"
 local NEW_LINE_S = "\n"
 local NEW_LINE_D = "\n\n"
 
-local PAGE_WIDTH = 79
+local PAGE_WIDTH = 80
 align.setDefaultWidth(PAGE_WIDTH)
 
 local TOC_NAME_WIDTH_LIMIT = 40
@@ -16,6 +17,24 @@ local TOC_NAME_REF_SPACING = 2
 local LOVE_TYPES = {}
 
 -- Misc. functions
+-- Helper function to format string values with backticks and proper quotes
+local function formatDefaultValue(value, valueType)
+    valueType = valueType or value
+    if valueType == "string" then
+        if value:find('"') then
+            return "`" .. value .. "`"
+        end
+        return "`" .. value .. "`"
+    elseif valueType == "constants" then
+        if value:find('"') then
+            return "'" .. value .. "'"
+        end
+        return '"' .. value .. '"'
+    end
+
+    return "`" .. tostring(value):gsub("%s+", "") .. "`"
+end
+
 local function getIndentation(indentLevel, indentString, defaultIndentLevel)
     indentLevel = indentLevel or defaultIndentLevel or 0
     indentString = indentString or INDENT_STRING
@@ -45,14 +64,17 @@ local function formatAsTag(str)
     return ("*%s*"):format(str)
 end
 
-local function formatAsReference(str)
-    return ("|%s|"):format(str)
+local function formatTags(fullName, suffix)
+    suffix = suffix or ""
+    local tags = {
+        formatAsTag(TAG_PREFIX .. fullName .. suffix), -- LOVE-...
+        formatAsTag(TAG_ALT_PREFIX .. fullName .. suffix), -- love-...
+    }
+    return align.right(table.concat(tags, " "))
 end
 
--- Formats arguments and return values
--- I'm not actually sure if there's a specific name for this formatting
-local function formatSpecial(str)
-    return ("`%s`"):format(str)
+local function formatAsReference(str)
+    return ("|%s|"):format(str)
 end
 
 local function concat(tab, sep, func)
@@ -66,8 +88,8 @@ local function concat(tab, sep, func)
 end
 
 local function concatAttribute(tab, sep, attr, formatFunc)
-    formatFunc = formatFunc or function(v)
-        return v
+    formatFunc = formatFunc or function(value)
+        return value
     end
     return concat(tab, sep, function(_, v)
         return formatFunc(v[attr])
@@ -75,11 +97,9 @@ local function concatAttribute(tab, sep, attr, formatFunc)
 end
 
 -- Trims text that is surrounded by formatting without removing the formatting
--- `ThisIsTooLong` -> `ThisIs-` if with = 7
 local function trimFormattedText(str, width, formatFunc)
     local formattedStr = formatFunc(str)
 
-    -- Allows for the formatting func perform differently based on #str
     while #formattedStr > width do
         str = str:sub(1, -2)
         formattedStr = formatFunc(str .. "-")
@@ -88,12 +108,7 @@ local function trimFormattedText(str, width, formatFunc)
     return formattedStr
 end
 
--- Prints a table of contents of `tab` in the format:
---
--- attributeName              tagPrefix .. attributeName
---
--- Where `attributeName` is either `tab[i].name` or `tab[i]`
--- `attributeName` is trimmed to be within `TOC_NAME_WIDTH_LIMIT` (including indent)
+-- Prints a table of contents
 local function printTableOfContents(tab, tagPrefix, indentLevel, indentString)
     local indent = select(3, getIndentation(indentLevel, indentString))
     tab = tab or {}
@@ -126,51 +141,39 @@ local function printTableOfContents(tab, tagPrefix, indentLevel, indentString)
     end
 end
 
--- Handles the most basic and common case of a table of contents, with a basic
--- tag and description
+-- Handles TOC with tag and description
 local function printTOCWithTagAndDesc(tab, attribute, tagPrefix, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
 
-    return align.right(formatAsTag(TAG_PREFIX .. tab.name .. "-" .. attribute))
+    return formatTags(tab.name .. "-" .. attribute)
         .. NEW_LINE_S
-        -- Basic identifier
-        .. align.left(attribute .. ":", indent)
-        .. NEW_LINE_D
-        -- Table of contents
+        .. align.left(attribute:gsub("^%l", string.upper) .. ": ~", indent)
+        .. NEW_LINE_S
         .. printTableOfContents(tab[attribute], TAG_PREFIX .. tagPrefix, indentLevel + 1, indentString)
 end
 
--- Gets a *very* basic (aligned/indented) description
+-- Gets a basic description
 local function getBasicDescription(attribute, moduleName, indent)
     indent = indent or ""
-    return align.left("The " .. attribute .. " of " .. formatAsReference(moduleName) .. ":", indent)
+    return align.left("The " .. attribute .. " of " .. formatAsReference(moduleName) .. ": ~", indent)
 end
 
 -- Functions
--- Gets a synopsis of a function variant
--- Synopsis: return1, return2 = func(arg1, arg2)
-local function formatDefaultValue(value)
-    if type(value) == "table" then
-        return "{...}"
-    else
-        return tostring(value):gsub("%s+", "")
-    end
-end
 
 local function formatTypedAttribute(value, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
 
     local typedAttribute =
-        align.left(formatSpecial(value.name) .. ": " .. ((formatDefaultValue(value.type)) or "any"), indent)
+        align.left(formatDefaultValue(value.name, value.type or "any") .. ": " .. (value.type or "any"), indent)
 
     if LOVE_TYPES[value.type] then
-        typedAttribute = typedAttribute .. " |love2d-docs-" .. value.type .. "|"
+        typedAttribute = typedAttribute .. " |" .. TAG_PREFIX .. value.type .. "|"
     end
 
     if value.default ~= nil then
-        typedAttribute = typedAttribute .. " (default: `" .. formatDefaultValue(value.default) .. "`)"
+        typedAttribute = typedAttribute .. " (default: " .. formatDefaultValue(value.default, value.type) .. ")"
     end
 
     typedAttribute = typedAttribute
@@ -195,16 +198,16 @@ local function formatNeovimParameter(param, indentLevel, indentString)
     local paramLine = indent
         .. "• {"
         .. (param.name or "?")
-        .. "} (`"
-        .. (formatDefaultValue(param.type) or "any")
-        .. "`)"
+        .. "} ("
+        .. formatDefaultValue(param.type, param.type or "any")
+        .. ")"
 
     if LOVE_TYPES[param.type] then
-        paramLine = paramLine .. " |love2d-docs-" .. param.type .. "|"
+        paramLine = paramLine .. " |" .. TAG_PREFIX .. param.type .. "|"
     end
 
     if param.default ~= nil then
-        paramLine = paramLine .. " (default: `" .. formatDefaultValue(param.default) .. "`)"
+        paramLine = paramLine .. " (default: " .. formatDefaultValue(param.default, param.type) .. ")"
     end
 
     if param.description then
@@ -244,10 +247,14 @@ local function formatNeovimReturn(ret, indentLevel, indentString, index, total)
         prefix = indent .. index .. ". "
     end
 
-    local returnLine = prefix .. "(" .. (("`" .. formatDefaultValue(ret.type) .. "`") or "any") .. ")"
+    local returnLine = prefix .. "(" .. formatDefaultValue(ret.type, ret.type) .. ")"
+
+    if ret.name and ret.name ~= "" then
+        returnLine = returnLine .. " " .. formatDefaultValue(ret.name, ret.type)
+    end
 
     if LOVE_TYPES[ret.type] then
-        returnLine = returnLine .. " |love2d-docs-" .. ret.type .. "|"
+        returnLine = returnLine .. " |" .. TAG_PREFIX .. ret.type .. "|"
     end
 
     if ret.description then
@@ -261,7 +268,6 @@ local function formatNeovimReturns(returns, indentLevel, indentString)
     if not returns or #returns == 0 then
         return indentString:rep(indentLevel) .. "None"
     end
-
     local result = {}
     for i, ret in ipairs(returns) do
         table.insert(result, formatNeovimReturn(ret, indentLevel, indentString, i, #returns))
@@ -273,24 +279,21 @@ end
 local function getSynopsis(variant, fullName)
     local synopsis = formatAsReference(fullName)
 
-    -- Return values
     if #(variant.returns or {}) > 0 then
-        local returns = concatAttribute(variant.returns, ", ", "name", formatSpecial)
+        local returns = concatAttribute(variant.returns, ", ", "name", formatDefaultValue)
         synopsis = returns .. " = " .. synopsis
     end
 
-    -- Arguments
     if #(variant.arguments or {}) == 0 then
         synopsis = synopsis .. "()"
     else
-        local arguments = concatAttribute(variant.arguments, ", ", "name", formatSpecial)
+        local arguments = concatAttribute(variant.arguments, ", ", "name", formatDefaultValue)
         synopsis = synopsis .. "(" .. arguments .. ")"
     end
 
     return synopsis
 end
 
--- Assembles a list of a function's synopses as a table
 local function getSynopses(func, fullName)
     local synopses = {}
 
@@ -301,7 +304,6 @@ local function getSynopses(func, fullName)
     return synopses
 end
 
--- Lists all of a function's synopses
 local function getFormattedSynopses(func, fullName, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
@@ -313,26 +315,23 @@ local function getFormattedSynopses(func, fullName, indentLevel, indentString)
     for index, synopsis in ipairs(synopses) do
         local prefix
         if variantCount > 1 then
-            prefix = indent .. align.pad(index .. ".", " ", #indentString)
+            prefix = indent .. align.pad(index .. ". ", "", #indentString)
         else
-            prefix = indent .. align.pad("", " ", #indentString)
+            prefix = indent
         end
 
-        table.insert(list, align.left(prefix .. synopsis, indentString:rep(indentLevel + 1), nil, true))
+        table.insert(list, align.left(prefix .. synopsis, indentString:rep(indentLevel), nil, true))
     end
 
     return list
 end
 
--- Formats the arguments/return values of a function variant
 local function getTypedAttributes(variant, attribute, indentLevel, indentString)
     local indent
     indentString, indent = select(2, getIndentation(indentLevel, indentString))
 
-    -- Begins the typedAttributes information
-    local typedAttributes = indent .. attribute .. ": ~" .. NEW_LINE_D
+    local typedAttributes = indent .. attribute:gsub("^%l", string.upper) .. ": ~" .. NEW_LINE_D
 
-    -- Handles formatting for functions that don't have any arguments/returns
     if #(variant[attribute] or {}) == 0 then
         typedAttributes = typedAttributes .. indentString:rep(indentLevel + 1) .. "None"
     elseif attribute == "arguments" then
@@ -340,22 +339,45 @@ local function getTypedAttributes(variant, attribute, indentLevel, indentString)
     elseif attribute == "returns" then
         typedAttributes = typedAttributes .. formatNeovimReturns(variant[attribute], indentLevel + 1, indentString)
     else
-        typedAttributes = typedAttributes
-            -- Separates all of the attributes
-            .. concat(variant[attribute], NEW_LINE_D, function(_, attr)
-                return formatTypedAttribute(attr, indentLevel + 1, indentString)
-            end)
+        local items = {}
+        for _, attr in ipairs(variant[attribute] or {}) do
+            local item = indentString:rep(indentLevel + 1)
+                .. "• {"
+                .. formatDefaultValue(attr.name, attribute)
+                .. "} ("
+                .. formatDefaultValue(attr.type or "any", attr.type)
+                .. ")"
+            if attr.description then
+                item = item .. NEW_LINE_S .. align.left(attr.description, indentString:rep(indentLevel + 2))
+            end
+
+            table.insert(items, item)
+        end
+
+        typedAttributes = typedAttributes .. table.concat(items, NEW_LINE_D)
     end
 
     return typedAttributes
 end
 
--- Gets the all of a variant's information
 local function getFormattedVariant(variant, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
 
-    local result = align.left(variant.description or "See function description", indent) .. NEW_LINE_D
+    local result = ""
+    local newLineAfterVariant = NEW_LINE_S
+
+    if (variant.returns and #variant.returns > 0) or (variant.arguments and #variant.arguments > 0) then
+        newLineAfterVariant = NEW_LINE_D
+    end
+
+    if variant.description == nil then
+        result = align.left("See function description", indent) .. newLineAfterVariant
+    elseif variant.description == "" then
+        result = ""
+    else
+        result = align.left(variant.description, indent) .. newLineAfterVariant
+    end
 
     if variant.arguments and #variant.arguments > 0 then
         result = result
@@ -363,7 +385,12 @@ local function getFormattedVariant(variant, indentLevel, indentString)
             .. "Parameters: ~"
             .. NEW_LINE_S
             .. formatNeovimParameters(variant.arguments, indentLevel + 1, indentString)
-            .. NEW_LINE_D
+
+        if variant.returns and #variant.returns > 0 then
+            result = result .. NEW_LINE_D
+        else
+            result = result .. NEW_LINE_S
+        end
     end
 
     if variant.returns and #variant.returns > 0 then
@@ -374,38 +401,32 @@ local function getFormattedVariant(variant, indentLevel, indentString)
             .. ": ~"
             .. NEW_LINE_S
             .. formatNeovimReturns(variant.returns, indentLevel + 1, indentString)
+            .. NEW_LINE_S
     end
 
     return result
 end
 
--- Formats the contents of all of a function's variants
 local function getFormattedVariants(func, fullName, indentLevel, indentString)
     indentLevel, indentString = getIndentation(indentLevel, indentString)
 
     local formattedSynopses = getFormattedSynopses(func, fullName, indentLevel, indentString)
     local variantCount = #func.variants
-
-    return concat(func.variants, NEW_LINE_S, function(index, variant)
-        local result = formattedSynopses[index] .. NEW_LINE_D
-
-        if variantCount > 1 then
-            result = result .. "    " .. index .. ".  "
-        end
-
-        return result .. getFormattedVariant(variant, indentLevel + 1, indentString)
-    end)
+    local resultBegin = "Variant" .. (variantCount > 1 and "s" or "") .. ": ~" .. NEW_LINE_S
+    return resultBegin
+        .. concat(func.variants, NEW_LINE_S, function(index, variant)
+            local result = formattedSynopses[index] .. NEW_LINE_D
+            return result .. getFormattedVariant(variant, indentLevel, indentString)
+        end)
 end
 
--- Compiles all of the information about a function
--- Includes details such as the function's description, variants and their parameters, etc.
 local function getFunctionOverview(func, parentName, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
 
     local fullName = parentName .. func.name
 
-    local overview = align.right(formatAsTag(TAG_PREFIX .. fullName))
+    local overview = formatTags(fullName)
         .. NEW_LINE_S
         .. align.left(formatAsReference(fullName), indent)
         .. NEW_LINE_D
@@ -413,23 +434,19 @@ local function getFunctionOverview(func, parentName, indentLevel, indentString)
         .. NEW_LINE_D
         .. indent
         .. "Synopses: ~"
-        .. NEW_LINE_D
+        .. NEW_LINE_S
         .. table.concat(getFormattedSynopses(func, fullName, indentLevel + 1, indentString), NEW_LINE_S)
         .. NEW_LINE_D
         .. indent
-        .. "Variants: ~"
-        .. NEW_LINE_D
         .. getFormattedVariants(func, fullName, indentLevel + 1, indentString)
 
     return overview
 end
 
--- Lists the functions of a module (or type) in a properly formatted list
 local function listModulesFunctions(functions, functionPrefix, indentLevel, indentString)
     return printTableOfContents(functions, TAG_PREFIX .. functionPrefix, indentLevel, indentString)
 end
 
--- Gets a module's formatted functions (descriptions, parameters, return values, etc.)
 local function getFormattedModuleFunctions(tab, functionPrefix, indentLevel, indentString)
     indentLevel, indentString = getIndentation(indentLevel, indentString)
 
@@ -438,8 +455,6 @@ local function getFormattedModuleFunctions(tab, functionPrefix, indentLevel, ind
     end)
 end
 
--- Shows all of the functions of a module, then gives the formatted functions
--- `attribute` is either 'callbacks' or 'functions'
 local function compileFormattedModuleFunctions(module, attribute, parentName, funcSeparator, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
@@ -449,7 +464,7 @@ local function compileFormattedModuleFunctions(module, attribute, parentName, fu
 
     local formattedModuleFunctions = subsection()
         .. NEW_LINE_S
-        .. align.right(formatAsTag(TAG_PREFIX .. parentName .. "-" .. attribute))
+        .. formatTags(parentName .. "-" .. attribute)
         .. NEW_LINE_S
         .. getBasicDescription(attribute, parentName, indent)
         .. NEW_LINE_D
@@ -466,8 +481,6 @@ local function compileFormattedModuleFunctions(module, attribute, parentName, fu
 end
 
 -- Types
--- Gets all of a type's information (constructors, supertypes, subtypes, etc.)
--- Also includes its description and tag
 local function getFormattedType(Type, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
@@ -477,7 +490,7 @@ local function getFormattedType(Type, indentLevel, indentString)
 
     local formattedType = subsection()
         .. NEW_LINE_S
-        .. align.right(formatAsTag(TAG_PREFIX .. Type.name))
+        .. formatTags(Type.name)
         .. NEW_LINE_S
         .. align.left(formatAsReference(Type.name))
         .. NEW_LINE_D
@@ -500,20 +513,16 @@ local function getFormattedType(Type, indentLevel, indentString)
     end
 end
 
--- Combines all of a module's formatted types
 local function getFormattedTypes(types, indentLevel, indentString)
     return concat(types, NEW_LINE_D, function(_, Type)
         return getFormattedType(Type, indentLevel, indentString)
     end)
 end
 
--- Lists the types of a module in a properly formatted list
 local function listModulesTypes(types, indentLevel, indentString)
     return printTableOfContents(types, TAG_PREFIX, indentLevel, indentString)
 end
 
--- Shows all the formatted types of a module, then gets the formatted the types
--- Also includes a basic description and tag
 local function compileFormattedModuleTypes(module, parentName, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
@@ -522,13 +531,12 @@ local function compileFormattedModuleTypes(module, parentName, indentLevel, inde
 
     local formattedModuleTypes = subsection()
         .. NEW_LINE_S
-        .. align.right(formatAsTag(TAG_PREFIX .. parentName .. "-types"))
+        .. formatTags(parentName .. "-types")
         .. NEW_LINE_S
         .. getBasicDescription("types", parentName, indent)
         .. NEW_LINE_D
         .. listModulesTypes(module.types, indentLevel + 1, indentString)
 
-    -- Gets the formatted types
     if #module.types == 0 then
         return formattedModuleTypes
     else
@@ -537,20 +545,17 @@ local function compileFormattedModuleTypes(module, parentName, indentLevel, inde
 end
 
 -- Enums
--- Gets all of an enum's information
--- Also includes its tag, description, etc.
 local function getFormattedEnum(enum, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
 
-    -- Adds a type to all constants to work with getTypedAttributes
     for i in ipairs(enum.constants) do
         enum.constants[i].type = "string"
     end
 
     return subsection()
         .. NEW_LINE_S
-        .. align.right(formatAsTag(TAG_PREFIX .. enum.name))
+        .. formatTags(enum.name)
         .. NEW_LINE_S
         .. align.left(formatAsReference(enum.name))
         .. NEW_LINE_D
@@ -559,19 +564,16 @@ local function getFormattedEnum(enum, indentLevel, indentString)
         .. getTypedAttributes(enum, "constants", indentLevel + 1, indentString)
 end
 
--- Combines all of a module's formatted enums
 local function getFormattedEnums(enums, indentLevel, indentString)
     return concat(enums, NEW_LINE_D, function(_, enum)
         return getFormattedEnum(enum, indentLevel, indentString)
     end)
 end
 
--- Lists the enums of a module in a properly formatted list
 local function listModulesEnums(enums, indentLevel, indentString)
     return printTableOfContents(enums, TAG_PREFIX, indentLevel, indentString)
 end
 
--- Assembles all of a module's enums and information, including enums' constants, etc.
 local function compileFormattedModuleEnums(module, parentName, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
@@ -580,7 +582,7 @@ local function compileFormattedModuleEnums(module, parentName, indentLevel, inde
 
     local formattedEnums = subsection()
         .. NEW_LINE_S
-        .. align.right(formatAsTag(TAG_PREFIX .. parentName .. "-enums"))
+        .. formatTags(parentName .. "-enums")
         .. NEW_LINE_S
         .. getBasicDescription("enums", parentName, indent)
         .. NEW_LINE_D
@@ -593,7 +595,7 @@ local function compileFormattedModuleEnums(module, parentName, indentLevel, inde
     end
 end
 
--- Output-- Combines all of a module's information
+-- Output
 local function compileModuleInformation(module, namePrefix, indentLevel, indentString)
     local indent
     indentLevel, indentString, indent = getIndentation(indentLevel, indentString)
@@ -602,7 +604,7 @@ local function compileModuleInformation(module, namePrefix, indentLevel, indentS
 
     return section()
         .. NEW_LINE_S
-        .. align.right(formatAsTag(TAG_PREFIX .. fullName))
+        .. formatTags(fullName)
         .. NEW_LINE_S
         .. align.left(formatAsReference(fullName))
         .. NEW_LINE_D
@@ -625,44 +627,41 @@ local function compileModuleInformation(module, namePrefix, indentLevel, indentS
         .. NEW_LINE_S
 end
 
-print(([[*love2d-docs.txt* *love2d-docs*      Documentation for the LÖVE game framework.
+print(([[*love2d-docs.txt* *LOVE* *love*       Documentation for the LÖVE game framework.
 
-                               o  o                    ~
-                      ╭─╮    ╭──────╮╭─╮    ╭─╮╭─────╮ ~
-                      │ │    │ ╭──╮ ││ │    │ ││ ╭───╯ ~
-                      │ │    │ │  │ │╰╮╰╮  ╭╯╭╯│ ╰───╮ ~
-                      │ │    │ │  │ │ ╰╮╰╮╭╯╭╯ │ ╭───╯ ~
-                      │ ╰───╮│ ╰──╯ │  ╰╮╰╯╭╯  │ ╰───╮ ~
-                      ╰─────╯╰──────╯   ╰──╯   ╰─────╯ ~
+                               o  o                     ~
+                       ╭─╮    ╭──────╮╭─╮    ╭─╮╭─────╮ ~
+                       │ │    │ ╭──╮ ││ │    │ ││ ╭───╯ ~
+                       │ │    │ │  │ │╰╮╰╮  ╭╯╭╯│ ╰───╮ ~
+                       │ │    │ │  │ │ ╰╮╰╮╭╯╭╯ │ ╭───╯ ~
+                       │ ╰───╮│ ╰──╯ │  ╰╮╰╯╭╯  │ ╰───╮ ~
+                       ╰─────╯╰──────╯   ╰──╯   ╰─────╯ ~
                 The complete solution for (Neo)Vim with LÖVE.
-                   Includes documentation.
+                            Includes documentation.
 
 For LÖVE (http://love2d.org) version %s.
 
-Generated from
-
+Generated from: ~
     https://github.com/love2d-community/love-api
 
-using
-
+Using: ~
     https://github.com/yorik1984/love2d-docs.nvim
 
-Original work by Davis Claiborne under the MIT license.
+Modified and maintained by: ~
+    yorik1984 under the MIT license.
 
+Original work by: ~
+    Davis Claiborne under the MIT license.
     https://github.com/davisdude/vim-love-docs
-
-Modified and maintained by yorik1984 under the MIT license.
 
 See LICENSE.md for more info.
 ]]):format(api.version))
 
--- Gets table information to know how to format types
 getLoveTypes(api)
 for _, module in ipairs(api.modules) do
     getLoveTypes(module)
 end
 
--- Gives the love module basic information
 api.name = "love"
 api.description = "The LÖVE framework"
 print(compileModuleInformation(api, ""))
@@ -671,6 +670,4 @@ for _, module in ipairs(api.modules) do
     print(compileModuleInformation(module, "love."))
 end
 
--- Prints modeline (spelling/capitalization errors are ugly; use correct file type)
--- (Uses concat to prevent vim from interpreting THIS as a modeline)
-print(" vim" .. ":nospell:ft=help:")
+print(" vim" .. ":nospell:ft=help:tw=" .. PAGE_WIDTH)
