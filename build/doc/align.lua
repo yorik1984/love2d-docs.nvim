@@ -1,9 +1,11 @@
 -- Align monospaced text
 
 -- Variables that control the output
-local defaultWidth = 79
-local tabWidth = 8
-local tabStr = (' '):rep(tabWidth)
+local defaultWidth = 80
+local tabWidth = 4
+local tolerance = 4
+local fillThreshold = 0.7
+local tabStr = (" "):rep(tabWidth)
 
 -- Change the global defaultWidth
 local function setDefaultWidth(n)
@@ -22,60 +24,89 @@ end
 
 -- Add a new line
 local function newLine(currentLine, fill, textWidth, determineSpacing)
-    local returnString = ''
+    local returnString = ""
 
     -- Ignore blank lines/lines that consist solely of whitespace
     if #currentLine > 0 then
         returnString = fill:rep(determineSpacing(currentLine, textWidth)) .. currentLine
     end
 
-    return returnString .. '\n'
+    return returnString .. "\n"
 end
 
--- Loop over words (separated by spaces)
--- Add space to beginning of line (instead of end) to make linebreaks easier to determine
+-- Loop over words (separated by spaces) with tolerance for widows/orphans
 local function loopOverTextByWord(line, fill, textWidth, spacingFunc)
-    -- Loop over words (separated by spaces)
-    -- Add space to beginning of line (instead of end) to make linebreaks easier to determine
-    line = ' ' .. line
+    -- Add space to beginning of line to make linebreaks easier to determine
+    line = " " .. line
 
     -- Used to trim the space added to the beginning of the line
     local first = true
 
-    -- Current line is the line on which the function is currently working
-    -- output is the string returned by the function
-    local currentLine, output = '', ''
-
-    line:gsub('(%s+)(%S+)', function(spacing, word)
-        -- Trim the space
+    -- Collect all words for analysis
+    local words = {}
+    line:gsub("(%s+)(%S+)", function(spacing, word)
         if first then
-            spacing = spacing:match('^%s(.*)$')
+            spacing = spacing:match("^%s(.*)$")
             first = false
         end
+        table.insert(words, { spacing = spacing, word = word })
+    end)
 
+    -- Reset first flag for the actual processing
+    first = true
+    local currentLine, output = "", ""
+    local i = 1
+
+    while i <= #words do
+        local wordData = words[i]
+        local spacing = wordData.spacing
+        local word = wordData.word
+
+        -- Check if word fits in current line
         if #currentLine + #spacing + #word <= textWidth then
-            -- Word is short enough
             currentLine = currentLine .. spacing .. word
+            i = i + 1
         else
             -- Line needs to be wrapped
             if #currentLine == 0 then
-                -- If currentLine is blank and it's too long, hyphenate it
+                -- If currentLine is blank and word is too long, hyphenate it
                 while #word > textWidth do
-                    currentLine = word:sub(1, textWidth - 1) .. '-'
+                    currentLine = word:sub(1, textWidth - 1) .. "-"
                     output = output .. newLine(currentLine, fill, textWidth, spacingFunc)
                     word = word:sub(textWidth)
                 end
+                currentLine = word
+                i = i + 1
             else
-                -- word is short enough to not be hyphenated
-                output = output .. newLine(currentLine, fill, textWidth, spacingFunc)
+                -- Check if this is the last word (potential widow/orphan)
+                if i == #words then
+                    -- If current line is reasonably full, try to keep the word here
+                    if #currentLine > textWidth * fillThreshold then
+                        -- Check if it fits with tolerance
+                        if #currentLine + #spacing + #word <= textWidth + tolerance then
+                            currentLine = currentLine .. spacing .. word
+                            i = i + 1
+                        else
+                            output = output .. newLine(currentLine, fill, textWidth, spacingFunc)
+                            currentLine = word
+                            i = i + 1
+                        end
+                    else
+                        output = output .. newLine(currentLine, fill, textWidth, spacingFunc)
+                        currentLine = word
+                        i = i + 1
+                    end
+                else
+                    -- Not the last word, normal wrap
+                    output = output .. newLine(currentLine, fill, textWidth, spacingFunc)
+                    currentLine = word
+                    i = i + 1
+                end
             end
-
-            -- Update the current line
-            currentLine = word
         end
-    end)
+    end
 
-    -- Add any non-wrapped content to the output and return it
+    -- Add any remaining content
     output = output .. newLine(currentLine, fill, textWidth, spacingFunc)
     return output
 end
@@ -83,15 +114,15 @@ end
 -- Loop over the string by lines to respect new lines
 local function loopOverTextByLine(text, fill, textWidth, spacingFunc)
     -- Add a new line to text to handle all cases (removed later)
-    text = text .. '\n'
+    text = text .. "\n"
 
-    local output = ''
-    text:gsub('(.-)\n', function(line)
+    local output = ""
+    text:gsub("(.-)\n", function(line)
         output = output .. loopOverTextByWord(line, fill, textWidth, spacingFunc)
     end)
 
     -- Trim the last new line, which was only added for easier looping
-    return output:match('^(.-)\n$')
+    return output:match("^(.-)\n$")
 end
 
 -- Determine the number of spaces required to right-align currentLine
@@ -103,7 +134,7 @@ end
 -- TODO: allow multi-character fill
 -- fill is what to use to pad the width of the text (must be one character)
 local function alignRight(text, fill, textWidth)
-    fill = fill or ' '
+    fill = fill or " "
     textWidth = textWidth or defaultWidth
 
     return loopOverTextByLine(text, fill, textWidth, determineRightAlignSpacing)
@@ -111,7 +142,7 @@ end
 
 -- Left-align text to a given width
 local function alignLeft(text, indentStr, textWidth, doNotIndentFirstLine)
-    indentStr = indentStr or ''
+    indentStr = indentStr or ""
     doNotIndentFirstLine = doNotIndentFirstLine or false
 
     -- Account for indentStr in text wrapping
@@ -127,12 +158,12 @@ end
 -- Pad text
 -- fill is the character (or series of characters) that should pad the text to the desired with
 local function alignPad(text, fill, width)
-    fill = fill or ' '
+    fill = fill or " "
     width = width or defaultWidth
 
     -- Cut text if it's too long
     if #text >= width then
-        text = text:sub(1, width - 1) .. '-'
+        text = text:sub(1, width - 1) .. "-"
     end
 
     return (text .. fill:rep(math.ceil(width - #text / #fill))):sub(1, width)

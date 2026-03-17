@@ -13,7 +13,7 @@
 
 **love2d-docs.nvim** is a comprehensive plugin for [Neovim](https://neovim.io/) and [Vim](https://www.vim.org/) that brings the entire [LÖVE](http://love2d.org) game framework documentation right into your editor.
 
-- 📖 **Built-in Help** — Complete LÖVE API documentation accessible via `:help love2d-docs-*`
+- 📖 **Built-in Help** — Complete LÖVE API documentation accessible via `:help LOVE-*`
 
 <!-- TOC -->
 
@@ -49,14 +49,14 @@ Plug "yorik1984/love2d-docs.nvim"
 
 ## 📚 Documentation
 
-Access the complete LÖVE API documentation `:help love2d-docs-*`:
+Access the complete LÖVE API documentation `:help LOVE-*`:
 
-| What to find      | Command Example                         |
-| ----------------- | --------------------------------------- |
-| **Function**      | `:help love2d-docs-love.window.setMode` |
-| **Type**          | `:help love2d-docs-File`                |
-| **Type Method**   | `:help love2d-docs-File:isEOF`          |
-| **Enum**          | `:help love2d-docs-BufferMode`          |
+| What to find      | Command Example                  | Alias                            |
+| ----------------- | -------------------------------- | -------------------------------- |
+| **Function**      | `:help LOVE-love.window.setMode` | `:help love-love.window.setMode` |
+| **Type**          | `:help LOVE-File`                | `:help love-File`                |
+| **Type Method**   | `:help LOVE-File:isEOF`          | `:help love-File:isEOF`          |
+| **Enum**          | `:help LOVE-BufferMode`          | `:help love-BufferMode`          |
 
 ## 🔄 Rebuilding the API
 
