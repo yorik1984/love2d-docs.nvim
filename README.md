@@ -1,5 +1,9 @@
 <h1 align="center">♡&nbsp;&nbsp; <a href="https://love2d.org/wiki/Main_Page">LÖVE docs</a>&nbsp;&nbsp;♡</h1>
 
+<a href="https://dotfyle.com/plugins/yorik1984/love2d-docs.nvim">
+	<img src="https://dotfyle.com/plugins/yorik1984/love2d-docs.nvim/shield?style=flat" />
+</a>
+
 [![Generate love2d-docs](https://github.com/yorik1984/love2d-docs.nvim/actions/workflows/update-love-api.yml/badge.svg)](https://github.com/yorik1984/love2d-docs.nvim/actions/workflows/update-love-api.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yorik1984/love2d-docs.nvim/blob/main/LICENSE)
 [![Lua](https://img.shields.io/badge/Lua-5.1-blue.svg)](https://www.lua.org/)
