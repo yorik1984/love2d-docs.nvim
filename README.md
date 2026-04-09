@@ -130,13 +130,13 @@ build/gen.bat
 ### Neovim with [newpaper.nvim](https://github.com/yorik1984/newpaper.nvim)
 
 <div align="center">
-  <img src="pics/screen1.png" alt="Neovim screenshot 1" width="80%">
+  <img src="https://raw.githubusercontent.com/yorik1984/love2d-docs.nvim/main/pics/screen1.png" alt="Neovim screenshot 1" width="80%">
 </div>
 
 ### Vim with [papercolor-theme](https://github.com/NLKNguyen/papercolor-theme)
 
 <div align="center">
-  <img src="pics/screen3.png" alt="Vim screenshot" width="80%">
+  <img src="https://raw.githubusercontent.com/yorik1984/love2d-docs.nvim/main/pics/screen3.png" alt="Vim screenshot" width="80%">
 </div>
 
 ## 📚 References & Related Projects
