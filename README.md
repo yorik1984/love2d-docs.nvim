@@ -30,7 +30,7 @@
   - [✋ Manual Generation (Optional)](#-manual-generation-optional)
 - [🎨 Screenshots](#-screenshots)
 - [📚 References & Related Projects](#-references--related-projects)
-- [©️ Credits](#-credits)
+- [🙏 Credits](#-credits)
 
 <!-- /TOC -->
 
@@ -141,7 +141,14 @@ build/gen.bat
 
 ## 📚 References & Related Projects
 
-+ **[love2d-definitions](https://github.com/yorik1984/love2d-definitions)**<br>
++ **[love2d-snippets](https://github.com/yorik1984/love2d-snippets)** <br>
+    A snippet generator and collection for the LÖVE framework, compatible with VS Code, Neovim (via LuaSnip), and any editor that supports VS Code-style snippets.
+    *   **🤖 Automated Updates:** GitHub Actions parses the official love-api and generates up-to-date snippets whenever the API changes.
+    *   **📦 Full API Coverage:** Includes snippets for all modules, functions, callbacks, type methods, constructors, getters/setters, enums, and `conf.lua`.
+    *   **⌨️ Tabs for Indentation:** Uses tab characters (`\t`) for indentation, allowing each developer to configure their preferred display width (2, 4, 8 spaces, etc.) without changing the actual files.
+    *   **📌 Version Branches:** Repository branches match LÖVE versions (e.g., branch `11.5` for LÖVE 11.5), while the `main` branch always contains the latest API.
+    *   
++ **[love2d-definitions](https://github.com/yorik1984/love2d-definitions)** <br>
 [LuaCATS](https://luals.github.io/wiki/annotations/) definition for [LÖVE](https://love2d.org/) framework.
 Creates `---@class` and `---@alias` definitions for perfect autocompletion and type checking in IDEs with LuaCATS.
     - **🤖 Automated Updates:** Uses GitHub Actions to stay in sync with the official love-api, just like this plugin.
@@ -149,19 +156,19 @@ Creates `---@class` and `---@alias` definitions for perfect autocompletion and t
     - **🧠 Smart Type System:** Intelligently handles type unions, plural forms (e.g., `tables` → `table[]`), optional parameters, and function overloads.
     - **📌 Version Branches:** Includes branches for specific LÖVE versions (e.g., `11.5`), so you can use annotations that match your project.
 
-+ **[love2d-tresitter.nvim](https://github.com/yorik1984/love2d-treesitter.nvim)**<br>
++ **[love2d-tresitter.nvim](https://github.com/yorik1984/love2d-treesitter.nvim)** <br>
 Is a comprehensive plugin for [Neovim](https://neovim.io/) that highlight [LÖVE](http://love2d.org) syntax in your editor.
 Provides complete LÖVE API syntax highlighting for LÖVE functions, modules, types, and callbacks, with full **[Treesitter](https://github.com/nvim-treesitter/nvim-treesitter)** support.
     * **🤖 Automated Updates:** Uses GitHub Actions to stay in sync with the official love-api, just like this plugin.
     * **⚙️ Fully Customizable:** Offers flexible styling options for colors and font styles (bold, italic, etc.).
     * **📌 Version Branches:** Maintains version-specific branches (e.g., `11.5`) to match different LÖVE releases.
 
-+ **[love2d-vim-syntax](https://github.com/yorik1984/love2d-vim-syntax)**<br>
++ **[love2d-vim-syntax](https://github.com/yorik1984/love2d-vim-syntax)** <br>
 Plugin for [Vim](https://www.vim.org/) that highlight [LÖVE](http://love2d.org) syntax in your editor.
     - 🎨 **Syntax Highlighting** — Colors LÖVE functions, modules, types, and callbacks
     - 🔧 **Customizable** — Flexible styling options for Vim
 
-## ©️ Credits
+## 🙏 Credits
 
 * Original Author: [Davis Claiborne](https://github.com/davisdude) — Created and maintained the original [vim-love-docs](https://github.com/davisdude/vim-love-docs)
 * Powered by: [love-api](https://github.com/love2d-community/love-api) — Community-maintained LÖVE API specification
