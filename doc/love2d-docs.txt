@@ -9923,13 +9923,14 @@ Creates a new specifically formatted image.
 In versions prior to 0.9.0, LÖVE expects ISO 8859-1 encoding for the glyphs string.
 
 Synopses: ~
-    1. `font` = |love.graphics.newImageFont|(`filename`, `glyphs`)
-    2. `font` = |love.graphics.newImageFont|(`imageData`, `glyphs`)
-    3. `font` = |love.graphics.newImageFont|(`filename`, `glyphs`,
+    1. `font` = |love.graphics.newImageFont|(`filename`, `glyphs`,
+    `extraspacing`)
+    2. `font` = |love.graphics.newImageFont|(`imageData`, `glyphs`,
     `extraspacing`)
 
 Variants: ~
-    1. `font` = |love.graphics.newImageFont|(`filename`, `glyphs`)
+    1. `font` = |love.graphics.newImageFont|(`filename`, `glyphs`,
+    `extraspacing`)
 
     See function description
 
@@ -9938,12 +9939,16 @@ Variants: ~
             The filepath to the image file.
         • {glyphs} (`string`)
             A string of the characters in the image in order from left to right.
+        • {extraspacing} (`number`) (default: `0`)
+            Additional spacing (positive or negative) to apply to each glyph in
+            the Font.
 
     Return: ~
         (`Font`) `font` |LOVE-Font|
             A Font object which can be used to draw text on screen.
 
-    2. `font` = |love.graphics.newImageFont|(`imageData`, `glyphs`)
+    2. `font` = |love.graphics.newImageFont|(`imageData`, `glyphs`,
+    `extraspacing`)
 
     See function description
 
@@ -9952,24 +9957,7 @@ Variants: ~
             The ImageData object to create the font from.
         • {glyphs} (`string`)
             A string of the characters in the image in order from left to right.
-
-    Return: ~
-        (`Font`) `font` |LOVE-Font|
-            A Font object which can be used to draw text on screen.
-
-    3. `font` = |love.graphics.newImageFont|(`filename`, `glyphs`,
-    `extraspacing`)
-
-    Instead of using this function, consider using a BMFont generator such as
-    bmfont, littera, or bmGlyph with love.graphics.newFont. Because slime said
-    it was better.
-
-    Parameters: ~
-        • {filename} (`string`)
-            The filepath to the image file.
-        • {glyphs} (`string`)
-            A string of the characters in the image in order from left to right.
-        • {extraspacing} (`number`)
+        • {extraspacing} (`number`) (default: `0`)
             Additional spacing (positive or negative) to apply to each glyph in
             the Font.
 
@@ -20857,6 +20845,7 @@ love.keyreleased.
 Synopses: ~
     1. `down` = |love.keyboard.isDown|(`key`)
     2. `anyDown` = |love.keyboard.isDown|(`key`, `...`)
+    3. `anyDown` = |love.keyboard.isDown|(`keys`)
 
 Variants: ~
     1. `down` = |love.keyboard.isDown|(`key`)
@@ -20884,6 +20873,18 @@ Variants: ~
     Return: ~
         (`boolean`) `anyDown`
             True if any supplied key is down, false if not.
+
+    3. `anyDown` = |love.keyboard.isDown|(`keys`)
+
+    See function description
+
+    Parameters: ~
+        • {keys} (`table`)
+            A table containing keys to check.
+
+    Return: ~
+        (`boolean`) `anyDown`
+            True if any of the keys in the table are down, false if not.
 
 --------------------------------------------------------------------------------
          *LOVE-love.keyboard.isScancodeDown* *love-love.keyboard.isScancodeDown*
